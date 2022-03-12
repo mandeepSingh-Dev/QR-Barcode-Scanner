@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity2">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/texttitleCardView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardElevation="20dp"
+        android:layout_marginLeft="30dp"
+        app:layout_constraintTop_toTopOf="@id/bigCardView"
+        app:layout_constraintBottom_toTopOf="@id/bigCardView"
+        app:layout_constraintLeft_toLeftOf="@id/bigCardView" >
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/typeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="HEIFHYEFGEBF"
+        android:textColor="#FB4E23"
+        android:padding="7dp"
+        android:elevation="20dp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="@id/bigCardView"
+        app:layout_constraintBottom_toTopOf="@id/bigCardView"
+        app:layout_constraintLeft_toLeftOf="@id/bigCardView"/>
+    </com.google.android.material.card.MaterialCardView>
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardElevation="20dp"
+        android:layout_marginRight="40dp"
+        app:layout_constraintTop_toTopOf="@id/texttitleCardView"
+        app:layout_constraintBottom_toBottomOf="@+id/texttitleCardView"
+        app:layout_constraintRight_toRightOf="@id/bigCardView" >
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HEIFHYEFGEBF"
+            android:textColor="#253022"
+            android:src="@drawable/ic_qrcode"
+            android:elevation="20dp"
+            app:layout_constraintTop_toTopOf="@id/bigCardView"
+            app:layout_constraintBottom_toTopOf="@id/bigCardView"
+            app:layout_constraintLeft_toLeftOf="@id/bigCardView"/>
+    </com.google.android.material.card.MaterialCardView>
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/bigCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+         android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="30dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="10dp"
+        >
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:paddingLeft="20dp">
+
+                <TextView
+                    android:id="@+id/result"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:lineSpacingExtra="10dp"
+                    android:text="https://wikipedia.com"
+                    android:textIsSelectable="true"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/searchButton"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:text="Search"
+                    android:textAllCaps="false"
+                    app:layout_constraintLeft_toLeftOf="@id/result"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/result"
+                    app:strokeColor="#FB4E23"
+                    app:strokeWidth="0.5dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/copybutton"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:drawableTop="@drawable/ic_baseline_content_copy_24"
+                    android:text="copy"
+                    android:textAllCaps="false"
+                    app:layout_constraintLeft_toLeftOf="@id/result"
+                    app:layout_constraintRight_toLeftOf="@id/shareButton"
+                    app:layout_constraintTop_toBottomOf="@id/searchButton"
+                    app:strokeColor="@android:color/transparent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/shareButton"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:drawableTop="@drawable/ic_baseline_share_24"
+                    android:text="copy"
+                    android:textAllCaps="false"
+                    app:layout_constraintLeft_toRightOf="@id/copybutton"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/searchButton"
+                    app:strokeColor="@android:color/transparent" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="30dp"
+                    app:cardCornerRadius="30dp"
+                    app:cardElevation="5dp"
+                    app:cardPreventCornerOverlap="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/copybutton"
+                    app:strokeColor="@color/teal_200"
+                    app:strokeWidth="1dp">
+
+                    <ImageView
+                        android:id="@+id/codeImage"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp"
+                        android:elevation="10dp"
+                        android:src="@color/purple_200"
+
+                        />
+                </com.google.android.material.card.MaterialCardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+    </com.google.android.material.card.MaterialCardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
