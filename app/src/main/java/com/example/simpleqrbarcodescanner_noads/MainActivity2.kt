@@ -1,54 +1,90 @@
 package com.example.simpleqrbarcodescanner_noads
 
+import android.Manifest
+import android.R.attr.phoneNumber
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.graphics.*
-import androidx.appcompat.app.AppCompatActivity
+import android.content.*
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
-import android.os.Parcelable
+import android.os.Message
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.Window
-import androidx.camera.core.ImageAnalysis
-import androidx.camera.core.ImageProxy
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.simpleqrbarcodescanner_noads.Util.Custom_Formats_duplicate
 import com.example.simpleqrbarcodescanner_noads.Util.Intent_KEYS
 import com.example.simpleqrbarcodescanner_noads.databinding.ActivityMain2Binding
-import com.example.simpleqrbarcodescanner_noads.databinding.ActivityMainBinding
-import com.google.mlkit.vision.barcode.BarcodeScanning
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.google.mlkit.vision.barcode.common.Barcode
-import com.google.mlkit.vision.common.InputImage
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
-import java.io.ByteArrayOutputStream
+import android.content.Intent
+import android.icu.util.Calendar
+import android.provider.CalendarContract
+import android.text.Html
+import androidx.core.text.HtmlCompat
+import java.util.*
 
- class MainActivity2 : AppCompatActivity()
+
+class MainActivity2 : AppCompatActivity()
 {
      lateinit var binding:ActivityMain2Binding
+    private var qrCOde:String?=null
+    private  val SEARCHBUTTON = 1
+    private val CALLBUTTON = 2
+    private val mPERMISSION_CODE = 100
 
-    @SuppressLint("SetTextI18n")
+    private  lateinit var phone:String
+    private lateinit var message:String
+
+    private lateinit var emailAddress:String
+    private lateinit var emailSubject:String
+    private lateinit var emailBody:String
+
+    private lateinit var cal_title:String
+    private lateinit var cal_description:String
+    private lateinit var cal_location:String
+    private lateinit var startDAY:String
+    private lateinit var startMONTH:String
+    private lateinit var startYEAR:String
+    private lateinit var startHOUR:String
+    private lateinit var startMINUTES:String
+    private lateinit var startSECONDS:String
+
+    private lateinit var endDAY:String
+    private lateinit var endMONTH:String
+    private lateinit var endYEAR:String
+    private lateinit var endHOUR:String
+    private lateinit var endMINUTES:String
+    private lateinit var endSECONDS:String
+
+    private lateinit var cal_end:String
+
+
+
+    @SuppressLint("SetTextI18n", "UseCompatLoadingForDrawables")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMain2Binding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
 
-        val qrCOde = intent.getStringExtra(Intent_KEYS.QRCODE)
+        //createEvent()
+
+         qrCOde = intent.getStringExtra(Intent_KEYS.QRCODE)
         val format = intent.getIntExtra(Intent_KEYS.FORMAT, 0)
         val valueType = intent.getIntExtra(Intent_KEYS.VALUETYPE,0)
         val bundle = intent.getBundleExtra(Intent_KEYS.BUNDLE)
 
-        Log.d("fkvnfjvb",valueType.toString())
 
+        //when block for setting data acc. to Valuetype
         when(valueType){
-            //doesnot suppported
-              /*  Barcode.TYPE_PRODUCT-> binding?.typeTextView.text = "Product"
-                Barcode.TYPE_TEXT->  binding?.typeTextView.text = "Text"
-                Barcode.TYPE_CONTACT_INFO->  binding?.typeTextView.text = "Contact"
-                Barcode.TYPE_ISBN->  binding?.typeTextView.text = "ISBN"
-            Barcode.TYPE_PHONE->  binding?.typeTextView.text = "Phone"
-            Barcode.TYPE_URL->  binding?.typeTextView.text = "Url"
-            Barcode.TYPE_GEO->  binding?.typeTextView.text = "Location"
-            Barcode.TYPE_CALENDAR_EVENT->  binding?.typeTextView.text = "Calendar"*/
             Barcode.TYPE_DRIVER_LICENSE->{
                 binding?.typeTextView.text = "Driving Licence"
                 val licencenumber = bundle?.getString("LICENCE_NUMBER")
@@ -66,16 +102,36 @@ import java.io.ByteArrayOutputStream
             }
                 Barcode.TYPE_SMS->{
                     binding?.typeTextView.text = "SMS"
-                val phone = bundle?.getString(Intent_KEYS.SMS_PHONE)
-               val message =  bundle?.getString(Intent_KEYS.MESSAGE)
+                 phone = bundle?.getString(Intent_KEYS.SMS_PHONE).toString()
+                 message = bundle?.getString(Intent_KEYS.MESSAGE).toString()
                 binding.result.text = "SMS to: $phone\nMessage: $message"
             }
                 Barcode.TYPE_EMAIL->{
                     binding?.typeTextView.text = "Email"
-                val emailAddress =  bundle?.getString(Intent_KEYS.EMAIL_ADDRESS)
-                val emailSubject =  bundle?.getString(Intent_KEYS.EMAIL_SUBJECT)
-                val emailBody =  bundle?.getString(Intent_KEYS.EMAIL_BODY)
+                 emailAddress =  bundle?.getString(Intent_KEYS.EMAIL_ADDRESS).toString()
+                 emailSubject =  bundle?.getString(Intent_KEYS.EMAIL_SUBJECT).toString()
+                 emailBody =  bundle?.getString(Intent_KEYS.EMAIL_BODY).toString()
                 binding.result.text = "Mail to :$emailAddress\nSubject : $emailSubject\nBody: $emailBody"
+            }
+            Barcode.TYPE_CALENDAR_EVENT ->{
+                binding?.typeTextView.text = "Event"
+                cal_title = bundle?.getString(Intent_KEYS.CAL_TITLE).toString()
+                cal_description =  bundle?.getString(Intent_KEYS.CAL_DESCRIPTION).toString()
+                cal_location =  bundle?.getString(Intent_KEYS.CAL_LOCATION_CAL).toString()
+                startDAY= bundle?.getString(Intent_KEYS.START_DAY).toString()
+                startMONTH = bundle?.getString(Intent_KEYS.START_MONTH).toString()
+                startYEAR = bundle?.getString(Intent_KEYS.START_YEAR).toString()
+                startHOUR = bundle?.getString(Intent_KEYS.START_HOUR).toString()
+                startMINUTES = bundle?.getString(Intent_KEYS.START_MINUTES).toString()
+                startSECONDS = bundle?.getString(Intent_KEYS.START_SECONDS).toString()
+
+                endDAY= bundle?.getString(Intent_KEYS.END_DAY).toString()
+                endMONTH  = bundle?.getString(Intent_KEYS.END_MONTH).toString()
+                endYEAR  =bundle?.getString(Intent_KEYS.END_YEAR).toString()
+                endHOUR = bundle?.getString(Intent_KEYS.END_HOUR).toString()
+                endMINUTES= bundle?.getString(Intent_KEYS.END_MINUTES).toString()
+                endSECONDS =bundle?.getString(Intent_KEYS.END_SECONDS).toString()
+                binding.result.text = "Summary: $cal_title\nDescription: $cal_description\nLocation: $cal_location\nstart: $startDAY-$startMONTH-$startYEAR   $startHOUR:$startMINUTES:$startSECONDS"
             }
             else ->{
                 binding?.typeTextView.text = "Void"
@@ -85,7 +141,145 @@ import java.io.ByteArrayOutputStream
         val bitmap = qrGenerate(qrCOde, format)
         binding.codeImage.setImageBitmap(bitmap)
 
-    }
+        //when block to set type of barcode acc. to valueType
+        val textType =  when(valueType){
+            Barcode.TYPE_PRODUCT-> {
+                binding.searchButton.text = "Search"
+                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_search_24,null),null,null,null)
+                binding.copybutton.text = "Copy"
+                binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
+                binding.addContactsButton.visibility = View.GONE
+//                binding.copyMainButton.visibility = View.GONE
+
+                "Product"}
+            Barcode.TYPE_TEXT->  {
+                binding.searchButton.text = "Copy"
+                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null,null)
+                binding.copybutton.visibility = View.GONE
+                binding.addContactsButton.visibility = View.GONE
+
+                "Text"}
+            Barcode.TYPE_CONTACT_INFO->  {
+                binding.searchButton.text = "Add to contacts"
+                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_outline_person_add_alt_1_24,null),null,null,null)
+                binding.copybutton.text = "Call"
+                binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_twotone_call_24,null),null,null)
+                //    binding.copyMainButton.visibility = View.GONE
+
+                "Contact Information"}
+            Barcode.TYPE_ISBN->  {
+                binding.searchButton.text = "Search"
+                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_search_24,null),null,null,null)
+                binding.copybutton.text = "Copy"
+                binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
+                binding.addContactsButton.visibility = View.GONE
+                //    binding.copyMainButton.visibility = View.GONE
+
+                "ID Book"}
+            Barcode.TYPE_PHONE->  {
+                binding.searchButton.text = "Call"
+                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_twotone_call_24,null),null,null,null)
+                binding.copybutton.text = "Copy"
+                binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
+                binding.addContactsButton.text = "Add contact"
+                //  binding.copyMainButton.visibility = View.GONE
+                "Phone"}
+            Barcode.TYPE_URL->  {
+                binding.searchButton.text = "Search"
+                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_search_24,null),null,null,null)
+                binding.copybutton.text = "Copy"
+                binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
+                binding.addContactsButton.visibility = View.GONE
+                //  binding.copyMainButton.visibility = View.GONE
+                "Url"}
+            Barcode.TYPE_GEO-> {
+                binding.searchButton.text = "Copy"
+                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null,null)
+                binding.copybutton.visibility = View.GONE
+                binding.addContactsButton.visibility = View.GONE
+
+                "Location"}
+            Barcode.TYPE_CALENDAR_EVENT->  {
+                binding.searchButton.text = "Add event"
+                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_calendar_month_24,null),null,null,null)
+                binding.copybutton.text = "Copy"
+                binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
+                binding.addContactsButton.visibility = View.GONE
+                //  binding.copyMainButton.visibility = View.GONE
+
+                "Event"}
+            Barcode.TYPE_UNKNOWN ->{
+                binding.searchButton.text = "Search"
+                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_email_24,null),null,null,null)
+                binding.copybutton.text = "Copy"
+                binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
+                binding.addContactsButton.visibility = View.GONE
+                //  binding.copyMainButton.visibility = View.GONE
+
+                "Unknown"}
+            Barcode.TYPE_EMAIL -> {
+                binding.searchButton.text = "Send email"
+                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_email_24,null),null,null,null)
+                binding.copybutton.text = "Copy"
+                binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
+                binding.addContactsButton.visibility = View.GONE
+                //   binding.copyMainButton.visibility = View.GONE
+
+                "Email"}
+            Barcode.TYPE_SMS->{
+                binding.searchButton.text = "Create message"
+                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_message_24,null),null,null,null)
+                binding.copybutton.text = "Copy"
+                binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
+                binding.addContactsButton.visibility = View.GONE
+                //   binding.copyMainButton.visibility = View.GONE
+
+                "SMS"}
+            Barcode.TYPE_WIFI->{
+                binding.searchButton.text = "Connect"
+                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_sharp_wifi_24,null),null,null,null)
+                binding.copybutton.text = "Copy"
+                binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
+                binding.addContactsButton.visibility = View.GONE
+                //  binding.copyMainButton.visibility = View.GONE
+
+                "Wifi"}
+            Barcode.TYPE_DRIVER_LICENSE->{
+                binding.searchButton.visibility = View.GONE
+                binding.copybutton.text = "Copy"
+                binding.addContactsButton.visibility = View.GONE
+                "Licence"}
+           else -> {
+               binding.searchButton.visibility= View.GONE
+               binding.copybutton.visibility = View.GONE
+               binding.shareButton.visibility = View.GONE
+               binding.addContactsButton.visibility = View.GONE
+               "Unknown"}
+        }
+        binding.typeTextView.text = textType
+
+        binding.searchButton.setOnClickListener {
+            val buttonText = binding.searchButton.text
+            when(buttonText) {
+                "Search" ->  qrCOde?.let { onSearch(it, valueType) }
+                "Copy" ->  qrCOde?.let { copyText(it) }
+                "Add to contacts"->  Log.d("dkfnd","Add to contacts")
+                "Call"-> if(ContextCompat.checkSelfPermission(this,Manifest.permission.CALL_PHONE)!=PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE),mPERMISSION_CODE)
+                }else{qrCOde?.let { call(it) } }
+                "Add event"->createEvent()
+                "Send email"->sendEmail(emailAddress,emailSubject,emailBody)
+                "Create message"->createMessage(phone,message)
+                "Connect"-> connectToWifi()
+            }
+        }
+        binding.copybutton.setOnClickListener {
+            qrCOde?.let { copyText(it) }
+        }
+        binding.shareButton.setOnClickListener {
+            qrCOde?.let { shareText(it) }
+        }
+    }//end of onCreate()
 
     fun qrGenerate(qrcode:String?,format:Int?): Bitmap {
         val imageWidth =  binding.codeImage.layoutParams?.width
@@ -167,4 +361,104 @@ import java.io.ByteArrayOutputStream
         return bitmap
     }
 
+   private fun onSearch(text:String,valueType: Int){
+       val intent = Intent(Intent.ACTION_VIEW)
+       val ISBN_baseurl = "https://www.google.com/search?q="
+         when(valueType){
+           Barcode.TYPE_URL -> {
+               binding.searchButton.text = "Search"
+               intent.data = Uri.parse(text)
+               startActivity(intent)
+           }
+           Barcode.TYPE_ISBN ->{
+               binding.searchButton.text = "Search"
+               intent.data = Uri.parse(ISBN_baseurl+text)
+               startActivity(intent)
+           }
+             Barcode.TYPE_TEXT-> copyText(text)
+
+       }
+
+
+   }
+
+    private fun copyText(text: String){
+        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText(text,text)
+        clipboard.setPrimaryClip(clip)
+        Snackbar.make(binding.copybutton,"Text copied",2000).show()
+    }
+    private fun shareText(text: String) {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.putExtra(Intent.EXTRA_TEXT,text)
+        intent.type = "text/plain"
+
+        val shareIntent = Intent.createChooser(intent, null)
+        startActivity(shareIntent)
+    }
+    private fun call(phnNumber:String){
+        val intent = Intent(Intent.ACTION_CALL)
+        intent.data = Uri.parse(/*"tel:$*/phnNumber)
+        MaterialAlertDialogBuilder(this, com.google.android.material.R.style.MaterialAlertDialog_MaterialComponents)
+            .setIcon(resources.getDrawable(R.drawable.ic_twotone_call_24,null))
+            .setMessage("Calling to: $qrCOde")
+            .setTitle("Dial")
+            .setCancelable(true)
+            .setBackground(resources.getDrawable(R.drawable.dialog_background,null))
+            .setPositiveButton("Call", DialogInterface.OnClickListener { dialog, which ->
+                startActivity(intent)
+                dialog.dismiss()
+            })
+            .setNegativeButton("cancel",DialogInterface.OnClickListener { dialog, which ->
+                dialog.dismiss()
+                dialog.cancel()
+            })
+            .show()
+
+    }
+    private fun connectToWifi(){
+        val intent = Intent(Settings.ACTION_WIFI_SETTINGS)
+        startActivity(intent)
+    }
+    private fun createMessage(phnNumber:String,message:String) {
+        val smsIntent = Intent(Intent.ACTION_SENDTO)
+        smsIntent.type = "vnd.android-dir/mms-sms"
+        smsIntent.data = Uri.parse("sms:$phnNumber")
+        smsIntent.putExtra("sms_body",message)
+        startActivity(smsIntent)
+    }
+    private fun sendEmail(email:String,subject:String,text:String){
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.putExtra(Intent.EXTRA_EMAIL,email)
+        intent.putExtra(Intent.EXTRA_SUBJECT,subject)
+        intent.putExtra(Intent.EXTRA_TEXT,text)
+        intent.setType("message/rfc822")
+
+        startActivity(Intent.createChooser(intent,"Choose ab Email"))
+
+    }
+    private fun createEvent(){
+
+        val i = Intent(Intent.ACTION_EDIT)
+        i.type = "vnd.android.cursor.item/event"
+        i.putExtra("beginTime", startDAY)
+        i.putExtra("allDay", true)
+        //i.putExtra("rule", "FREQ=YEARLY")
+        i.putExtra("endTime", cal_end)
+        i.putExtra("title", cal_title)
+        i.putExtra(CalendarContract.Events.DESCRIPTION,cal_description)
+        startActivity(i)
+    }
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        when(requestCode){
+            mPERMISSION_CODE ->{
+                if(permissions.isNotEmpty() && permissions[0].equals(Manifest.permission.CALL_PHONE))
+                {
+                     qrCOde?.let { call(it) }
+                }
+            }
+        }
+    }
 }

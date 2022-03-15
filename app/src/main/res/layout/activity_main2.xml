@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/parentViewgroup"
     tools:context=".MainActivity2">
 
     <com.google.android.material.card.MaterialCardView
@@ -54,7 +55,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
          android:layout_marginTop="30dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
@@ -76,56 +76,97 @@
 
                 <TextView
                     android:id="@+id/result"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="18dp"
-                    android:lineSpacingExtra="10dp"
-                    android:text="https://wikipedia.com"
+                    android:lineSpacingExtra="14dp"
+                    android:layout_marginRight="20dp"
+                    android:paddingRight="20dp"
+                    android:text="https://VOID.COM"
                     android:textIsSelectable="true"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"/>
 
-                <com.google.android.material.button.MaterialButton
+                <!--search button-->
+                <Button
                     android:id="@+id/searchButton"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
+                    android:layout_marginRight="20dp"
                     android:text="Search"
                     android:textAllCaps="false"
-                    app:layout_constraintLeft_toLeftOf="@id/result"
+                    app:cornerRadius="6dp"
+                    android:paddingLeft="60dp"
+                    android:paddingRight="60dp"
+                    android:drawableLeft="@drawable/ic_baseline_search_24"
+                    android:drawableTint="#016DD8"
+                    app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/result"
                     app:strokeColor="#FB4E23"
                     app:strokeWidth="0.5dp" />
+                <!--copy button-->
 
-                <com.google.android.material.button.MaterialButton
+                <!--linearlayout for url website-->
+                <LinearLayout
+                    android:id="@+id/buttonsLinerLyaout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="20dp"
+                    app:layout_constraintLeft_toLeftOf="@id/result"
+                   app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/searchButton"
+                    >
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/addContactsButton"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableTop="@drawable/ic_outline_person_add_alt_1_24"
+                        android:text="Add to Contacts"
+                        android:textAllCaps="false"
+                        app:layout_constraintLeft_toLeftOf="@id/result"
+                        app:layout_constraintRight_toLeftOf="@id/shareButton"
+                        app:layout_constraintTop_toBottomOf="@id/searchButton"
+                        app:strokeColor="@android:color/transparent" />
+
+                    <com.google.android.material.button.MaterialButton
                     android:id="@+id/copybutton"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
                     android:drawableTop="@drawable/ic_baseline_content_copy_24"
                     android:text="copy"
+                    android:layout_weight="1"
                     android:textAllCaps="false"
                     app:layout_constraintLeft_toLeftOf="@id/result"
                     app:layout_constraintRight_toLeftOf="@id/shareButton"
                     app:layout_constraintTop_toBottomOf="@id/searchButton"
                     app:strokeColor="@android:color/transparent" />
 
-                <com.google.android.material.button.MaterialButton
+                    <com.google.android.material.button.MaterialButton
                     android:id="@+id/shareButton"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
                     android:drawableTop="@drawable/ic_baseline_share_24"
-                    android:text="copy"
+                    android:text="share"
+                    android:layout_weight="1"
                     android:textAllCaps="false"
                     app:layout_constraintLeft_toRightOf="@id/copybutton"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/searchButton"
                     app:strokeColor="@android:color/transparent" />
+
+                </LinearLayout>
+
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="wrap_content"
@@ -138,7 +179,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/copybutton"
+                    app:layout_constraintTop_toBottomOf="@id/buttonsLinerLyaout"
                     app:strokeColor="@color/teal_200"
                     app:strokeWidth="1dp">
 
@@ -148,7 +189,7 @@
                         android:layout_height="250dp"
                         android:elevation="10dp"
                         android:src="@color/purple_200"
-
+                        android:background="@color/white"
                         />
                 </com.google.android.material.card.MaterialCardView>
             </androidx.constraintlayout.widget.ConstraintLayout>

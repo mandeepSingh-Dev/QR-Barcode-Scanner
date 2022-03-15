@@ -40,7 +40,6 @@ class MainActivity : AppCompatActivity(){
   //  var imageAnalysis:ImageAnalysis?=null
     private var binding:ActivityMainBinding?=null
 
-    private val qrCodeFoundButton: Button? = null
     private var qrCode: String? = null
     lateinit var camera:Camera
     var isFlashGlow = false
@@ -53,10 +52,10 @@ class MainActivity : AppCompatActivity(){
         setContentView(binding?.root)
 
         supportActionBar?.hide()
-        binding?.button?.setOnClickListener {
-          /*  val intent = Intent(applicationContext,MainActivity2::class.java)
-            startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(this).toBundle())*/
-        }
+      /*  binding?.button?.setOnClickListener {
+          *//*  val intent = Intent(applicationContext,MainActivity2::class.java)
+            startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(this).toBundle())*//*
+        }*/
 
 
         //blink()
@@ -158,7 +157,7 @@ binding?.imageView?.setImageBitmap(bitmap)*/
         imageAnalysis?.setAnalyzer(ContextCompat.getMainExecutor(this),QRCodeImageAnalyzer(object : QRCodeFoundListener {
                 override fun onQRCodeFound(qrCode: String?) {
                     Log.d("djfnd", qrCode + "d")
-                    binding?.button?.text = qrCode
+                   // binding?.button?.text = qrCode
                     this@MainActivity.qrCode = qrCode
                 }
                 override fun onqrCodeNotFound() {
@@ -207,29 +206,10 @@ binding?.imageView?.setImageBitmap(bitmap)*/
       //  camera.cameraControl.enableTorch(true)
 
     }
-
-
-
     override fun onResume() {
         super.onResume()
         Log.d("CALLBAbbbbbCK","onResume")
         requestCamera()
-    }
-
-    override fun onStop() {
-        super.onStop()
-      /*  if(cameraProvider!=null) {
-            imageAnalysis?.clearAnalyzer()
-            cameraProvider?.unbindAll()
-        }*/
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-       // if(cameraProvider!=null) {
-         //   imageAnalysis?.clearAnalyzer()
-         //   cameraProvider?.unbindAll()
-      //  }
     }
 
 }

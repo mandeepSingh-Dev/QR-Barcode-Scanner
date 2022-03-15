@@ -49,6 +49,7 @@ class QRCodeImageAnalyzer(private val listener: QRCodeFoundListener) : ImageAnal
                             rawValue = barcode?.rawValue
                             format = barcode?.format
                             valueType = barcode?.valueType
+
                             this.barcode = barcode
                     Log.d("fknf",valueType.toString())
                     }
@@ -154,6 +155,31 @@ class QRCodeImageAnalyzer(private val listener: QRCodeFoundListener) : ImageAnal
             Barcode.TYPE_SMS  ->{
                 bundle.putString(Intent_KEYS.SMS_PHONE,barcode?.sms?.phoneNumber)
                 bundle.putString(Intent_KEYS.MESSAGE,barcode?.sms?.message)
+            }
+            Barcode.TYPE_CALENDAR_EVENT ->{
+                bundle.putString(Intent_KEYS.CAL_TITLE,barcode?.calendarEvent?.summary)
+                bundle.putString(Intent_KEYS.CAL_DESCRIPTION,barcode?.calendarEvent?.description)
+                bundle.putString(Intent_KEYS.CAL_LOCATION_CAL,barcode?.calendarEvent?.location)
+
+                bundle.putString(Intent_KEYS.START_DAY,barcode?.calendarEvent?.start?.day.toString())
+                bundle.putString(Intent_KEYS.START_MONTH,barcode?.calendarEvent?.start?.month.toString())
+                bundle.putString(Intent_KEYS.START_YEAR,barcode?.calendarEvent?.start?.year.toString())
+                bundle.putString(Intent_KEYS.START_HOUR,barcode?.calendarEvent?.start?.hours.toString())
+                bundle.putString(Intent_KEYS.START_MINUTES,barcode?.calendarEvent?.start?.minutes.toString())
+                bundle.putString(Intent_KEYS.START_SECONDS,barcode?.calendarEvent?.start?.seconds.toString())
+
+                bundle.putString(Intent_KEYS.END_DAY,barcode?.calendarEvent?.end?.day.toString())
+                bundle.putString(Intent_KEYS.END_MONTH,barcode?.calendarEvent?.end?.month.toString())
+                bundle.putString(Intent_KEYS.END_YEAR,barcode?.calendarEvent?.end?.year.toString())
+                bundle.putString(Intent_KEYS.END_HOUR,barcode?.calendarEvent?.end?.hours.toString())
+                bundle.putString(Intent_KEYS.END_MINUTES,barcode?.calendarEvent?.end?.minutes.toString())
+                bundle.putString(Intent_KEYS.END_SECONDS,barcode?.calendarEvent?.end?.seconds.toString())
+
+
+
+                bundle.putString(Intent_KEYS.CAL_END,barcode?.calendarEvent?.end?.rawValue)
+               // bundle.putString("description",barcode?.calendarEvent?.description)
+
             }
             //doesnot suppported
             Barcode.TYPE_DRIVER_LICENSE ->{

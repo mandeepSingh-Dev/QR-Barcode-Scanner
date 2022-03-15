@@ -3,16 +3,19 @@
     package="com.example.simpleqrbarcodescanner_noads">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-feature android:name="android.hardware.camera.any" />
-
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+
+    <uses-permission android:name="android.permission.WRITE_CALENDAR"/>
+    <uses-permission android:name="android.permission.READ_CALENDAR"/>
+
 
     <application
         android:allowBackup="true"
@@ -21,6 +24,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SimpleQRBarcodeScannerNoAds">
+        <activity
+            android:name=".CodeSave_Activity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity2"
             android:exported="false" />
