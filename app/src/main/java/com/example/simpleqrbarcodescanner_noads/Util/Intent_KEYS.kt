@@ -20,25 +20,28 @@ object Intent_KEYS {
     val SMS_PHONE = "SMS_PHONE"
     val MESSAGE = "MESSAGE"
     //for calender BUNDLE
-    val CAL_TITLE = "title"
-    val CAL_DESCRIPTION= "description"
-    val CAL_LOCATION_CAL = "location"
-    val START_DAY = "startday"
-    val START_MONTH = "startmonth"
-    val START_YEAR = "startyear"
-    val START_HOUR = "starthour"
-    val START_MINUTES = "startminute"
-    val START_SECONDS = "startsecond"
+    val CAL_ARRAYLIST  = "calender_Arraylist"
+    val CONTACTS_ARRAYLIST  = "contacts_Arraylist"
 
-    val END_DAY = "endday"
-    val END_MONTH = "endmonth"
-    val END_YEAR = "endyear"
-    val END_HOUR = "endhour"
-    val END_MINUTES = "endminute"
-    val END_SECONDS = "endsecond"
+    /* val CAL_TITLE = "title"
+     val CAL_DESCRIPTION= "description"
+     val CAL_LOCATION_CAL = "location"
+     val START_DAY = "startday"
+     val START_MONTH = "startmonth"
+     val START_YEAR = "startyear"
+     val START_HOUR = "starthour"
+     val START_MINUTES = "startminute"
+     val START_SECONDS = "startsecond"
+
+     val END_DAY = "endday"
+     val END_MONTH = "endmonth"
+     val END_YEAR = "endyear"
+     val END_HOUR = "endhour"
+     val END_MINUTES = "endminute"
+     val END_SECONDS = "endsecond"
 
 
-    val CAL_END = "end"
+     val CAL_END = "end"*/
 
     //for licence BUNDLE
     val LICENCE_NUMBER = "LICENCE_NUMBER"

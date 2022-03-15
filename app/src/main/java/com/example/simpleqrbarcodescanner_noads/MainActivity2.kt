@@ -1,7 +1,6 @@
 package com.example.simpleqrbarcodescanner_noads
 
 import android.Manifest
-import android.R.attr.phoneNumber
 import android.annotation.SuppressLint
 import android.content.*
 import android.content.pm.PackageManager
@@ -9,7 +8,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.os.Message
 import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
@@ -28,9 +26,8 @@ import com.journeyapps.barcodescanner.BarcodeEncoder
 import android.content.Intent
 import android.icu.util.Calendar
 import android.provider.CalendarContract
-import android.text.Html
-import androidx.core.text.HtmlCompat
-import java.util.*
+import android.provider.ContactsContract
+import kotlin.collections.ArrayList
 
 
 class MainActivity2 : AppCompatActivity()
@@ -66,6 +63,9 @@ class MainActivity2 : AppCompatActivity()
     private lateinit var endSECONDS:String
 
     private lateinit var cal_end:String
+    lateinit var calArlst:ArrayList<String>
+    lateinit var contactArlst:ArrayList<String>
+
 
 
 
@@ -85,7 +85,7 @@ class MainActivity2 : AppCompatActivity()
 
         //when block for setting data acc. to Valuetype
         when(valueType){
-            Barcode.TYPE_DRIVER_LICENSE->{
+                Barcode.TYPE_DRIVER_LICENSE->{
                 binding?.typeTextView.text = "Driving Licence"
                 val licencenumber = bundle?.getString("LICENCE_NUMBER")
                 binding.result.text = licencenumber
@@ -113,26 +113,29 @@ class MainActivity2 : AppCompatActivity()
                  emailBody =  bundle?.getString(Intent_KEYS.EMAIL_BODY).toString()
                 binding.result.text = "Mail to :$emailAddress\nSubject : $emailSubject\nBody: $emailBody"
             }
-            Barcode.TYPE_CALENDAR_EVENT ->{
+                Barcode.TYPE_CALENDAR_EVENT ->{
                 binding?.typeTextView.text = "Event"
-                cal_title = bundle?.getString(Intent_KEYS.CAL_TITLE).toString()
-                cal_description =  bundle?.getString(Intent_KEYS.CAL_DESCRIPTION).toString()
-                cal_location =  bundle?.getString(Intent_KEYS.CAL_LOCATION_CAL).toString()
-                startDAY= bundle?.getString(Intent_KEYS.START_DAY).toString()
-                startMONTH = bundle?.getString(Intent_KEYS.START_MONTH).toString()
-                startYEAR = bundle?.getString(Intent_KEYS.START_YEAR).toString()
-                startHOUR = bundle?.getString(Intent_KEYS.START_HOUR).toString()
-                startMINUTES = bundle?.getString(Intent_KEYS.START_MINUTES).toString()
-                startSECONDS = bundle?.getString(Intent_KEYS.START_SECONDS).toString()
+                calArlst = ArrayList()
+                bundle?.getStringArrayList(Intent_KEYS.CAL_ARRAYLIST)?.let {
+                    calArlst.addAll(it) }
 
-                endDAY= bundle?.getString(Intent_KEYS.END_DAY).toString()
-                endMONTH  = bundle?.getString(Intent_KEYS.END_MONTH).toString()
-                endYEAR  =bundle?.getString(Intent_KEYS.END_YEAR).toString()
-                endHOUR = bundle?.getString(Intent_KEYS.END_HOUR).toString()
-                endMINUTES= bundle?.getString(Intent_KEYS.END_MINUTES).toString()
-                endSECONDS =bundle?.getString(Intent_KEYS.END_SECONDS).toString()
-                binding.result.text = "Summary: $cal_title\nDescription: $cal_description\nLocation: $cal_location\nstart: $startDAY-$startMONTH-$startYEAR   $startHOUR:$startMINUTES:$startSECONDS"
+
+                if(calArlst[6].toInt()<10){ calArlst[6] = "0${calArlst[6]}" }
+                if(calArlst[7].toInt()<10){  calArlst[7] = "0${calArlst[7]}" }
+                if(calArlst[8].toInt()<10){  calArlst[8] = "0${calArlst[8]}" }
+
+                if(calArlst[12].toInt()<10){  calArlst[12] = "0${calArlst[12]}" }
+                if(calArlst[13].toInt()<10){  calArlst[13] = "0${calArlst[13]}" }
+                if(calArlst[14].toInt()<10){  calArlst[14] = "0${calArlst[14]}"}
+
+                binding.result.text = "Summary: ${calArlst[0]}\nDescription: ${calArlst[1]}\nLocation: ${calArlst[2]}\nStart Time: ${calArlst[3]}-${calArlst[4]}-${calArlst[5]}   ${calArlst[6]}:${calArlst[7]}:${calArlst[8]}\nEnd Time: ${calArlst[9]}-${calArlst[10]}-${calArlst[11]}   ${calArlst[12]}:${calArlst[13]}:${calArlst[14]}"
             }
+                Barcode.TYPE_CONTACT_INFO ->{
+                    contactArlst = ArrayList()
+                    bundle?.getStringArrayList(Intent_KEYS.CONTACTS_ARRAYLIST)?.let {
+                        contactArlst.addAll(it) }
+                    binding.result.text = qrCOde
+                }
             else ->{
                 binding?.typeTextView.text = "Void"
                 binding.result.text = qrCOde
@@ -263,11 +266,11 @@ class MainActivity2 : AppCompatActivity()
             when(buttonText) {
                 "Search" ->  qrCOde?.let { onSearch(it, valueType) }
                 "Copy" ->  qrCOde?.let { copyText(it) }
-                "Add to contacts"->  Log.d("dkfnd","Add to contacts")
+                "Add to contacts"-> addToContacts(contactArlst)
                 "Call"-> if(ContextCompat.checkSelfPermission(this,Manifest.permission.CALL_PHONE)!=PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE),mPERMISSION_CODE)
                 }else{qrCOde?.let { call(it) } }
-                "Add event"->createEvent()
+                "Add event"->createEvent(calArlst)
                 "Send email"->sendEmail(emailAddress,emailSubject,emailBody)
                 "Create message"->createMessage(phone,message)
                 "Connect"-> connectToWifi()
@@ -437,17 +440,27 @@ class MainActivity2 : AppCompatActivity()
         startActivity(Intent.createChooser(intent,"Choose ab Email"))
 
     }
-    private fun createEvent(){
+    private fun createEvent(list:ArrayList<String>){
 
         val i = Intent(Intent.ACTION_EDIT)
         i.type = "vnd.android.cursor.item/event"
-        i.putExtra("beginTime", startDAY)
-        i.putExtra("allDay", true)
-        //i.putExtra("rule", "FREQ=YEARLY")
-        i.putExtra("endTime", cal_end)
-        i.putExtra("title", cal_title)
-        i.putExtra(CalendarContract.Events.DESCRIPTION,cal_description)
+        i.putExtra(CalendarContract.Events.TITLE, list[0])
+        i.putExtra(CalendarContract.Events.DESCRIPTION, list[1])
+        i.putExtra(CalendarContract.Events.EVENT_LOCATION, list[2])
         startActivity(i)
+    }
+    private fun addToContacts(list:ArrayList<String>) {
+        val intent = Intent(ContactsContract.Intents.Insert.ACTION)
+        intent.type = ContactsContract.RawContacts.CONTENT_TYPE
+        intent.putExtra(ContactsContract.Intents.Insert.NAME,list[4])
+        intent.putExtra(ContactsContract.Intents.Insert.PHONE,list[0])
+        intent.putExtra(ContactsContract.Data.EXTRA_ADDRESS_BOOK_INDEX,list[1])
+        intent.putExtra(ContactsContract.Intents.Insert.EMAIL,list[2])
+        intent.putExtra(ContactsContract.Intents.Insert.JOB_TITLE,list[5])
+        intent.putExtra(ContactsContract.CommonDataKinds.Organization.DISPLAY_NAME,list[3])
+        intent.putExtra(ContactsContract.CommonDataKinds.Website.URL,list[6])
+        startActivity(intent)
+
     }
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)

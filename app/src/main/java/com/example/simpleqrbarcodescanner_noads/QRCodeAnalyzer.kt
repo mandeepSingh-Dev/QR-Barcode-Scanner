@@ -25,6 +25,9 @@ class QRCodeImageAnalyzer(private val listener: QRCodeFoundListener) : ImageAnal
     var valueType:Int?=null
     var barcode:Barcode?=null
     lateinit var bundle:Bundle
+    lateinit var calArrayList:ArrayList<String>
+    lateinit var contactArrayList:ArrayList<String>
+
     @SuppressLint("UnsafeOptInUsageError")
     override fun analyze(image: ImageProxy)
     {
@@ -157,29 +160,50 @@ class QRCodeImageAnalyzer(private val listener: QRCodeFoundListener) : ImageAnal
                 bundle.putString(Intent_KEYS.MESSAGE,barcode?.sms?.message)
             }
             Barcode.TYPE_CALENDAR_EVENT ->{
-                bundle.putString(Intent_KEYS.CAL_TITLE,barcode?.calendarEvent?.summary)
-                bundle.putString(Intent_KEYS.CAL_DESCRIPTION,barcode?.calendarEvent?.description)
-                bundle.putString(Intent_KEYS.CAL_LOCATION_CAL,barcode?.calendarEvent?.location)
+                calArrayList = ArrayList()
+                calArrayList.add(barcode?.calendarEvent?.summary.toString())
+                calArrayList.add(barcode?.calendarEvent?.description.toString())
+                calArrayList.add(barcode?.calendarEvent?.location.toString())
 
-                bundle.putString(Intent_KEYS.START_DAY,barcode?.calendarEvent?.start?.day.toString())
-                bundle.putString(Intent_KEYS.START_MONTH,barcode?.calendarEvent?.start?.month.toString())
-                bundle.putString(Intent_KEYS.START_YEAR,barcode?.calendarEvent?.start?.year.toString())
-                bundle.putString(Intent_KEYS.START_HOUR,barcode?.calendarEvent?.start?.hours.toString())
-                bundle.putString(Intent_KEYS.START_MINUTES,barcode?.calendarEvent?.start?.minutes.toString())
-                bundle.putString(Intent_KEYS.START_SECONDS,barcode?.calendarEvent?.start?.seconds.toString())
+                calArrayList.add(barcode?.calendarEvent?.start?.day.toString())
+                calArrayList.add(barcode?.calendarEvent?.start?.month.toString())
+                calArrayList.add(barcode?.calendarEvent?.start?.year.toString())
+                calArrayList.add(barcode?.calendarEvent?.start?.hours.toString())
+                calArrayList.add(barcode?.calendarEvent?.start?.minutes.toString())
+                calArrayList.add(barcode?.calendarEvent?.start?.seconds.toString())
 
-                bundle.putString(Intent_KEYS.END_DAY,barcode?.calendarEvent?.end?.day.toString())
-                bundle.putString(Intent_KEYS.END_MONTH,barcode?.calendarEvent?.end?.month.toString())
-                bundle.putString(Intent_KEYS.END_YEAR,barcode?.calendarEvent?.end?.year.toString())
-                bundle.putString(Intent_KEYS.END_HOUR,barcode?.calendarEvent?.end?.hours.toString())
-                bundle.putString(Intent_KEYS.END_MINUTES,barcode?.calendarEvent?.end?.minutes.toString())
-                bundle.putString(Intent_KEYS.END_SECONDS,barcode?.calendarEvent?.end?.seconds.toString())
+                calArrayList.add(barcode?.calendarEvent?.end?.day.toString())
+                calArrayList.add(barcode?.calendarEvent?.end?.month.toString())
+                calArrayList.add(barcode?.calendarEvent?.end?.year.toString())
+                calArrayList.add(barcode?.calendarEvent?.end?.hours.toString())
+                calArrayList.add(barcode?.calendarEvent?.end?.minutes.toString())
+                calArrayList.add(barcode?.calendarEvent?.end?.seconds.toString())
 
+                calArrayList.add(barcode?.calendarEvent?.summary.toString())
+                calArrayList.add(barcode?.calendarEvent?.summary.toString())
+                calArrayList.add(barcode?.calendarEvent?.summary.toString())
+                calArrayList.add(barcode?.calendarEvent?.summary.toString())
+                calArrayList.add(barcode?.calendarEvent?.summary.toString())
+                calArrayList.add(barcode?.calendarEvent?.summary.toString())
 
+                bundle.putStringArrayList(Intent_KEYS.CAL_ARRAYLIST,calArrayList)
 
-                bundle.putString(Intent_KEYS.CAL_END,barcode?.calendarEvent?.end?.rawValue)
-               // bundle.putString("description",barcode?.calendarEvent?.description)
+            }
+            Barcode.TYPE_CONTACT_INFO ->{
+                contactArrayList = ArrayList()
+                contactArrayList.add(barcode?.contactInfo?.phones?.get(0)?.number.toString())
+                contactArrayList.add(barcode?.contactInfo?.addresses?.get(0)?.addressLines?.get(0).toString())
+                contactArrayList.add(barcode?.contactInfo?.emails?.get(0)?.address.toString())
+                     var dfhdj4 = ""
+                      barcode?.contactInfo?.organization?.forEach { dfhdj4 += it.toString() }
+                contactArrayList.add(dfhdj4)
+                contactArrayList.add(barcode?.contactInfo?.name?.formattedName.toString())
+                contactArrayList.add(barcode?.contactInfo?.title.toString())
+                contactArrayList.add(barcode?.contactInfo?.urls?.get(0).toString())
+                contactArrayList.add(barcode?.contactInfo?.phones?.get(0)?.type.toString())
 
+                contactArrayList?.let{
+                    bundle?.putStringArrayList(Intent_KEYS.CONTACTS_ARRAYLIST,contactArrayList)}
             }
             //doesnot suppported
             Barcode.TYPE_DRIVER_LICENSE ->{
