@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity(){
 
 
 
-       ObjectAnimator.ofFloat(binding?.movingView,"translationY",binding?.view?.layoutParams?.height?.toFloat()?.minus(20f)!!).apply {
+       ObjectAnimator.ofFloat(binding?.movingView,"translationY",binding?.viewBox?.layoutParams?.height?.toFloat()?.minus(20f)!!).apply {
             repeatMode = ValueAnimator.REVERSE
             repeatCount = ValueAnimator.INFINITE
          //   reverse()
@@ -94,8 +94,19 @@ binding?.imageView?.setImageBitmap(bitmap)*/
             Toast.makeText(this,qrCode+"sd",Toast.LENGTH_LONG).show()
         }*/
 
+        binding?.bottomView?.setOnItemSelectedListener {
+            when(it.itemId){
+                 R.id.create->{
+                    startActivity(Intent(this,MainActivity2::class.java),ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
+                }
+                else->{
+                    Toast.makeText(this,"error",Toast.LENGTH_SHORT).show()
+                }
+            }
+            return@setOnItemSelectedListener true
+        }
 
-    }
+    }//end of onCreate()
     private fun requestCamera() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             startCamera()
@@ -210,6 +221,15 @@ binding?.imageView?.setImageBitmap(bitmap)*/
         super.onResume()
         Log.d("CALLBAbbbbbCK","onResume")
         requestCamera()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        cameraProvider?.unbindAll()
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        cameraProvider?.unbindAll()
     }
 
 }

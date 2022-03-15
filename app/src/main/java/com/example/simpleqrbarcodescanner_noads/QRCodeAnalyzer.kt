@@ -191,19 +191,24 @@ class QRCodeImageAnalyzer(private val listener: QRCodeFoundListener) : ImageAnal
             }
             Barcode.TYPE_CONTACT_INFO ->{
                 contactArrayList = ArrayList()
-                contactArrayList.add(barcode?.contactInfo?.phones?.get(0)?.number.toString())
-                contactArrayList.add(barcode?.contactInfo?.addresses?.get(0)?.addressLines?.get(0).toString())
-                contactArrayList.add(barcode?.contactInfo?.emails?.get(0)?.address.toString())
-                     var dfhdj4 = ""
-                      barcode?.contactInfo?.organization?.forEach { dfhdj4 += it.toString() }
-                contactArrayList.add(dfhdj4)
-                contactArrayList.add(barcode?.contactInfo?.name?.formattedName.toString())
-                contactArrayList.add(barcode?.contactInfo?.title.toString())
-                contactArrayList.add(barcode?.contactInfo?.urls?.get(0).toString())
-                contactArrayList.add(barcode?.contactInfo?.phones?.get(0)?.type.toString())
+               try {
+                   contactArrayList.add(barcode?.contactInfo?.phones?.get(0)?.number.toString())
+                   contactArrayList.add(
+                       barcode?.contactInfo?.addresses?.get(0)?.addressLines?.get(0).toString()
+                   )
+                   contactArrayList.add(barcode?.contactInfo?.emails?.get(0)?.address.toString())
+                   var dfhdj4 = ""
+                   barcode?.contactInfo?.organization?.forEach { dfhdj4 += it.toString() }
+                   contactArrayList.add(dfhdj4)
+                   contactArrayList.add(barcode?.contactInfo?.name?.formattedName.toString())
+                   contactArrayList.add(barcode?.contactInfo?.title.toString())
+                   contactArrayList.add(barcode?.contactInfo?.urls?.get(0).toString())
+                   contactArrayList.add(barcode?.contactInfo?.phones?.get(0)?.type.toString())
 
-                contactArrayList?.let{
-                    bundle?.putStringArrayList(Intent_KEYS.CONTACTS_ARRAYLIST,contactArrayList)}
+                   contactArrayList?.let {
+                       bundle?.putStringArrayList(Intent_KEYS.CONTACTS_ARRAYLIST, contactArrayList)
+                   }
+               }catch (e:Exception){}
             }
             //doesnot suppported
             Barcode.TYPE_DRIVER_LICENSE ->{

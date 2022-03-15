@@ -373,12 +373,13 @@ class MainActivity2 : AppCompatActivity()
                intent.data = Uri.parse(text)
                startActivity(intent)
            }
-           Barcode.TYPE_ISBN ->{
+           Barcode.TYPE_ISBN,Barcode.TYPE_PRODUCT ->{
                binding.searchButton.text = "Search"
                intent.data = Uri.parse(ISBN_baseurl+text)
                startActivity(intent)
            }
              Barcode.TYPE_TEXT-> copyText(text)
+
 
        }
 
@@ -454,11 +455,6 @@ class MainActivity2 : AppCompatActivity()
         intent.type = ContactsContract.RawContacts.CONTENT_TYPE
         intent.putExtra(ContactsContract.Intents.Insert.NAME,list[4])
         intent.putExtra(ContactsContract.Intents.Insert.PHONE,list[0])
-        intent.putExtra(ContactsContract.Data.EXTRA_ADDRESS_BOOK_INDEX,list[1])
-        intent.putExtra(ContactsContract.Intents.Insert.EMAIL,list[2])
-        intent.putExtra(ContactsContract.Intents.Insert.JOB_TITLE,list[5])
-        intent.putExtra(ContactsContract.CommonDataKinds.Organization.DISPLAY_NAME,list[3])
-        intent.putExtra(ContactsContract.CommonDataKinds.Website.URL,list[6])
         startActivity(intent)
 
     }

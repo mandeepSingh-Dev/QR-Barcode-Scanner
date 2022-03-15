@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/create"
+        android:icon="@drawable/ic_outline_create_24"
+        android:title="Create"
+        android:iconTint="#FF005B" />
+    <item
+        android:id="@+id/history2"
+        android:icon="@drawable/ic_twotone_history_24"
+        android:title="History"
+        android:iconTint="#C6FF00"
+        />
+    <item
+        android:id="@+id/history3"
+        android:icon="@drawable/ic_twotone_settings_24"
+        android:title="Setting"
+        android:iconTint="#1CFFFF"/>
+    <item
+        android:id="@+id/history5"
+        android:icon="@drawable/ic_baseline_lightbulb_24"
+        android:title="History"
+        android:iconTint="#FFFFFF"/>
+
+</menu>
