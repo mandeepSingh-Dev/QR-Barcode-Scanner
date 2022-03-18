@@ -8,6 +8,7 @@ interface QRCodeFoundListener {
     fun onQRCodeFound(qrCode: String?)
     fun onqrCodeNotFound()
     fun onQRFormat(qrCode:String?,format:Int?,valueType:Int?,bundle:Bundle?)
+    fun onBarcode(barcode: Barcode)
 
 
 }

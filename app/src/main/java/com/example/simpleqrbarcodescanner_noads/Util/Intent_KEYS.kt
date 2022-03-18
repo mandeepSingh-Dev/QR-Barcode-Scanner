@@ -22,6 +22,11 @@ object Intent_KEYS {
     //for calender BUNDLE
     val CAL_ARRAYLIST  = "calender_Arraylist"
     val CONTACTS_ARRAYLIST  = "contacts_Arraylist"
+    val URL_LIST = "url_list"
+    val WIFI_LIST = "wifi_list"
+    val EMAIL_LIST = "email_list"
+    val SMS_LIST = "sms_list"
+
 
     /* val CAL_TITLE = "title"
      val CAL_DESCRIPTION= "description"

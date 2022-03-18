@@ -10,10 +10,15 @@ import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import androidx.camera.lifecycle.ProcessCameraProvider
 import com.example.simpleqrbarcodescanner_noads.Util.Intent_KEYS
+import com.example.simpleqrbarcodescanner_noads.room.EntityClass
+import com.example.simpleqrbarcodescanner_noads.room.MyRoomDatabase
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 import com.google.zxing.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 
 
@@ -53,20 +58,12 @@ class QRCodeImageAnalyzer(private val listener: QRCodeFoundListener) : ImageAnal
                             format = barcode?.format
                             valueType = barcode?.valueType
 
+                            barcode?.let { listener.onBarcode(it) }
                             this.barcode = barcode
-                    Log.d("fknf",valueType.toString())
                     }
                     rawValue?.let {
                         listener.onQRCodeFound(it)
                         listener.onQRFormat(it,format,valueType,setBundle(valueType,barcode))
-                        Log.d("dfkndf",barcode?.boundingBox?.top.toString())
-                        Log.d("dfkndf",barcode?.boundingBox?.bottom.toString())
-                        Log.d("dfkndf",barcode?.boundingBox?.left.toString())
-                        Log.d("dfkndf",barcode?.boundingBox?.right.toString())
-                        Log.d("dfkndf",barcode?.boundingBox?.width().toString())
-                        Log.d("dfkndf",barcode?.boundingBox?.height().toString())
-                        Log.d("dfkndf",barcode?.cornerPoints?.get(0)?.x.toString())
-                        Log.d("dfkndf",barcode?.cornerPoints?.get(0)?.y.toString())
 
 
                         /* when(valueType){
@@ -143,24 +140,51 @@ class QRCodeImageAnalyzer(private val listener: QRCodeFoundListener) : ImageAnal
     fun setBundle(valueType:Int?,barcode: Barcode?):Bundle{
 
         var bundle=Bundle()
+        calArrayList = ArrayList()
         when(valueType){
-            Barcode.TYPE_URL -> bundle.putString(Intent_KEYS.URL,barcode?.url?.url)
+            Barcode.TYPE_URL -> {
+                bundle.putString(Intent_KEYS.URL,barcode?.url?.url)
+                calArrayList.add(barcode?.url?.url.toString())
+                bundle.putStringArrayList("",calArrayList)
+
+                calArrayList?.let { bundle?.putStringArrayList(Intent_KEYS.URL_LIST, calArrayList) }
+            }
             Barcode.TYPE_WIFI -> {
+
                 bundle.putString(Intent_KEYS.WIFINAME,barcode?.wifi?.ssid.toString())
                 bundle.putString(Intent_KEYS.PASSWORD,barcode?.wifi?.password.toString())
-                barcode?.wifi?.encryptionType?.let { bundle.putInt(Intent_KEYS.ENCRYPTION_VALUE, it) }
+                barcode?.wifi?.encryptionType?.let {
+                    bundle.putInt(Intent_KEYS.ENCRYPTION_VALUE, it)
+                }
+                calArrayList.add(barcode?.wifi?.ssid.toString())
+                calArrayList.add(barcode?.wifi?.password.toString())
+                calArrayList.add(barcode?.wifi?.encryptionType.toString())
+
+                calArrayList?.let { bundle?.putStringArrayList(Intent_KEYS.WIFI_LIST, calArrayList) }
             }
             Barcode.TYPE_EMAIL -> {
                 bundle.putString(Intent_KEYS.EMAIL_ADDRESS,barcode?.email?.address)
                 bundle.putString(Intent_KEYS.EMAIL_SUBJECT,barcode?.email?.subject)
                 bundle.putString(Intent_KEYS.EMAIL_BODY,barcode?.email?.body)
+
+                calArrayList.add(barcode?.email?.address.toString())
+                calArrayList.add(barcode?.email?.subject.toString())
+                calArrayList.add(barcode?.email?.body.toString())
+
+                calArrayList?.let { bundle?.putStringArrayList(Intent_KEYS.EMAIL_LIST, calArrayList) }
+
+
             }
             Barcode.TYPE_SMS  ->{
                 bundle.putString(Intent_KEYS.SMS_PHONE,barcode?.sms?.phoneNumber)
                 bundle.putString(Intent_KEYS.MESSAGE,barcode?.sms?.message)
+
+                calArrayList.add(barcode?.sms?.phoneNumber.toString())
+                calArrayList.add(barcode?.sms?.message.toString())
+
+                calArrayList?.let { bundle?.putStringArrayList(Intent_KEYS.SMS_LIST, calArrayList) }
             }
             Barcode.TYPE_CALENDAR_EVENT ->{
-                calArrayList = ArrayList()
                 calArrayList.add(barcode?.calendarEvent?.summary.toString())
                 calArrayList.add(barcode?.calendarEvent?.description.toString())
                 calArrayList.add(barcode?.calendarEvent?.location.toString())
@@ -179,40 +203,28 @@ class QRCodeImageAnalyzer(private val listener: QRCodeFoundListener) : ImageAnal
                 calArrayList.add(barcode?.calendarEvent?.end?.minutes.toString())
                 calArrayList.add(barcode?.calendarEvent?.end?.seconds.toString())
 
-                calArrayList.add(barcode?.calendarEvent?.summary.toString())
-                calArrayList.add(barcode?.calendarEvent?.summary.toString())
-                calArrayList.add(barcode?.calendarEvent?.summary.toString())
-                calArrayList.add(barcode?.calendarEvent?.summary.toString())
-                calArrayList.add(barcode?.calendarEvent?.summary.toString())
-                calArrayList.add(barcode?.calendarEvent?.summary.toString())
-
-                bundle.putStringArrayList(Intent_KEYS.CAL_ARRAYLIST,calArrayList)
-
+                calArrayList?.let { bundle?.putStringArrayList(Intent_KEYS.CAL_ARRAYLIST, calArrayList) }
             }
             Barcode.TYPE_CONTACT_INFO ->{
                 contactArrayList = ArrayList()
                try {
-                   contactArrayList.add(barcode?.contactInfo?.phones?.get(0)?.number.toString())
-                   contactArrayList.add(
-                       barcode?.contactInfo?.addresses?.get(0)?.addressLines?.get(0).toString()
-                   )
-                   contactArrayList.add(barcode?.contactInfo?.emails?.get(0)?.address.toString())
+                   calArrayList.add(barcode?.contactInfo?.phones?.get(0)?.number.toString())
+                   calArrayList.add(barcode?.contactInfo?.addresses?.get(0)?.addressLines?.get(0).toString())
+                   calArrayList.add(barcode?.contactInfo?.emails?.get(0)?.address.toString())
                    var dfhdj4 = ""
                    barcode?.contactInfo?.organization?.forEach { dfhdj4 += it.toString() }
-                   contactArrayList.add(dfhdj4)
-                   contactArrayList.add(barcode?.contactInfo?.name?.formattedName.toString())
-                   contactArrayList.add(barcode?.contactInfo?.title.toString())
-                   contactArrayList.add(barcode?.contactInfo?.urls?.get(0).toString())
-                   contactArrayList.add(barcode?.contactInfo?.phones?.get(0)?.type.toString())
+                   calArrayList.add(dfhdj4)
+                   calArrayList.add(barcode?.contactInfo?.name?.formattedName.toString())
+                   calArrayList.add(barcode?.contactInfo?.title.toString())
+                   calArrayList.add(barcode?.contactInfo?.urls?.get(0).toString())
+                   calArrayList.add(barcode?.contactInfo?.phones?.get(0)?.type.toString())
 
-                   contactArrayList?.let {
-                       bundle?.putStringArrayList(Intent_KEYS.CONTACTS_ARRAYLIST, contactArrayList)
-                   }
+                   calArrayList?.let { bundle?.putStringArrayList(Intent_KEYS.CONTACTS_ARRAYLIST, calArrayList) }
                }catch (e:Exception){}
             }
             //doesnot suppported
             Barcode.TYPE_DRIVER_LICENSE ->{
-                bundle.putString(Intent_KEYS.LICENCE_NUMBER,barcode?.driverLicense?.licenseNumber)
+              /*  bundle.putString(Intent_KEYS.LICENCE_NUMBER,barcode?.driverLicense?.licenseNumber)
                 bundle.putString(Intent_KEYS.LICENCE_FIRSTNAME,barcode?.driverLicense?.firstName)
                 bundle.putString(Intent_KEYS.LICENCE_MIDDLENAME,barcode?.driverLicense?.middleName)
                 bundle.putString(Intent_KEYS.LICENCE_LASTNAME,barcode?.driverLicense?.lastName)
@@ -226,7 +238,7 @@ class QRCodeImageAnalyzer(private val listener: QRCodeFoundListener) : ImageAnal
                 bundle.putString(Intent_KEYS.LICENCE_ADSTATE,barcode?.driverLicense?.addressState)
                 bundle.putString(Intent_KEYS.LICENCE_ADCITY,barcode?.driverLicense?.addressCity)
                 bundle.putString(Intent_KEYS.LICENCE_ADZIP,barcode?.driverLicense?.addressZip)
-            }
+     */       }
             else-> bundle.putString(Intent_KEYS.VOID,"VOID")
        }
         return bundle

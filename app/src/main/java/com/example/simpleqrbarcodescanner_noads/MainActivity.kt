@@ -22,15 +22,30 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import com.example.simpleqrbarcodescanner_noads.Util.Custom_Formats_duplicate
 import com.example.simpleqrbarcodescanner_noads.Util.Intent_KEYS
 import com.example.simpleqrbarcodescanner_noads.databinding.ActivityMainBinding
+import com.example.simpleqrbarcodescanner_noads.room.EntityClass
+import com.example.simpleqrbarcodescanner_noads.room.MainRepositry
+import com.example.simpleqrbarcodescanner_noads.room.MyRoomDatabase
 import com.google.common.util.concurrent.ListenableFuture
+import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
+import dagger.hilt.android.AndroidEntryPoint
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observer
+import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.internal.operators.observable.ObservableOnErrorComplete
+import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity(){
 
     private val PERMISSION_REQUEST_CAMERA = 1
@@ -46,12 +61,56 @@ class MainActivity : AppCompatActivity(){
 
     var vibrator:Vibrator?=null
 
+    @Inject
+    lateinit var mainRepositry: MainRepositry
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
         setContentView(binding?.root)
 
         supportActionBar?.hide()
+
+
+      /*  mainRepositry.getList().observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe {
+                it.forEach {
+                    Log.d("'fgidhfgd",it.rawValue)
+                    Toast.makeText(this,it.rawValue,Toast.LENGTH_SHORT).show()
+                    binding?.textTexting?.text = it.rawValue
+                }
+            }*/
+var count = 1
+        binding?.scanImage?.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                mainRepositry.insert(
+                    EntityClass(
+                        ArrayList<String>(),
+                        System.currentTimeMillis(),
+                        "hds${count++}",
+                        "isdgggggfhs${count++}"
+                    )
+                )
+            }
+            }
+          /*  .subscribe(object:io.reactivex.rxjava3.core.SingleObserver<List<EntityClass>>{
+                override fun onSubscribe(d: Disposable) {}
+                override fun onError(e: Throwable) {}
+
+                override fun onSuccess(t: List<EntityClass>) {
+                }
+            })*/
+
+
+
+
+      //  CoroutineScope(Dispatchers.IO).launch {
+         // MyRoomDatabase.getInstance(this@MainActivity).getDao().query().get(0).calenderList.forEach {
+              // Log.d("f777udjf",it.toString())
+          // }
+      //  }
       /*  binding?.button?.setOnClickListener {
           *//*  val intent = Intent(applicationContext,MainActivity2::class.java)
             startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(this).toBundle())*//*
@@ -171,8 +230,7 @@ binding?.imageView?.setImageBitmap(bitmap)*/
                    // binding?.button?.text = qrCode
                     this@MainActivity.qrCode = qrCode
                 }
-                override fun onqrCodeNotFound() {
-                }
+                override fun onqrCodeNotFound() {}
                 override fun onQRFormat(qrCode: String?, format: Int?, valueType: Int?, bundle:Bundle?) {
                     val intent = Intent(applicationContext, MainActivity2::class.java)
                     intent.putExtra(Intent_KEYS.QRCODE, qrCode)
@@ -196,6 +254,7 @@ binding?.imageView?.setImageBitmap(bitmap)*/
                     //  qrGenerate(qrCode,format)
                 }
 
+            override fun onBarcode(barcode: Barcode) {}
             })
         )
         camera = cameraProvider.bindToLifecycle(this,cameraSelector,imageAnalysis,preview)
@@ -206,11 +265,11 @@ binding?.imageView?.setImageBitmap(bitmap)*/
                    camera.cameraControl.enableTorch(!isFlashGlow)
                }
            }
-         camera.cameraInfo.torchState.observe(this, Observer {
-         isFlashGlow = when(it) {
-             TorchState.ON -> true
-             else -> false
-         }
+         camera.cameraInfo.torchState.observe(this, androidx.lifecycle.Observer {
+             isFlashGlow = when (it) {
+                 TorchState.ON -> true
+                 else -> false
+             }
          })
         /**-------Configuring Flash---------------------------------*/
 
@@ -219,7 +278,7 @@ binding?.imageView?.setImageBitmap(bitmap)*/
     }
     override fun onResume() {
         super.onResume()
-        Log.d("CALLBAbbbbbCK","onResume")
+        Log.d("dfsdfsdfs","onResume")
         requestCamera()
     }
 

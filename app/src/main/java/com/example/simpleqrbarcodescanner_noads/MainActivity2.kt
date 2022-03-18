@@ -24,16 +24,20 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import android.content.Intent
-import android.icu.util.Calendar
 import android.provider.CalendarContract
 import android.provider.ContactsContract
+import com.example.simpleqrbarcodescanner_noads.room.EntityClass
+import com.example.simpleqrbarcodescanner_noads.room.MyRoomDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlin.collections.ArrayList
 
 
 class MainActivity2 : AppCompatActivity()
 {
      lateinit var binding:ActivityMain2Binding
-    private var qrCOde:String?=null
+    private var rawQrCOde:String?=null
     private  val SEARCHBUTTON = 1
     private val CALLBUTTON = 2
     private val mPERMISSION_CODE = 100
@@ -45,26 +49,10 @@ class MainActivity2 : AppCompatActivity()
     private lateinit var emailSubject:String
     private lateinit var emailBody:String
 
-    private lateinit var cal_title:String
-    private lateinit var cal_description:String
-    private lateinit var cal_location:String
-    private lateinit var startDAY:String
-    private lateinit var startMONTH:String
-    private lateinit var startYEAR:String
-    private lateinit var startHOUR:String
-    private lateinit var startMINUTES:String
-    private lateinit var startSECONDS:String
-
-    private lateinit var endDAY:String
-    private lateinit var endMONTH:String
-    private lateinit var endYEAR:String
-    private lateinit var endHOUR:String
-    private lateinit var endMINUTES:String
-    private lateinit var endSECONDS:String
-
-    private lateinit var cal_end:String
     lateinit var calArlst:ArrayList<String>
     lateinit var contactArlst:ArrayList<String>
+
+    lateinit var arrayList:ArrayList<String>
 
 
 
@@ -77,19 +65,25 @@ class MainActivity2 : AppCompatActivity()
 
         //createEvent()
 
-         qrCOde = intent.getStringExtra(Intent_KEYS.QRCODE)
+         rawQrCOde = intent.getStringExtra(Intent_KEYS.QRCODE)
         val format = intent.getIntExtra(Intent_KEYS.FORMAT, 0)
         val valueType = intent.getIntExtra(Intent_KEYS.VALUETYPE,0)
         val bundle = intent.getBundleExtra(Intent_KEYS.BUNDLE)
 
+        arrayList = ArrayList()
+
 
         //when block for setting data acc. to Valuetype
         when(valueType){
-                Barcode.TYPE_DRIVER_LICENSE->{
+               /* Barcode.TYPE_DRIVER_LICENSE->{
                 binding?.typeTextView.text = "Driving Licence"
-                val licencenumber = bundle?.getString("LICENCE_NUMBER")
-                binding.result.text = licencenumber
-            }
+
+                    CoroutineScope(Dispatchers.IO).launch {
+                        MyRoomDatabase.getInstance(this@MainActivity2).getDao()
+                            .insert(EntityClass(calArlst,System.currentTimeMillis(),Barcode.TYPE_CALENDAR_EVENT.toString(),rawQrCOde.toString()))
+                    }
+                binding.result.text = rawQrCOde
+            }*/
                 Barcode.TYPE_WIFI ->{
                     binding?.typeTextView.text = "Wifi"
                 val wifiName = bundle?.getString(Intent_KEYS.WIFINAME)
@@ -98,12 +92,27 @@ class MainActivity2 : AppCompatActivity()
                 val encryption = if(encryptionValue==2){"WPA/WPA2"}
                                 else if(encryptionValue==3){"WEP"}
                                 else{"None"}
+
+                    bundle?.getStringArrayList(Intent_KEYS.WIFI_LIST)?.let { arrayList.addAll(it) }
+                    CoroutineScope(Dispatchers.IO).launch {
+                        MyRoomDatabase.getInstance(this@MainActivity2).getDao()
+                            .insert(EntityClass(arrayList,System.currentTimeMillis(),Barcode.TYPE_WIFI.toString(),rawQrCOde.toString()))
+                    }
+
                 binding.result.text = "Wifi Name:$wifiName\nPassword: $password\n$encryption"
             }
                 Barcode.TYPE_SMS->{
                     binding?.typeTextView.text = "SMS"
                  phone = bundle?.getString(Intent_KEYS.SMS_PHONE).toString()
                  message = bundle?.getString(Intent_KEYS.MESSAGE).toString()
+
+                    bundle?.getStringArrayList(Intent_KEYS.SMS_LIST)?.let { arrayList.addAll(it) }
+
+                    CoroutineScope(Dispatchers.IO).launch {
+                        MyRoomDatabase.getInstance(this@MainActivity2).getDao()
+                            .insert(EntityClass(arrayList,System.currentTimeMillis(),Barcode.TYPE_SMS.toString(),rawQrCOde.toString()))
+                    }
+
                 binding.result.text = "SMS to: $phone\nMessage: $message"
             }
                 Barcode.TYPE_EMAIL->{
@@ -111,7 +120,15 @@ class MainActivity2 : AppCompatActivity()
                  emailAddress =  bundle?.getString(Intent_KEYS.EMAIL_ADDRESS).toString()
                  emailSubject =  bundle?.getString(Intent_KEYS.EMAIL_SUBJECT).toString()
                  emailBody =  bundle?.getString(Intent_KEYS.EMAIL_BODY).toString()
+
+                    bundle?.getStringArrayList(Intent_KEYS.EMAIL_LIST)?.let { arrayList.addAll(it) }
+
+                    CoroutineScope(Dispatchers.IO).launch {
+                        MyRoomDatabase.getInstance(this@MainActivity2).getDao()
+                            .insert(EntityClass(arrayList,System.currentTimeMillis(),Barcode.TYPE_EMAIL.toString(),rawQrCOde.toString()))
+                    }
                 binding.result.text = "Mail to :$emailAddress\nSubject : $emailSubject\nBody: $emailBody"
+
             }
                 Barcode.TYPE_CALENDAR_EVENT ->{
                 binding?.typeTextView.text = "Event"
@@ -129,19 +146,32 @@ class MainActivity2 : AppCompatActivity()
                 if(calArlst[14].toInt()<10){  calArlst[14] = "0${calArlst[14]}"}
 
                 binding.result.text = "Summary: ${calArlst[0]}\nDescription: ${calArlst[1]}\nLocation: ${calArlst[2]}\nStart Time: ${calArlst[3]}-${calArlst[4]}-${calArlst[5]}   ${calArlst[6]}:${calArlst[7]}:${calArlst[8]}\nEnd Time: ${calArlst[9]}-${calArlst[10]}-${calArlst[11]}   ${calArlst[12]}:${calArlst[13]}:${calArlst[14]}"
+                    CoroutineScope(Dispatchers.IO).launch {
+                        MyRoomDatabase.getInstance(this@MainActivity2).getDao()
+                            .insert(EntityClass(calArlst,System.currentTimeMillis(),Barcode.TYPE_CALENDAR_EVENT.toString(),rawQrCOde.toString()))
+                    }
             }
                 Barcode.TYPE_CONTACT_INFO ->{
                     contactArlst = ArrayList()
                     bundle?.getStringArrayList(Intent_KEYS.CONTACTS_ARRAYLIST)?.let {
                         contactArlst.addAll(it) }
-                    binding.result.text = qrCOde
+                    CoroutineScope(Dispatchers.IO).launch {
+                        MyRoomDatabase.getInstance(this@MainActivity2).getDao()
+                            .insert(EntityClass(contactArlst,System.currentTimeMillis(),Barcode.TYPE_CONTACT_INFO.toString(),rawQrCOde.toString()))
+                    }
+                    binding.result.text = rawQrCOde
                 }
             else ->{
                 binding?.typeTextView.text = "Void"
-                binding.result.text = qrCOde
+                binding.result.text = rawQrCOde
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    MyRoomDatabase.getInstance(this@MainActivity2).getDao()
+                        .insert(EntityClass(arrayList,System.currentTimeMillis(),Barcode.TYPE_UNKNOWN.toString(),rawQrCOde.toString()))
+                }
             }
         }
-        val bitmap = qrGenerate(qrCOde, format)
+        val bitmap = qrGenerate(rawQrCOde, format)
         binding.codeImage.setImageBitmap(bitmap)
 
         //when block to set type of barcode acc. to valueType
@@ -251,7 +281,7 @@ class MainActivity2 : AppCompatActivity()
                 binding.searchButton.visibility = View.GONE
                 binding.copybutton.text = "Copy"
                 binding.addContactsButton.visibility = View.GONE
-                "Licence"}
+                "Driving Licence"}
            else -> {
                binding.searchButton.visibility= View.GONE
                binding.copybutton.visibility = View.GONE
@@ -264,12 +294,12 @@ class MainActivity2 : AppCompatActivity()
         binding.searchButton.setOnClickListener {
             val buttonText = binding.searchButton.text
             when(buttonText) {
-                "Search" ->  qrCOde?.let { onSearch(it, valueType) }
-                "Copy" ->  qrCOde?.let { copyText(it) }
+                "Search" ->  rawQrCOde?.let { onSearch(it, valueType) }
+                "Copy" ->  rawQrCOde?.let { copyText(it) }
                 "Add to contacts"-> addToContacts(contactArlst)
                 "Call"-> if(ContextCompat.checkSelfPermission(this,Manifest.permission.CALL_PHONE)!=PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE),mPERMISSION_CODE)
-                }else{qrCOde?.let { call(it) } }
+                }else{rawQrCOde?.let { call(it) } }
                 "Add event"->createEvent(calArlst)
                 "Send email"->sendEmail(emailAddress,emailSubject,emailBody)
                 "Create message"->createMessage(phone,message)
@@ -277,10 +307,10 @@ class MainActivity2 : AppCompatActivity()
             }
         }
         binding.copybutton.setOnClickListener {
-            qrCOde?.let { copyText(it) }
+            rawQrCOde?.let { copyText(it) }
         }
         binding.shareButton.setOnClickListener {
-            qrCOde?.let { shareText(it) }
+            rawQrCOde?.let { shareText(it) }
         }
     }//end of onCreate()
 
@@ -405,7 +435,7 @@ class MainActivity2 : AppCompatActivity()
         intent.data = Uri.parse(/*"tel:$*/phnNumber)
         MaterialAlertDialogBuilder(this, com.google.android.material.R.style.MaterialAlertDialog_MaterialComponents)
             .setIcon(resources.getDrawable(R.drawable.ic_twotone_call_24,null))
-            .setMessage("Calling to: $qrCOde")
+            .setMessage("Calling to: $rawQrCOde")
             .setTitle("Dial")
             .setCancelable(true)
             .setBackground(resources.getDrawable(R.drawable.dialog_background,null))
@@ -465,7 +495,7 @@ class MainActivity2 : AppCompatActivity()
             mPERMISSION_CODE ->{
                 if(permissions.isNotEmpty() && permissions[0].equals(Manifest.permission.CALL_PHONE))
                 {
-                     qrCOde?.let { call(it) }
+                     rawQrCOde?.let { call(it) }
                 }
             }
         }
