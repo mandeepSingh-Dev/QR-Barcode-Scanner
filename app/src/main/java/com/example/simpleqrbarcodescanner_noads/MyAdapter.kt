@@ -35,7 +35,7 @@ Log.d("fjisdfhsd",typeValue)
     }
      fun getTypeValueasString(typeValue:Int):String{
          return   when(typeValue)
-         {
+           {
              Barcode.TYPE_PRODUCT -> "Product"
              Barcode.TYPE_TEXT-> "Text"
              Barcode.TYPE_CONTACT_INFO-> "Contact Information"

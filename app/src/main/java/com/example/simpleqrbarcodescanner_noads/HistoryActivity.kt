@@ -2,10 +2,13 @@ package com.example.simpleqrbarcodescanner_noads
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.text.Layout
 import android.util.Log
 import android.view.LayoutInflater
+import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.simpleqrbarcodescanner_noads.MyViewmodel.MyViewModel
 import com.example.simpleqrbarcodescanner_noads.databinding.ActivityHistoryBinding
 import com.example.simpleqrbarcodescanner_noads.room.EntityClass
 import com.example.simpleqrbarcodescanner_noads.room.MainRepositry
@@ -21,8 +24,9 @@ class HistoryActivity : AppCompatActivity() {
     @Inject
     lateinit var mainRepositry:MainRepositry
 
-    var adapter:MyAdapter?=null
+    val myViewmodel:MyViewModel by viewModels()
 
+    var adapter:MyAdapter?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,8 +38,8 @@ class HistoryActivity : AppCompatActivity() {
 
    fun getData(){
        var list = mutableListOf<EntityClass>()
-       mainRepositry.getList()
-           .subscribeOn(Schedulers.io())
+      // mainRepositry.getList()
+       myViewmodel.listobservable.subscribeOn(Schedulers.io())
            .observeOn(Schedulers.computation())
            .map {
                list = it as MutableList<EntityClass>
@@ -43,8 +47,8 @@ class HistoryActivity : AppCompatActivity() {
            .observeOn(AndroidSchedulers.mainThread())
            .doOnError {
                Log.d("dkfndk",it.message.toString())
-           }.subscribe {
-
+           }
+           .subscribe {
                adapter = MyAdapter(this,list.toList())
                initRecyclerView()
               /* list.forEach {
@@ -56,5 +60,9 @@ class HistoryActivity : AppCompatActivity() {
     fun initRecyclerView(){
         binding.historyRecyclerView.layoutManager = LinearLayoutManager(this)
        binding.historyRecyclerView.adapter = adapter
+    }
+
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+        super.onSaveInstanceState(outState, outPersistentState)
     }
 }

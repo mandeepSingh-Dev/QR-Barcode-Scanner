@@ -26,6 +26,7 @@ import com.journeyapps.barcodescanner.BarcodeEncoder
 import android.content.Intent
 import android.provider.CalendarContract
 import android.provider.ContactsContract
+import android.widget.Toast
 import com.example.simpleqrbarcodescanner_noads.room.EntityClass
 import com.example.simpleqrbarcodescanner_noads.room.MyRoomDatabase
 import kotlinx.coroutines.CoroutineScope
@@ -66,6 +67,7 @@ class MainActivity2 : AppCompatActivity()
         //createEvent()
 
          rawQrCOde = intent.getStringExtra(Intent_KEYS.QRCODE)
+      //  Toast.makeText(this,rawQrCOde,Toast.LENGTH_SHORT).show()
         val format = intent.getIntExtra(Intent_KEYS.FORMAT, 0)
         val valueType = intent.getIntExtra(Intent_KEYS.VALUETYPE,0)
         val bundle = intent.getBundleExtra(Intent_KEYS.BUNDLE)
@@ -76,109 +78,7 @@ class MainActivity2 : AppCompatActivity()
         //when block for setting data acc. to Valuetype and to store in room also
         // but for only metoined below types
         //and for other types we store from another 2nd when block
-        when(valueType){
-               /* Barcode.TYPE_DRIVER_LICENSE->{
-                binding?.typeTextView.text = "Driving Licence"
 
-                    CoroutineScope(Dispatchers.IO).launch {
-                        MyRoomDatabase.getInstance(this@MainActivity2).getDao()
-                            .insert(EntityClass(calArlst,System.currentTimeMillis(),Barcode.TYPE_CALENDAR_EVENT.toString(),rawQrCOde.toString()))
-                    }
-                binding.result.text = rawQrCOde
-            }*/
-                Barcode.TYPE_WIFI ->{
-                    binding?.typeTextView.text = "Wifi"
-                val wifiName = bundle?.getString(Intent_KEYS.WIFINAME)
-                val password = bundle?.getString(Intent_KEYS.PASSWORD)
-                val encryptionValue = bundle?.getInt(Intent_KEYS.ENCRYPTION_VALUE)
-                val encryption = if(encryptionValue==2){"WPA/WPA2"}
-                                else if(encryptionValue==3){"WEP"}
-                                else{"None"}
-
-                    bundle?.getStringArrayList(Intent_KEYS.WIFI_LIST)?.let { arrayList.addAll(it) }
-/*
-                    CoroutineScope(Dispatchers.IO).launch {
-                        MyRoomDatabase.getInstance(this@MainActivity2).getDao()
-                            .insert(EntityClass(arrayList,System.currentTimeMillis(),Barcode.TYPE_WIFI.toString(),rawQrCOde.toString()))
-                    }
-*/
-           minsert(Barcode.TYPE_WIFI)
-                binding.result.text = "Wifi Name:$wifiName\nPassword: $password\n$encryption"
-            }
-                Barcode.TYPE_SMS->{
-                    binding?.typeTextView.text = "SMS"
-                 phone = bundle?.getString(Intent_KEYS.SMS_PHONE).toString()
-                 message = bundle?.getString(Intent_KEYS.MESSAGE).toString()
-
-                    bundle?.getStringArrayList(Intent_KEYS.SMS_LIST)?.let { arrayList.addAll(it) }
-
-/*
-                    CoroutineScope(Dispatchers.IO).launch {
-                        MyRoomDatabase.getInstance(this@MainActivity2).getDao()
-                            .insert(EntityClass(arrayList,System.currentTimeMillis(),Barcode.TYPE_SMS.toString(),rawQrCOde.toString()))
-                    }
-*/
-                    minsert(Barcode.TYPE_SMS)
-                binding.result.text = "SMS to: $phone\nMessage: $message"
-            }
-                Barcode.TYPE_EMAIL->{
-                    binding?.typeTextView.text = "Email"
-                 emailAddress =  bundle?.getString(Intent_KEYS.EMAIL_ADDRESS).toString()
-                 emailSubject =  bundle?.getString(Intent_KEYS.EMAIL_SUBJECT).toString()
-                 emailBody =  bundle?.getString(Intent_KEYS.EMAIL_BODY).toString()
-
-                    bundle?.getStringArrayList(Intent_KEYS.EMAIL_LIST)?.let { arrayList.addAll(it) }
-
-/*
-                    CoroutineScope(Dispatchers.IO).launch {
-                        MyRoomDatabase.getInstance(this@MainActivity2).getDao()
-                            .insert(EntityClass(arrayList,System.currentTimeMillis(),Barcode.TYPE_EMAIL.toString(),rawQrCOde.toString()))
-                    }
-*/                    minsert(Barcode.TYPE_EMAIL)
-
-                    binding.result.text = "Mail to :$emailAddress\nSubject : $emailSubject\nBody: $emailBody"
-
-            }
-                Barcode.TYPE_CALENDAR_EVENT ->{
-                binding?.typeTextView.text = "Event"
-                calArlst = ArrayList()
-                bundle?.getStringArrayList(Intent_KEYS.CAL_ARRAYLIST)?.let {
-                    calArlst.addAll(it) }
-
-
-                if(calArlst[6].toInt()<10){ calArlst[6] = "0${calArlst[6]}" }
-                if(calArlst[7].toInt()<10){  calArlst[7] = "0${calArlst[7]}" }
-                if(calArlst[8].toInt()<10){  calArlst[8] = "0${calArlst[8]}" }
-
-                if(calArlst[12].toInt()<10){  calArlst[12] = "0${calArlst[12]}" }
-                if(calArlst[13].toInt()<10){  calArlst[13] = "0${calArlst[13]}" }
-                if(calArlst[14].toInt()<10){  calArlst[14] = "0${calArlst[14]}"}
-
-                binding.result.text = "Summary: ${calArlst[0]}\nDescription: ${calArlst[1]}\nLocation: ${calArlst[2]}\nStart Time: ${calArlst[3]}-${calArlst[4]}-${calArlst[5]}   ${calArlst[6]}:${calArlst[7]}:${calArlst[8]}\nEnd Time: ${calArlst[9]}-${calArlst[10]}-${calArlst[11]}   ${calArlst[12]}:${calArlst[13]}:${calArlst[14]}"
-/*
-                    CoroutineScope(Dispatchers.IO).launch {
-                        MyRoomDatabase.getInstance(this@MainActivity2).getDao()
-                            .insert(EntityClass(calArlst,System.currentTimeMillis(),Barcode.TYPE_CALENDAR_EVENT.toString(),rawQrCOde.toString()))
-                    }
-*/              minsert( Barcode.TYPE_CALENDAR_EVENT)
-            }
-                Barcode.TYPE_CONTACT_INFO ->{
-                    contactArlst = ArrayList()
-                    bundle?.getStringArrayList(Intent_KEYS.CONTACTS_ARRAYLIST)?.let {
-                        contactArlst.addAll(it) }
-                    CoroutineScope(Dispatchers.IO).launch {
-                        MyRoomDatabase.getInstance(this@MainActivity2).getDao()
-                            .insert(EntityClass(contactArlst,System.currentTimeMillis(),Barcode.TYPE_CONTACT_INFO.toString(),rawQrCOde.toString()))
-                    }
-                    binding.result.text = rawQrCOde
-                    minsert( Barcode.TYPE_CONTACT_INFO)
-                }
-            else ->{
-                binding?.typeTextView.text = "Void"
-                binding.result.text = rawQrCOde
-                minsert( Barcode.TYPE_UNKNOWN)
-            }
-        }
         val bitmap = qrGenerate(rawQrCOde, format)
         binding.codeImage.setImageBitmap(bitmap)
 
@@ -193,13 +93,17 @@ class MainActivity2 : AppCompatActivity()
                 binding.addContactsButton.visibility = View.GONE
 //                binding.copyMainButton.visibility = View.GONE
                minsert( Barcode.TYPE_PRODUCT)
+                binding.result.text = rawQrCOde
+
                 "Product"}
             Barcode.TYPE_TEXT->  {
                 binding.searchButton.text = "Copy"
                 binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null,null)
                 binding.copybutton.visibility = View.GONE
                 binding.addContactsButton.visibility = View.GONE
+                binding.result.text = rawQrCOde
                 minsert( Barcode.TYPE_TEXT)
+
                 "Text"}
             Barcode.TYPE_CONTACT_INFO->  {
                 binding.searchButton.text = "Add to contacts"
@@ -207,6 +111,17 @@ class MainActivity2 : AppCompatActivity()
                 binding.copybutton.text = "Call"
                 binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_twotone_call_24,null),null,null)
                 //    binding.copyMainButton.visibility = View.GONE
+              /**------------------*/
+                bundle?.getStringArrayList(Intent_KEYS.CONTACTS_ARRAYLIST)?.let {
+                    /*contactArlst.addAll(it)*/
+                    arrayList.addAll(it)}
+                /* CoroutineScope(Dispatchers.IO).launch {
+                     MyRoomDatabase.getInstance(this@MainActivity2).getDao()
+                         .insert(EntityClass(contactArlst,System.currentTimeMillis(),Barcode.TYPE_CONTACT_INFO.toString(),rawQrCOde.toString()))
+                 }*/
+                binding.result.text = rawQrCOde
+                minsert( Barcode.TYPE_CONTACT_INFO)
+                /**------------------*/
 
                 "Contact Information"}
             Barcode.TYPE_ISBN->  {
@@ -216,6 +131,7 @@ class MainActivity2 : AppCompatActivity()
                 binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
                 binding.addContactsButton.visibility = View.GONE
                 //    binding.copyMainButton.visibility = View.GONE
+                binding.result.text = rawQrCOde
                 minsert( Barcode.TYPE_ISBN)
 
                 "ID Book"}
@@ -225,8 +141,9 @@ class MainActivity2 : AppCompatActivity()
                 binding.copybutton.text = "Copy"
                 binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
                 binding.addContactsButton.text = "Add contact"
-                minsert( Barcode.TYPE_PHONE)
 //  binding.copyMainButton.visibility = View.GONE
+                binding.result.text = rawQrCOde
+                minsert( Barcode.TYPE_PHONE)
                 "Phone"}
             Barcode.TYPE_URL->  {
                 binding.searchButton.text = "Search"
@@ -235,6 +152,7 @@ class MainActivity2 : AppCompatActivity()
                 binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
                 binding.addContactsButton.visibility = View.GONE
                 //  binding.copyMainButton.visibility = View.GONE
+                binding.result.text = rawQrCOde
                 minsert( Barcode.TYPE_URL)
                 "Url"}
             Barcode.TYPE_GEO-> {
@@ -242,6 +160,7 @@ class MainActivity2 : AppCompatActivity()
                 binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null,null)
                 binding.copybutton.visibility = View.GONE
                 binding.addContactsButton.visibility = View.GONE
+                binding.result.text = rawQrCOde
                 minsert( Barcode.TYPE_GEO)
 
                 "Location"}
@@ -252,7 +171,28 @@ class MainActivity2 : AppCompatActivity()
                 binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
                 binding.addContactsButton.visibility = View.GONE
                 //  binding.copyMainButton.visibility = View.GONE
+                /**--------------------*/
+                bundle?.getStringArrayList(Intent_KEYS.CAL_ARRAYLIST)?.let {
+                    /*calArlst.addAll(it)*/
+                    arrayList.addAll(it) }
 
+
+                if(arrayList[6].toInt()<10){ arrayList[6] = "0${arrayList[6]}" }
+                if(arrayList[7].toInt()<10){  arrayList[7] = "0${arrayList[7]}" }
+                if(arrayList[8].toInt()<10){  arrayList[8] = "0${arrayList[8]}" }
+
+                if(arrayList[12].toInt()<10){ arrayList[12] = "0${arrayList[12]}" }
+                if(arrayList[13].toInt()<10){ arrayList[13] = "0${arrayList[13]}" }
+                if(arrayList[14].toInt()<10){ arrayList[14] = "0${arrayList[14]}"}
+
+                binding.result.text = "Summary: ${arrayList[0]}\nDescription: ${arrayList[1]}\nLocation: ${arrayList[2]}\nStart Time: ${arrayList[3]}-${arrayList[4]}-${arrayList[5]}   ${arrayList[6]}:${arrayList[7]}:${arrayList[8]}\nEnd Time: ${arrayList[9]}-${arrayList[10]}-${arrayList[11]}   ${arrayList[12]}:${arrayList[13]}:${arrayList[14]}"
+/*
+                    CoroutineScope(Dispatchers.IO).launch {
+                        MyRoomDatabase.getInstance(this@MainActivity2).getDao()
+                            .insert(EntityClass(calArlst,System.currentTimeMillis(),Barcode.TYPE_CALENDAR_EVENT.toString(),rawQrCOde.toString()))
+                    }
+*/              minsert( Barcode.TYPE_CALENDAR_EVENT)
+                /**--------------------*/
                 "Event"}
             Barcode.TYPE_UNKNOWN ->{
                 binding.searchButton.text = "Search"
@@ -261,6 +201,7 @@ class MainActivity2 : AppCompatActivity()
                 binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
                 binding.addContactsButton.visibility = View.GONE
                 //  binding.copyMainButton.visibility = View.GONE
+                binding.result.text = rawQrCOde
                 minsert( Barcode.TYPE_UNKNOWN)
 
                 "Unknown"}
@@ -271,7 +212,23 @@ class MainActivity2 : AppCompatActivity()
                 binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
                 binding.addContactsButton.visibility = View.GONE
                 //   binding.copyMainButton.visibility = View.GONE
+                /**--------------------------*/
+                emailAddress =  bundle?.getString(Intent_KEYS.EMAIL_ADDRESS).toString()
+                emailSubject =  bundle?.getString(Intent_KEYS.EMAIL_SUBJECT).toString()
+                emailBody =  bundle?.getString(Intent_KEYS.EMAIL_BODY).toString()
 
+                bundle?.getStringArrayList(Intent_KEYS.EMAIL_LIST)?.let { arrayList.addAll(it) }
+
+/*
+                    CoroutineScope(Dispatchers.IO).launch {
+                        MyRoomDatabase.getInstance(this@MainActivity2).getDao()
+                            .insert(EntityClass(arrayList,System.currentTimeMillis(),Barcode.TYPE_EMAIL.toString(),rawQrCOde.toString()))
+                    }
+*/
+                binding.result.text = "Mail to :$emailAddress\nSubject : $emailSubject\nBody: $emailBody"
+                minsert(Barcode.TYPE_EMAIL)
+
+                /**----------------*/
                 "Email"}
             Barcode.TYPE_SMS->{
                 binding.searchButton.text = "Create message"
@@ -280,7 +237,21 @@ class MainActivity2 : AppCompatActivity()
                 binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
                 binding.addContactsButton.visibility = View.GONE
                 //   binding.copyMainButton.visibility = View.GONE
+         /**--------------------------*/
+                phone = bundle?.getString(Intent_KEYS.SMS_PHONE).toString()
+                message = bundle?.getString(Intent_KEYS.MESSAGE).toString()
 
+                bundle?.getStringArrayList(Intent_KEYS.SMS_LIST)?.let { arrayList.addAll(it) }
+
+/*
+                    CoroutineScope(Dispatchers.IO).launch {
+                        MyRoomDatabase.getInstance(this@MainActivity2).getDao()
+                            .insert(EntityClass(arrayList,System.currentTimeMillis(),Barcode.TYPE_SMS.toString(),rawQrCOde.toString()))
+                    }
+*/
+                binding.result.text = "SMS to: $phone\nMessage: $message"
+                minsert(Barcode.TYPE_SMS)
+                /**-----------------------*/
                 "SMS"}
             Barcode.TYPE_WIFI->{
                 binding.searchButton.text = "Connect"
@@ -289,12 +260,30 @@ class MainActivity2 : AppCompatActivity()
                 binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
                 binding.addContactsButton.visibility = View.GONE
                 //  binding.copyMainButton.visibility = View.GONE
+                /**---------------------------*/
+                val wifiName = bundle?.getString(Intent_KEYS.WIFINAME)
+                val password = bundle?.getString(Intent_KEYS.PASSWORD)
+                val encryptionValue = bundle?.getInt(Intent_KEYS.ENCRYPTION_VALUE)
+                val encryption = if(encryptionValue==2){"WPA/WPA2"}
+                else if(encryptionValue==3){"WEP"}
+                else{"None"}
 
+                bundle?.getStringArrayList(Intent_KEYS.WIFI_LIST)?.let { arrayList.addAll(it) }
+/*
+                    CoroutineScope(Dispatchers.IO).launch {
+                        MyRoomDatabase.getInstance(this@MainActivity2).getDao()
+                            .insert(EntityClass(arrayList,System.currentTimeMillis(),Barcode.TYPE_WIFI.toString(),rawQrCOde.toString()))
+                    }
+*/
+                binding.result.text = "Wifi Name:$wifiName\nPassword: $password\n$encryption"
+                minsert(Barcode.TYPE_WIFI)
+                /**---------------------------*/
                 "Wifi"}
             Barcode.TYPE_DRIVER_LICENSE->{
                 binding.searchButton.visibility = View.GONE
                 binding.copybutton.text = "Copy"
                 binding.addContactsButton.visibility = View.GONE
+                               binding.result.text = rawQrCOde
                 minsert( Barcode.TYPE_DRIVER_LICENSE)
                 "Driving Licence"}
            else -> {
@@ -302,6 +291,12 @@ class MainActivity2 : AppCompatActivity()
                binding.copybutton.visibility = View.GONE
                binding.shareButton.visibility = View.GONE
                binding.addContactsButton.visibility = View.GONE
+
+               /**--------------------------------*/
+               binding.result.text = rawQrCOde
+               minsert( Barcode.TYPE_UNKNOWN)
+               /**--------------------------------*/
+
                "Unknown"}
         }
         binding.typeTextView.text = textType
