@@ -13,12 +13,12 @@
         android:iconTint="#C6FF00"
         />
     <item
-        android:id="@+id/history3"
+        android:id="@+id/setting"
         android:icon="@drawable/ic_twotone_settings_24"
         android:title="Setting"
         android:iconTint="#1CFFFF"/>
     <item
-        android:id="@+id/history5"
+        android:id="@+id/settingEXTRA"
         android:icon="@drawable/ic_baseline_lightbulb_24"
         android:title="History"
         android:iconTint="#FFFFFF"/>
