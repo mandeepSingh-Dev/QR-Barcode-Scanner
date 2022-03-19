@@ -1,9 +1,10 @@
 package com.example.simpleqrbarcodescanner_noads.room
 
+import android.os.Parcel
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.mlkit.vision.barcode.common.Barcode
 
 @Entity
 class EntityClass(
@@ -52,9 +53,40 @@ class EntityClass(
     var endseconds:String,*/
 
 
-    )
+    ): Parcelable
 {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "ID")
     var id:Int=0
+
+    constructor(parcel: Parcel) : this(
+        parcel.createStringArrayList()!!,
+        parcel.readLong(),
+        parcel.readString().toString(),
+        parcel.readString().toString()
+    ) {
+        id = parcel.readInt()
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeStringList(calenderList)
+        parcel.writeLong(currentTime)
+        parcel.writeString(type_value)
+        parcel.writeString(rawValue)
+        parcel.writeInt(id)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<EntityClass> {
+        override fun createFromParcel(parcel: Parcel): EntityClass {
+            return EntityClass(parcel)
+        }
+
+        override fun newArray(size: Int): Array<EntityClass?> {
+            return arrayOfNulls(size)
+        }
+    }
 }

@@ -1,14 +1,16 @@
 package com.example.simpleqrbarcodescanner_noads
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.text.Layout
+import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
+import android.view.animation.AnimationUtils
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.simpleqrbarcodescanner_noads.MyViewmodel.MyViewModel
+import com.example.simpleqrbarcodescanner_noads.MVVM.MyAdapter
+import com.example.simpleqrbarcodescanner_noads.MVVM.MyViewModel
 import com.example.simpleqrbarcodescanner_noads.databinding.ActivityHistoryBinding
 import com.example.simpleqrbarcodescanner_noads.room.EntityClass
 import com.example.simpleqrbarcodescanner_noads.room.MainRepositry
@@ -24,20 +26,45 @@ class HistoryActivity : AppCompatActivity() {
     @Inject
     lateinit var mainRepositry:MainRepositry
 
-    val myViewmodel:MyViewModel by viewModels()
+    val myViewmodel: MyViewModel by viewModels()
 
-    var adapter:MyAdapter?=null
+    var adapter: MyAdapter?=null
+
+    var layoutManager:LinearLayoutManager?=null
+    var list = mutableListOf<EntityClass>()
+
+    private var stateee:Parcelable?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHistoryBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
+        supportActionBar?.hide()
 
-        getData()
+        if(savedInstanceState!=null)
+        {
+            stateee = savedInstanceState.getParcelable("STATE")
+        }
+        val anim =AnimationUtils.loadAnimation(this,R.anim.appear_anim)
+        binding?.deleteButton?.animation = anim
+
+        binding.historyTITLE?.setOnClickListener {
+            if(binding.deleteButton.visibility == View.VISIBLE) {
+                binding.deleteButton.visibility = View.GONE
+            }else{
+                binding.deleteButton.visibility = View.VISIBLE
+            }
+        }
+
+
+
+         list = mutableListOf()
+          getData()
     }
 
    fun getData(){
-       var list = mutableListOf<EntityClass>()
+       Log.d("kdkfndknf","fdfkjd")
+
       // mainRepositry.getList()
        myViewmodel.listobservable.subscribeOn(Schedulers.io())
            .observeOn(Schedulers.computation())
@@ -58,11 +85,21 @@ class HistoryActivity : AppCompatActivity() {
    }
 
     fun initRecyclerView(){
-        binding.historyRecyclerView.layoutManager = LinearLayoutManager(this)
+       layoutManager = LinearLayoutManager(this)
+        binding.historyRecyclerView.layoutManager = layoutManager
        binding.historyRecyclerView.adapter = adapter
+
+        if(stateee!=null) {
+            binding.historyRecyclerView.layoutManager?.onRestoreInstanceState(stateee)
+        }
     }
 
-    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
-        super.onSaveInstanceState(outState, outPersistentState)
+
+
+
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable("STATE",binding.historyRecyclerView.layoutManager?.onSaveInstanceState())
     }
 }

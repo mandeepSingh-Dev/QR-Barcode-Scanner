@@ -26,7 +26,6 @@ import com.journeyapps.barcodescanner.BarcodeEncoder
 import android.content.Intent
 import android.provider.CalendarContract
 import android.provider.ContactsContract
-import android.widget.Toast
 import com.example.simpleqrbarcodescanner_noads.room.EntityClass
 import com.example.simpleqrbarcodescanner_noads.room.MyRoomDatabase
 import kotlinx.coroutines.CoroutineScope
@@ -153,6 +152,8 @@ class MainActivity2 : AppCompatActivity()
                 binding.addContactsButton.visibility = View.GONE
                 //  binding.copyMainButton.visibility = View.GONE
                 binding.result.text = rawQrCOde
+
+                bundle?.getStringArrayList(Intent_KEYS.URL_LIST)?.let { arrayList.addAll(it) }
                 minsert( Barcode.TYPE_URL)
                 "Url"}
             Barcode.TYPE_GEO-> {

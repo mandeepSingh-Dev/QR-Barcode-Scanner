@@ -1,6 +1,5 @@
-package com.example.simpleqrbarcodescanner_noads.MyViewmodel
+package com.example.simpleqrbarcodescanner_noads.MVVM
 
-import android.database.Observable
 import androidx.lifecycle.ViewModel
 import com.example.simpleqrbarcodescanner_noads.room.EntityClass
 import com.example.simpleqrbarcodescanner_noads.room.MainRepositry

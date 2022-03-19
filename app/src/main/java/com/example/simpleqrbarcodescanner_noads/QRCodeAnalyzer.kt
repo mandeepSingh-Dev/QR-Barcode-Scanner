@@ -145,7 +145,6 @@ class QRCodeImageAnalyzer(private val listener: QRCodeFoundListener) : ImageAnal
             Barcode.TYPE_URL -> {
                 bundle.putString(Intent_KEYS.URL,barcode?.url?.url)
                 calArrayList.add(barcode?.url?.url.toString())
-                bundle.putStringArrayList("",calArrayList)
 
                 calArrayList?.let { bundle?.putStringArrayList(Intent_KEYS.URL_LIST, calArrayList) }
             }
