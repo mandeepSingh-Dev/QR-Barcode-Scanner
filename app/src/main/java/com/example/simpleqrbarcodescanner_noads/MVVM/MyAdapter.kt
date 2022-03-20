@@ -2,11 +2,14 @@ package com.example.simpleqrbarcodescanner_noads.MVVM
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.simpleqrbarcodescanner_noads.R
 import com.example.simpleqrbarcodescanner_noads.room.EntityClass
@@ -17,6 +20,13 @@ import java.util.*
 
 class MyAdapter(val context:Context,val list:List<EntityClass>):RecyclerView.Adapter<MyAdapter.MyViewHolder>()
 {
+
+    var customClickListener:CustomClickListener?=null
+    var isSelectable = false
+    var isSelected = false
+    var pos = 0
+    var arrayList = ArrayList<Int>()
+    var arrayList2 = ArrayList<EntityClass>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
        val view =  LayoutInflater.from(context).inflate(R.layout.item_history,parent,false)
         return MyViewHolder(view)
@@ -24,10 +34,43 @@ class MyAdapter(val context:Context,val list:List<EntityClass>):RecyclerView.Ada
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
          val entityItem = list.get(position)
-
         try {
             setDataintoVIEW(entityItem, holder)
             }catch (e:Exception){}
+        holder.itemView.setOnLongClickListener {
+
+            isSelectable = true
+            holder.itemView.setBackgroundColor(Color.RED)
+            arrayList.add(holder.adapterPosition)
+            arrayList2.add(entityItem)
+
+           // customClickListener?.customOnClick(entityItem,position)
+           // Toast.makeText(context,"onClcikCustom",Toast.LENGTH_SHORT).show()
+            return@setOnLongClickListener true
+        }
+        holder.itemView.setOnClickListener {
+            if (isSelectable) {
+                    if (!(arrayList.contains(position))) {
+                        holder.itemView.setBackgroundColor(Color.RED)
+                        arrayList.add(holder.adapterPosition)
+                        arrayList2.add(entityItem)
+
+                    } else if (arrayList.contains(position)) {
+                        holder.itemView.setBackgroundColor(Color.WHITE)
+                        arrayList.remove(holder.adapterPosition)
+                        arrayList2.remove(entityItem)
+
+                        if(arrayList.isEmpty())
+                        {
+                        isSelectable = false}
+                        }
+            }
+            Log.d("der4fsd",arrayList2.size.toString())
+        }
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView)
     }
 
     override fun getItemCount(): Int {
@@ -159,4 +202,12 @@ class MyAdapter(val context:Context,val list:List<EntityClass>):RecyclerView.Ada
     @SuppressLint("SimpleDateFormat")
     fun convertoDate(milliseconds: Long): String =
         SimpleDateFormat("dd-MM-yyyy  h:mm a").format(Date(milliseconds))
+
+    interface CustomClickListener{
+        fun customOnClick(item:EntityClass,position:Int)
+    }
+
+    fun setCustomClickListenr(customClickListener: CustomClickListener){
+        this.customClickListener = customClickListener
+    }
 }

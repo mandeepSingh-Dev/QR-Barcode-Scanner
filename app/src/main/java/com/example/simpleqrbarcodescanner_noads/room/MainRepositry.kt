@@ -12,4 +12,8 @@ class MainRepositry @Inject constructor(val daoClass:DaoClass)
     {
         daoClass.insert(entityClass)
     }
+    suspend  fun delete(entityClass: EntityClass)
+    {
+         daoClass.delete(entityClass)
+    }
 }

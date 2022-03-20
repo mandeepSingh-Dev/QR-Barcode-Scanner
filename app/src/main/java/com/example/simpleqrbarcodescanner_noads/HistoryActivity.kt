@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,14 +18,17 @@ import com.example.simpleqrbarcodescanner_noads.room.MainRepositry
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class HistoryActivity : AppCompatActivity() {
 
+    var isSelectable = false
     lateinit var binding:ActivityHistoryBinding
-    @Inject
-    lateinit var mainRepositry:MainRepositry
 
     val myViewmodel: MyViewModel by viewModels()
 
@@ -48,21 +52,11 @@ class HistoryActivity : AppCompatActivity() {
         val anim =AnimationUtils.loadAnimation(this,R.anim.appear_anim)
         binding?.deleteButton?.animation = anim
 
-        binding.historyTITLE?.setOnClickListener {
-            if(binding.deleteButton.visibility == View.VISIBLE) {
-                binding.deleteButton.visibility = View.GONE
-            }else{
-                binding.deleteButton.visibility = View.VISIBLE
-            }
-        }
-
-
-
          list = mutableListOf()
           getData()
     }
 
-   fun getData(){
+    private fun getData(){
        Log.d("kdkfndknf","fdfkjd")
 
       // mainRepositry.getList()
@@ -84,7 +78,7 @@ class HistoryActivity : AppCompatActivity() {
            }
    }
 
-    fun initRecyclerView(){
+    private fun initRecyclerView(){
        layoutManager = LinearLayoutManager(this)
         binding.historyRecyclerView.layoutManager = layoutManager
        binding.historyRecyclerView.adapter = adapter
@@ -92,6 +86,25 @@ class HistoryActivity : AppCompatActivity() {
         if(stateee!=null) {
             binding.historyRecyclerView.layoutManager?.onRestoreInstanceState(stateee)
         }
+      /*  adapter?.setCustomClickListenr(object:MyAdapter.CustomClickListener{
+            override fun customOnClick(item: EntityClass, position: Int) {
+               *//* CoroutineScope(Dispatchers.IO).launch {
+                  myViewmodel.delete(list[position])
+                    withContext(Dispatchers.Main) {
+                        list.remove(list[position])
+                        adapter?.notifyDataSetChanged()
+                        adapter?.notifyItemRemoved(position)
+                    }
+                }*//*
+               *//* if(binding.deleteButton.visibility == View.VISIBLE) {
+                    binding.deleteButton.visibility = View.GONE
+                }else{
+                    binding.deleteButton.visibility = View.VISIBLE
+                }*//*
+              //  isSelectable = true
+
+            }
+        })*/
     }
 
 

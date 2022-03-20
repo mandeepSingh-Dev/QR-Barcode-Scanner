@@ -1,10 +1,7 @@
 package com.example.simpleqrbarcodescanner_noads.room
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
+import androidx.room.*
 import androidx.room.OnConflictStrategy.REPLACE
-import androidx.room.Query
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Observable
 
@@ -17,4 +14,8 @@ interface  DaoClass
 
     @Query("SELECT * FROM ENTITYCLASS")
     fun query(): Flowable<List<EntityClass>>
+
+    @Delete
+    suspend fun delete(entityClass: EntityClass)
+
 }

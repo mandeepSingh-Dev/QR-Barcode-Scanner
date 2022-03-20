@@ -17,4 +17,9 @@ class MyViewModel @Inject constructor(val mainRepositry: MainRepositry): ViewMod
     suspend fun insert(entityClass: EntityClass){
         mainRepositry.insert(entityClass)
     }
+
+    suspend fun delete(entityClass: EntityClass)
+    {
+        mainRepositry.delete(entityClass)
+    }
 }
