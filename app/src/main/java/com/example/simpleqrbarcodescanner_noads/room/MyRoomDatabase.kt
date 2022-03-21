@@ -8,7 +8,7 @@ import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 
 
-@Database(entities = arrayOf(EntityClass::class), version = 4)
+@Database(entities = arrayOf(EntityClass::class), version = 5)
 @TypeConverters(Converterss::class)
 abstract class MyRoomDatabase: RoomDatabase()
 {

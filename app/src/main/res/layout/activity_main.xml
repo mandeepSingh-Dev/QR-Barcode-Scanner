@@ -127,7 +127,6 @@
                 app:rippleColor="#FFFFFF"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-
                 />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>

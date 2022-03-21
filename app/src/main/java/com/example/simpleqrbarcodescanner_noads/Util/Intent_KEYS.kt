@@ -5,27 +5,32 @@ object Intent_KEYS {
     const val FORMAT = "format"
     const val VALUETYPE = "valuetype"
     const val BUNDLE = "Bundle"
+    const val FROM_HISTORY =  "fromHistory"
 
     //for URL BUNDLE
-    val URL = "URL"
+  const  val URL = "URL"
     //for WIFI BUNDLE
-    val WIFINAME = "WIFINAME"
-    val PASSWORD = "PASSWORD"
-    val ENCRYPTION_VALUE = "ENCRYPTION_TYPE"
+  const val WIFINAME = "WIFINAME"
+  const  val PASSWORD = "PASSWORD"
+  const  val ENCRYPTION_VALUE = "ENCRYPTION_TYPE"
     //for Email BUNDLE
-    val EMAIL_ADDRESS = "EMAIL_ADDRESS"
-    val EMAIL_SUBJECT = "EMAIL_SUBJECT"
-    val EMAIL_BODY = "EMAIL_BODY"
+    const  val EMAIL_ADDRESS = "EMAIL_ADDRESS"
+    const val EMAIL_SUBJECT = "EMAIL_SUBJECT"
+    const  val EMAIL_BODY = "EMAIL_BODY"
     //for sms BUNDLE
-    val SMS_PHONE = "SMS_PHONE"
-    val MESSAGE = "MESSAGE"
+    const  val SMS_PHONE = "SMS_PHONE"
+    const  val MESSAGE = "MESSAGE"
     //for calender BUNDLE
-    val CAL_ARRAYLIST  = "calender_Arraylist"
-    val CONTACTS_ARRAYLIST  = "contacts_Arraylist"
-    val URL_LIST = "url_list"
-    val WIFI_LIST = "wifi_list"
-    val EMAIL_LIST = "email_list"
-    val SMS_LIST = "sms_list"
+    const val CAL_ARRAYLIST  = "calender_Arraylist"
+    const val CONTACTS_ARRAYLIST  = "contacts_Arraylist"
+    const  val URL_LIST = "url_list"
+    const val WIFI_LIST = "wifi_list"
+    const val EMAIL_LIST = "email_list"
+    const val SMS_LIST = "sms_list"
+
+  //for localbroadcast between Historyactivity and adapter
+    const  val INTENT_ADAPTER = "IntentAdapter"
+
 
 
     /* val CAL_TITLE = "title"

@@ -6,12 +6,15 @@ import android.animation.ValueAnimator
 import android.app.ActivityOptions
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.os.*
 import android.util.Log
 import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -47,16 +50,17 @@ class MainActivity : AppCompatActivity(){
 
     var vibrator:Vibrator?=null
 
-    @Inject
-    lateinit var mainRepositry: MainRepositry
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
         setContentView(binding?.root)
 
         supportActionBar?.hide()
+
+        binding?.scanImage?.setOnClickListener {
+            Toast.makeText(this,"fgdf",Toast.LENGTH_SHORT).show()
+            launcher.launch("image/*")
+        }
 
 
       /*  mainRepositry.getList().observeOn(AndroidSchedulers.mainThread())
@@ -68,19 +72,18 @@ class MainActivity : AppCompatActivity(){
                     binding?.textTexting?.text = it.rawValue
                 }
             }*/
-var count = 1
-        binding?.scanImage?.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
+      //  binding?.scanImage?.setOnClickListener {
+        /*    CoroutineScope(Dispatchers.IO).launch {
                 mainRepositry.insert(
                     EntityClass(
                         ArrayList<String>(),
                         System.currentTimeMillis(),
                         "hds${count++}",
                         "isdgggggfhs${count++}"
-                    )
+                               )
                 )
-            }
-            }
+            }*/
+         //   }
           /*  .subscribe(object:io.reactivex.rxjava3.core.SingleObserver<List<EntityClass>>{
                 override fun onSubscribe(d: Disposable) {}
                 override fun onError(e: Throwable) {}
@@ -211,6 +214,7 @@ binding?.imageView?.setImageBitmap(bitmap)*/
             .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
             .build()
 
+
         imageAnalysis?.setAnalyzer(ContextCompat.getMainExecutor(this),QRCodeImageAnalyzer(object : QRCodeFoundListener {
                 override fun onQRCodeFound(qrCode: String?) {
                     Log.d("djfnd", qrCode + "d")
@@ -240,13 +244,12 @@ binding?.imageView?.setImageBitmap(bitmap)*/
 
                     //  qrGenerate(qrCode,format)
                 }
-
-            override fun onBarcode(barcode: Barcode) {}
+                override fun onBarcode(barcode: Barcode) {}
             })
         )
         camera = cameraProvider.bindToLifecycle(this,cameraSelector,imageAnalysis,preview)
         /**-------Configuring Flash---------------------------------*/
-        if(camera.cameraInfo.hasFlashUnit()==true){
+        if(camera.cameraInfo.hasFlashUnit()){
                binding?.flashButton?.visibility = View.VISIBLE
                binding?.flashButton?.setOnClickListener {
                    camera.cameraControl.enableTorch(!isFlashGlow)
@@ -277,5 +280,44 @@ binding?.imageView?.setImageBitmap(bitmap)*/
         super.onDestroy()
         cameraProvider?.unbindAll()
     }
+
+    private var launcher = registerForActivityResult(ActivityResultContracts.GetContent(),ActivityResultCallback{
+
+        val inputStream= contentResolver?.openInputStream(it)
+        val bitmap = BitmapFactory.decodeStream(inputStream)
+
+      var scanner =   ScannerBarcode(object:QRCodeFoundListener{
+            override fun onQRCodeFound(qrCode: String?) {
+                Log.d("djfnd", qrCode + "d")
+                // binding?.button?.text = qrCode
+                this@MainActivity.qrCode = qrCode
+            }
+            override fun onqrCodeNotFound() {}
+            override fun onQRFormat(qrCode: String?, format: Int?, valueType: Int?, bundle:Bundle?) {
+                val intent = Intent(applicationContext, MainActivity2::class.java)
+                intent.putExtra(Intent_KEYS.QRCODE, qrCode)
+                intent.putExtra(Intent_KEYS.FORMAT, format)
+                intent.putExtra(Intent_KEYS.VALUETYPE, valueType)
+                intent.putExtra(Intent_KEYS.BUNDLE,bundle)
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this@MainActivity).toBundle())
+
+                // var effectbivrate=VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK)
+                // Vibrator().vibrate(effectbivrate)
+                //here we r doing clearAnalyzer and unBindAll because camera ImageAnalyzer taking
+                //images continuosuly and if we dont use  clearAnalyzer and Unbind
+                //then qrcode scans mulitple code and open activity multiple times
+                //thats why i need to use clearAnalysis and unBindAll for only scan one barcode at
+                // a time--->
+               // imageAnalysis?.clearAnalyzer()
+               // cameraProvider.unbindAll()
+                //then we need to start the Camera again when we come back to camera activity.
+                //requestCamera()
+
+                //  qrGenerate(qrCode,format)
+            }
+            override fun onBarcode(barcode: Barcode) {}
+        })
+        scanner.scanBarcode2(bitmap)
+    })
 
 }

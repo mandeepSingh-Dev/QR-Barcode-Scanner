@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
+    android:id="@+id/parentcardView"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardElevation="10dp"
     app:cardCornerRadius="10dp"
@@ -27,36 +28,52 @@
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toRightOf="@id/logo"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/popupMenu"
             app:layout_constraintBottom_toBottomOf="parent"
             android:orientation="vertical">
         <TextView
             android:id="@+id/TypeValueTEXT"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Email"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:textSize="25sp"
+            android:textSize="21sp"
             android:layout_marginLeft="25dp"
             android:layout_marginTop="8dp"/>
             <TextView
                 android:id="@+id/nameInfoText"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="email@example.com"
+                android:ellipsize="end"
+                android:maxHeight="200dp"
                 android:layout_marginTop="5dp"
                 android:textColor="@color/black"
                 android:layout_marginLeft="25dp"/>
             <TextView
             android:id="@+id/currentDateTEXT"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="03/17/2022 09:36"
+                android:layout_marginTop="10dp"
             android:textColor="@color/black"
+                android:textStyle="italic"
+                android:textSize="15sp"
             android:layout_marginLeft="25dp"
                 android:layout_marginBottom="10dp"/>
         </LinearLayout>
-
+<ImageView
+    android:id="@+id/popupMenu"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    android:padding="8dp"
+    android:background="@drawable/ripple"
+    android:src="@drawable/ic_baseline_more_vert_24"
+    app:layout_constraintBottom_toBottomOf="parent"
+    android:layout_marginRight="20dp"
+    />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

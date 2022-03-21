@@ -1,10 +1,12 @@
 package com.example.simpleqrbarcodescanner_noads.MVVM
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.simpleqrbarcodescanner_noads.room.EntityClass
 import com.example.simpleqrbarcodescanner_noads.room.MainRepositry
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Flowable
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -14,12 +16,16 @@ class MyViewModel @Inject constructor(val mainRepositry: MainRepositry): ViewMod
     init {
         listobservable = mainRepositry.getList()
     }
-    suspend fun insert(entityClass: EntityClass){
-        mainRepositry.insert(entityClass)
+     fun insert(entityClass: EntityClass){
+         viewModelScope.launch {
+             mainRepositry.insert(entityClass)
+         }
     }
 
-    suspend fun delete(entityClass: EntityClass)
+     fun delete(entityClass: EntityClass)
     {
-        mainRepositry.delete(entityClass)
+        viewModelScope.launch {
+            mainRepositry.delete(entityClass)
+        }
     }
 }

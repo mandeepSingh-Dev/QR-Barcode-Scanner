@@ -1,5 +1,6 @@
 package com.example.simpleqrbarcodescanner_noads
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
@@ -9,14 +10,18 @@ import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.simpleqrbarcodescanner_noads.MVVM.MyAdapter
 import com.example.simpleqrbarcodescanner_noads.MVVM.MyViewModel
+import com.example.simpleqrbarcodescanner_noads.Util.Intent_KEYS
 import com.example.simpleqrbarcodescanner_noads.databinding.ActivityHistoryBinding
 import com.example.simpleqrbarcodescanner_noads.room.EntityClass
 import com.example.simpleqrbarcodescanner_noads.room.MainRepositry
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,7 +32,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class HistoryActivity : AppCompatActivity() {
 
-    var isSelectable = false
     lateinit var binding:ActivityHistoryBinding
 
     val myViewmodel: MyViewModel by viewModels()
@@ -38,6 +42,7 @@ class HistoryActivity : AppCompatActivity() {
     var list = mutableListOf<EntityClass>()
 
     private var stateee:Parcelable?=null
+    var disposable:Disposable?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,13 +59,17 @@ class HistoryActivity : AppCompatActivity() {
 
          list = mutableListOf()
           getData()
+
+        binding.backbutton.setOnClickListener {
+            finish()
+        }
     }
 
     private fun getData(){
        Log.d("kdkfndknf","fdfkjd")
 
       // mainRepositry.getList()
-       myViewmodel.listobservable.subscribeOn(Schedulers.io())
+       disposable = myViewmodel.listobservable.subscribeOn(Schedulers.io())
            .observeOn(Schedulers.computation())
            .map {
                list = it as MutableList<EntityClass>
@@ -68,14 +77,11 @@ class HistoryActivity : AppCompatActivity() {
            .observeOn(AndroidSchedulers.mainThread())
            .doOnError {
                Log.d("dkfndk",it.message.toString())
-           }
-           .subscribe {
-               adapter = MyAdapter(this,list.toList())
-               initRecyclerView()
-              /* list.forEach {
-                   binding?.textTexting?.text =
-                       it.rawValue }*/
-           }
+           }.subscribe {
+              adapter = MyAdapter(this,list.toList())
+              initRecyclerView()
+          }
+
    }
 
     private fun initRecyclerView(){
@@ -86,16 +92,27 @@ class HistoryActivity : AppCompatActivity() {
         if(stateee!=null) {
             binding.historyRecyclerView.layoutManager?.onRestoreInstanceState(stateee)
         }
-      /*  adapter?.setCustomClickListenr(object:MyAdapter.CustomClickListener{
+        adapter?.setCustomClickListenr(object:MyAdapter.CustomClickListener {
             override fun customOnClick(item: EntityClass, position: Int) {
-               *//* CoroutineScope(Dispatchers.IO).launch {
-                  myViewmodel.delete(list[position])
+
+                myViewmodel.delete(item)
+                list.remove(item)
+                  adapter?.notifyItemRemoved(position)
+                adapter?.notifyItemRangeChanged(position,list.size)
+
+
+           /*     CoroutineScope(Dispatchers.IO).launch {
+                    myViewmodel.delete(list[position])
                     withContext(Dispatchers.Main) {
                         list.remove(list[position])
                         adapter?.notifyDataSetChanged()
                         adapter?.notifyItemRemoved(position)
                     }
-                }*//*
+                }*/
+            }
+        })
+
+            /*
                *//* if(binding.deleteButton.visibility == View.VISIBLE) {
                     binding.deleteButton.visibility = View.GONE
                 }else{
@@ -115,4 +132,29 @@ class HistoryActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
         outState.putParcelable("STATE",binding.historyRecyclerView.layoutManager?.onSaveInstanceState())
     }
+
+    override fun onBackPressed() {
+       // super.onBackPressed()
+        //checking items are selected or not by checking size of arraylist of selected items
+        val list = adapter?.getList()
+        list?.size?.let {
+            if (it > 0) {
+                LocalBroadcastManager.getInstance(this)
+                    .sendBroadcast(Intent(Intent_KEYS.INTENT_ADAPTER))
+            } else {
+                super.onBackPressed()
+               // finish()
+            }
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        disposable?.dispose()
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        disposable?.dispose()
+    }
+
 }

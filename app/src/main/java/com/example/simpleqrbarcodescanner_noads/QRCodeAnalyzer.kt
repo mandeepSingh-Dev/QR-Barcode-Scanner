@@ -2,23 +2,12 @@ package com.example.simpleqrbarcodescanner_noads
 
 import android.annotation.SuppressLint
 import android.graphics.*
-import android.graphics.ImageFormat.*
 import android.os.Bundle
-import android.os.Parcelable
-import android.util.Log
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
-import androidx.camera.lifecycle.ProcessCameraProvider
 import com.example.simpleqrbarcodescanner_noads.Util.Intent_KEYS
-import com.example.simpleqrbarcodescanner_noads.room.EntityClass
-import com.example.simpleqrbarcodescanner_noads.room.MyRoomDatabase
-import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
-import com.google.zxing.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 
 
@@ -38,13 +27,14 @@ class QRCodeImageAnalyzer(private val listener: QRCodeFoundListener) : ImageAnal
     {
 
         bundle = Bundle()
+        ScannerBarcode(listener).scanBarcode1(image)
 
         /* val options = BarcodeScannerOptions.Builder()
             .setBarcodeFormats(
                 Barcode.FORMAT_QR_CODE,
                 Barcode.FORMAT_AZTEC)
             .build()*/
-        val mediaImage = image.image
+       /* val mediaImage = image.image
         if (mediaImage != null) {
             inputImage = InputImage.fromMediaImage(mediaImage, image.imageInfo.rotationDegrees)
 
@@ -66,12 +56,12 @@ class QRCodeImageAnalyzer(private val listener: QRCodeFoundListener) : ImageAnal
                         listener.onQRFormat(it,format,valueType,setBundle(valueType,barcode))
 
 
-                        /* when(valueType){
+                        *//* when(valueType){
                              Barcode.TYPE_WIFI->{
 
                              }
                              else->{Log.d("fkghyhdfgfv","fidhfd")}
-                         }*/
+                         }*//*
                     }
                     image.close()
                // provider.unbindAll()
@@ -86,32 +76,8 @@ class QRCodeImageAnalyzer(private val listener: QRCodeFoundListener) : ImageAnal
 
             }
 
-        }
-
-
-        /*    if (image.format == YUV_420_888 || image.format == YUV_422_888 || image.format == YUV_444_888)
-        {
-            val byteBuffer = image.planes[0]?.buffer
-            val imageData = ByteArray(byteBuffer?.capacity()!!)
-            byteBuffer.get(imageData)
-            val source = PlanarYUVLuminanceSource(imageData, image.width, image.height, 0, 0, image.width, image.height, false)
-            val binaryBitmap = BinaryBitmap(HybridBinarizer(source))
-
-            try {
-                val result = QRCodeMultiReader().decode(binaryBitmap)
-                listener.onQRCodeFound(result.getText())
-                Log.d("dsdsdsdss",result.text+"s")
-            } catch (e: FormatException) {
-                Log.d("dflmd",e.message.toString())
-                listener.onqrCodeNotFound()
-            } catch (e: ChecksumException) {
-                Log.d("dflssssmd",e.message.toString())
-                listener.onqrCodeNotFound()
-            } catch (e: NotFoundException) {
-                Log.d("dflffffmd",e.cause.toString())
-                listener.onqrCodeNotFound()
-            }
         }*/
+
     }
 
     fun getBitmap(image:ImageProxy){
@@ -202,10 +168,9 @@ class QRCodeImageAnalyzer(private val listener: QRCodeFoundListener) : ImageAnal
                 calArrayList.add(barcode?.calendarEvent?.end?.minutes.toString())
                 calArrayList.add(barcode?.calendarEvent?.end?.seconds.toString())
 
-                calArrayList?.let { bundle?.putStringArrayList(Intent_KEYS.CAL_ARRAYLIST, calArrayList) }
+                calArrayList.let { bundle.putStringArrayList(Intent_KEYS.CAL_ARRAYLIST, calArrayList) }
             }
             Barcode.TYPE_CONTACT_INFO ->{
-                contactArrayList = ArrayList()
                try {
                    calArrayList.add(barcode?.contactInfo?.phones?.get(0)?.number.toString())
                    calArrayList.add(barcode?.contactInfo?.addresses?.get(0)?.addressLines?.get(0).toString())
@@ -218,8 +183,9 @@ class QRCodeImageAnalyzer(private val listener: QRCodeFoundListener) : ImageAnal
                    calArrayList.add(barcode?.contactInfo?.urls?.get(0).toString())
                    calArrayList.add(barcode?.contactInfo?.phones?.get(0)?.type.toString())
 
-                   calArrayList?.let { bundle?.putStringArrayList(Intent_KEYS.CONTACTS_ARRAYLIST, calArrayList) }
+                   calArrayList.let { bundle.putStringArrayList(Intent_KEYS.CONTACTS_ARRAYLIST, it) }
                }catch (e:Exception){}
+
             }
             //doesnot suppported
             Barcode.TYPE_DRIVER_LICENSE ->{
