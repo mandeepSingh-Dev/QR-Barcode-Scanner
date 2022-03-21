@@ -5,6 +5,8 @@ import android.graphics.*
 import android.os.Bundle
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
+import com.example.simpleqrbarcodescanner_noads.ScannerUtil.QRCodeFoundListener
+import com.example.simpleqrbarcodescanner_noads.ScannerUtil.ScannerBarcode
 import com.example.simpleqrbarcodescanner_noads.Util.Intent_KEYS
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage

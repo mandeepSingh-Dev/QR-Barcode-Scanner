@@ -1,4 +1,4 @@
-package com.example.simpleqrbarcodescanner_noads
+package com.example.simpleqrbarcodescanner_noads.ScannerUtil
 
 import android.graphics.Bitmap
 import android.os.Bundle

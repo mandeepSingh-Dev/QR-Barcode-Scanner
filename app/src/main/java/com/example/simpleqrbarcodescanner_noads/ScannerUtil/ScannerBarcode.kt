@@ -1,17 +1,16 @@
-package com.example.simpleqrbarcodescanner_noads
+package com.example.simpleqrbarcodescanner_noads.ScannerUtil
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.camera.core.ImageProxy
 import com.example.simpleqrbarcodescanner_noads.Util.Intent_KEYS
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 
-class ScannerBarcode(private val listener:QRCodeFoundListener)
+class ScannerBarcode(private val listener: QRCodeFoundListener)
 {
 
         var inputImage: InputImage? = null

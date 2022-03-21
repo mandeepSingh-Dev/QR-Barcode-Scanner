@@ -80,7 +80,6 @@ class MainActivity2 : AppCompatActivity()
         val bundle = intent.getBundleExtra(Intent_KEYS.BUNDLE)
         fromHistoryPage = intent.getBooleanExtra(Intent_KEYS.FROM_HISTORY,false)
 
-        Log.d("edfihdfg",valueType.toString()+"   "+format.toString()+"   ")
         arrayList = ArrayList()
 
 
@@ -88,11 +87,14 @@ class MainActivity2 : AppCompatActivity()
         // but for only metoined below types
         //and for other types we store from another 2nd when block
 
-        val bitmap = qrGenerate(rawQrCOde, format)
-        binding.codeImage.setImageBitmap(bitmap)
+        try {
+            val bitmap = qrGenerate(rawQrCOde, format)
+            binding.codeImage.setImageBitmap(bitmap)
+        }catch (e:Exception){}
 
         //when block to set type of barcode in top textview  acc. to valueType
         // and to store data also in room
+        try{
         val textType =  when(valueType){
             Barcode.TYPE_PRODUCT-> {
                 binding.searchButton.text = "Search"
@@ -314,7 +316,9 @@ class MainActivity2 : AppCompatActivity()
                "Unknown"}
         }
         binding.typeTextView.text = textType
+        }catch (e:Exception){}
 
+        try{
         binding.searchButton.setOnClickListener {
             val buttonText = binding.searchButton.text
             when(buttonText) {
@@ -336,6 +340,7 @@ class MainActivity2 : AppCompatActivity()
         binding.shareButton.setOnClickListener {
             rawQrCOde?.let { shareText(it) }
         }
+        }catch (e:Exception){}
     }//end of onCreate()
 
     fun qrGenerate(qrcode:String?,format:Int?): Bitmap {

@@ -21,17 +21,13 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.simpleqrbarcodescanner_noads.ScannerUtil.QRCodeFoundListener
+import com.example.simpleqrbarcodescanner_noads.ScannerUtil.ScannerBarcode
 import com.example.simpleqrbarcodescanner_noads.Util.Intent_KEYS
 import com.example.simpleqrbarcodescanner_noads.databinding.ActivityMainBinding
-import com.example.simpleqrbarcodescanner_noads.room.EntityClass
-import com.example.simpleqrbarcodescanner_noads.room.MainRepositry
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.mlkit.vision.barcode.common.Barcode
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -145,7 +141,7 @@ binding?.imageView?.setImageBitmap(bitmap)*/
         binding?.bottomView?.setOnItemSelectedListener {
             when(it.itemId){
                  R.id.create->{
-                    startActivity(Intent(this,MainActivity2::class.java),ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
+                    startActivity(Intent(this,CreateActivity::class.java),ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
                 }
                 R.id.history2 -> startActivity(Intent(this,HistoryActivity::class.java),ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
                 else->{
@@ -215,7 +211,8 @@ binding?.imageView?.setImageBitmap(bitmap)*/
             .build()
 
 
-        imageAnalysis?.setAnalyzer(ContextCompat.getMainExecutor(this),QRCodeImageAnalyzer(object : QRCodeFoundListener {
+        imageAnalysis?.setAnalyzer(ContextCompat.getMainExecutor(this),QRCodeImageAnalyzer(object :
+            QRCodeFoundListener {
                 override fun onQRCodeFound(qrCode: String?) {
                     Log.d("djfnd", qrCode + "d")
                    // binding?.button?.text = qrCode
@@ -286,7 +283,7 @@ binding?.imageView?.setImageBitmap(bitmap)*/
         val inputStream= contentResolver?.openInputStream(it)
         val bitmap = BitmapFactory.decodeStream(inputStream)
 
-      var scanner =   ScannerBarcode(object:QRCodeFoundListener{
+      var scanner =   ScannerBarcode(object: QRCodeFoundListener {
             override fun onQRCodeFound(qrCode: String?) {
                 Log.d("djfnd", qrCode + "d")
                 // binding?.button?.text = qrCode
