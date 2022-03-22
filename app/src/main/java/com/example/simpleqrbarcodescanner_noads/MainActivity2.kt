@@ -26,12 +26,15 @@ import com.journeyapps.barcodescanner.BarcodeEncoder
 import android.content.Intent
 import android.provider.CalendarContract
 import android.provider.ContactsContract
+import androidmads.library.qrgenearator.QRGContents
+import androidmads.library.qrgenearator.QRGEncoder
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import com.example.simpleqrbarcodescanner_noads.MVVM.MyViewModel
 import com.example.simpleqrbarcodescanner_noads.MVVM.MyViewmodel2
 import com.example.simpleqrbarcodescanner_noads.room.EntityClass
 import com.example.simpleqrbarcodescanner_noads.room.MyRoomDatabase
+import com.google.zxing.oned.EAN13Reader
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -78,8 +81,10 @@ class MainActivity2 : AppCompatActivity()
         val format = intent.getIntExtra(Intent_KEYS.FORMAT,0)
         val valueType = intent.getIntExtra(Intent_KEYS.VALUETYPE,0)
         val bundle = intent.getBundleExtra(Intent_KEYS.BUNDLE)
+        val typeValue_QRGEN = intent.getStringExtra(Intent_KEYS.VALUETYPE_QRGENERATOR)
         fromHistoryPage = intent.getBooleanExtra(Intent_KEYS.FROM_HISTORY,false)
 
+        Log.d("dgfknfgd","format$format $typeValue_QRGEN ")
         arrayList = ArrayList()
 
 
@@ -87,8 +92,8 @@ class MainActivity2 : AppCompatActivity()
         // but for only metoined below types
         //and for other types we store from another 2nd when block
 
-        try {
-            val bitmap = qrGenerate(rawQrCOde, format)
+       try {
+            val bitmap = qrGenerate(rawQrCOde, format,typeValue_QRGEN!!)
             binding.codeImage.setImageBitmap(bitmap)
         }catch (e:Exception){}
 
@@ -343,7 +348,7 @@ class MainActivity2 : AppCompatActivity()
         }catch (e:Exception){}
     }//end of onCreate()
 
-    fun qrGenerate(qrcode:String?,format:Int?): Bitmap {
+    fun qrGenerate(qrcode:String?,format:Int?,TypeValstr:String): Bitmap {
         val imageWidth =  binding.codeImage.layoutParams?.width
         val bitmap =  when(format){
             Custom_Formats_duplicate.CODABAR -> {
@@ -413,9 +418,44 @@ class MainActivity2 : AppCompatActivity()
                 BarcodeEncoder().encodeBitmap(qrcode, BarcodeFormat.AZTEC,imageWidth!!, 220)
             }
             else ->  {
-                Log.d("dfnndb", format.toString())
-                binding.codeImage.layoutParams.height = 280
+                Log.d("dfnndb", format.toString()+"else block")
+               /* binding.codeImage.layoutParams.height = 280
                 BitmapFactory.decodeResource(resources, R.drawable.ic_baseline_image_24)
+                */
+              val bitmapp =   when(TypeValstr) {
+                    "Text"->{  val encoder =  QRGEncoder("9654980621",null,QRGContents.Type.TEXT,470)
+                        Log.d("dfnndb", TypeValstr.toString()+"else block")
+                        encoder.encodeAsBitmap()}
+                    "Phone Number"->{
+                        Log.d("dfnndb", TypeValstr.toString()+"else block")
+                        val encoder =  QRGEncoder("9654980621",null,QRGContents.Type.PHONE,470)
+                        encoder.encodeAsBitmap()
+                    }
+                    "URL"->{ val encoder =  QRGEncoder("9654980621",null,QRGContents.URL_KEY,470)
+                        Log.d("dfnndb", TypeValstr.toString()+"else block")
+                        encoder.encodeAsBitmap()}
+                    "Contact information"->{ val encoder =  QRGEncoder("9654980621",null,QRGContents.Type.CONTACT,170)
+                        Log.d("dfnndb", TypeValstr.toString()+"else block")
+                       try {
+                           binding.codeImage.setImageBitmap(encoder.encodeAsBitmap())
+                       }catch (e:Exception){}
+                        encoder.encodeAsBitmap()
+                    }
+                    "Wi-fi information"->{ val encoder =  QRGEncoder("9654980621",null,QRGContents.Type.TEXT,470)
+                        Log.d("dfnndb", TypeValstr.toString()+"else block")
+                        encoder.encodeAsBitmap()}
+                    "Email"->{ val encoder =  QRGEncoder("9654980621",null,QRGContents.Type.EMAIL,470)
+                        Log.d("dfnndb", TypeValstr.toString()+"else block")
+                        encoder.encodeAsBitmap()}
+                    "SMS"->{ val encoder =  QRGEncoder("9654980621",null,QRGContents.Type.SMS,470)
+                        Log.d("dfnndb", TypeValstr.toString()+"else block")
+                        encoder.encodeAsBitmap()}
+                    else->{
+                        val encoder =  QRGEncoder("9654980621",null,QRGContents.Type.TEXT,470)
+                        Log.d("dfnndb", TypeValstr.toString()+"else block")
+                        encoder.encodeAsBitmap()}
+                }
+                bitmapp
             }
 
         }

@@ -14,6 +14,7 @@ import com.example.simpleqrbarcodescanner_noads.R
 import com.example.simpleqrbarcodescanner_noads.Util.Intent_KEYS
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.zxing.BarcodeFormat
+import com.google.zxing.qrcode.QRCodeWriter
 
 class CreateAdapter(val context: Context, val arrayList:ArrayList<Create_Item>): RecyclerView.Adapter<CreateAdapter.MyViewHolder>() {
 
@@ -37,11 +38,15 @@ class CreateAdapter(val context: Context, val arrayList:ArrayList<Create_Item>):
         holder.iconLogo?.setImageResource(item.iconId)
         holder.typeValue?.text = item.typeValue
 
-        val intent = Intent(context,MainActivity2::class.java)
-        intent.putExtra(Intent_KEYS.QRCODE,"9650226920")
-        intent.putExtra(Intent_KEYS.FORMAT, Barcode.FORMAT_QR_CODE)
+        holder.iconLogo?.setOnClickListener {
+            val intent = Intent(context, MainActivity2::class.java)
+            intent.putExtra(Intent_KEYS.QRCODE, "9650226920")
+            intent.putExtra(Intent_KEYS.FORMAT, item.format)
+            intent.putExtra(Intent_KEYS.VALUETYPE_QRGENERATOR,item.typeValue)
 
-        context.startActivity(intent)
+            context.startActivity(intent)
+        }
+
 
     }
 

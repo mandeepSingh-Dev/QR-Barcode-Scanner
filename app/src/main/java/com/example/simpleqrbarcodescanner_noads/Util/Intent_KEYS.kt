@@ -4,7 +4,8 @@ object Intent_KEYS {
     const val QRCODE = "qrCode"
     const val FORMAT = "format"
     const val VALUETYPE = "valuetype"
-    const val BUNDLE = "Bundle"
+    const val VALUETYPE_QRGENERATOR = "valuetype"
+  const val BUNDLE = "Bundle"
     const val FROM_HISTORY =  "fromHistory"
 
     //for URL BUNDLE

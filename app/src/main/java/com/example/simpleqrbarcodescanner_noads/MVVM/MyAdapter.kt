@@ -25,11 +25,15 @@ import com.example.simpleqrbarcodescanner_noads.R
 import com.example.simpleqrbarcodescanner_noads.Util.Intent_KEYS
 import com.example.simpleqrbarcodescanner_noads.room.EntityClass
 import com.google.mlkit.vision.barcode.common.Barcode
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MyAdapter(val context:Context,val list:List<EntityClass>):RecyclerView.Adapter<MyAdapter.MyViewHolder>()
+class MyAdapter(val context:Context,val myviewmodel:MyViewModel):RecyclerView.Adapter<MyAdapter.MyViewHolder>()
 {
 
     var customClickListener:CustomClickListener?=null
@@ -42,7 +46,7 @@ class MyAdapter(val context:Context,val list:List<EntityClass>):RecyclerView.Ada
     var localbroadcatMnaager:LocalBroadcastManager?=null
 
     /**------------------*/
-    var arrayList: ArrayList<EntityClass> = list as ArrayList
+    var arrayListtty: ArrayList<EntityClass> = ArrayList<EntityClass>()
     var tvEmpty: TextView? = null
     var isEnable = false
     var isSelectAll = false
@@ -64,9 +68,9 @@ class MyAdapter(val context:Context,val list:List<EntityClass>):RecyclerView.Ada
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-         val entityItem = list.get(position)
+         val entityItem = arrayListtty?.get(position)
 
-        setDataintoVIEW(entityItem.type_value.toInt(),entityItem, holder)
+        setDataintoVIEW(entityItem?.type_value?.toInt()!!,entityItem, holder)
 
         holder.itemView.setOnClickListener {
             Log.d("soljdsdfs",entityItem.type_value)
@@ -79,16 +83,27 @@ class MyAdapter(val context:Context,val list:List<EntityClass>):RecyclerView.Ada
             Log.d("fihfedf",entityItem.type_value)
             context.startActivity(intent)
         }
+
+        var popmenu = PopupMenu(context,holder.popupMenu)
+        popmenu.inflate(R.menu.select_menu)
         holder.popupMenu?.setOnClickListener {
-            var popmenu = PopupMenu(context,holder.popupMenu)
-            popmenu.inflate(R.menu.select_menu)
 
             popmenu.setOnMenuItemClickListener {
                 if(it.itemId==R.id.menu_delete)
                 {
-                    customClickListener?.customOnClick(entityItem,position)
-                    Toast.makeText(context,"DELETE",Toast.LENGTH_SHORT).show()
-
+                  //  customClickListener?.customOnClick(arrayList.get(holder.adapterPosition),holder.adapterPosition)
+                 CoroutineScope(Dispatchers.Default).launch {
+                    val itemm = myviewmodel.getItembyId(arrayListtty?.get(holder.adapterPosition)?.id!!)
+                     myviewmodel.delete(itemm)
+                    withContext(Dispatchers.Main) {
+                        arrayListtty?.removeAt(holder.adapterPosition)
+                       // notifyItemRemoved(holder.adapterPosition)
+                       // notifyDataSetChanged()
+                       // notifyItemRangeChanged(holder.adapterPosition,arrayListtty.size)
+                       // notifyItemRangeChanged(holder.adapterPosition, arrayListtty?.size!!); // notifyDataSetChanged()
+                       // Toast.makeText(context, "DELETE", Toast.LENGTH_SHORT).show()
+                    }
+                 }
                 }
                 else{
                     Toast.makeText(context,"SELECTEDTOAST",Toast.LENGTH_SHORT).show()
@@ -283,7 +298,7 @@ holder.itemView.setOnClickListener {
     }
 
     override fun getItemCount(): Int {
-            return list.size
+            return arrayListtty?.size
     }
 
     class MyViewHolder(itemView: View) :RecyclerView.ViewHolder(itemView)
@@ -548,4 +563,10 @@ holder.itemView.setOnClickListener {
 
         myViewmodel2.setText(selectList.size.toString())
     }*/
+
+    fun setDate(listy:ArrayList<EntityClass>)
+      {
+          arrayListtty = listy
+          notifyDataSetChanged()
+    }
 }

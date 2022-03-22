@@ -10,6 +10,7 @@ import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,9 +21,11 @@ import com.example.simpleqrbarcodescanner_noads.databinding.ActivityHistoryBindi
 import com.example.simpleqrbarcodescanner_noads.room.EntityClass
 import com.example.simpleqrbarcodescanner_noads.room.MainRepositry
 import dagger.hilt.android.AndroidEntryPoint
+import io.reactivex.FlowableSubscriber
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import org.reactivestreams.Subscription
 
 @AndroidEntryPoint
 class HistoryActivity : AppCompatActivity() {
@@ -53,18 +56,38 @@ class HistoryActivity : AppCompatActivity() {
         binding?.deleteButton?.animation = anim
 
          list = mutableListOf()
-          getData()
 
         binding.backbutton.setOnClickListener {
             finish()
         }
+        adapter = MyAdapter(this@HistoryActivity,myViewmodel)
+        initRecyclerView()
+        getData()
     }
 
     private fun getData(){
        Log.d("kdkfndknf","fdfkjd")
 
-      // mainRepositry.getList()
-       disposable = myViewmodel.listobservable.subscribeOn(Schedulers.io())
+
+
+     myViewmodel.listobservable
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object:io.reactivex.rxjava3.core.Observer<ArrayList<EntityClass>>{
+                override fun onSubscribe(d: Disposable) {
+                    disposable = d
+                }
+                override fun onNext(it: ArrayList<EntityClass>) {
+                  Toast.makeText(this@HistoryActivity,"onnextCalled",Toast.LENGTH_SHORT).show()
+                    adapter?.setDate(it)
+                }
+                override fun onError(e: Throwable) {}
+                override fun onComplete() {}
+            }
+            )
+
+
+    /*   disposable = myViewmodel.listobservable.subscribeOn(Schedulers.io())
            .observeOn(Schedulers.computation())
            .map {
                list = it as MutableList<EntityClass>
@@ -73,9 +96,9 @@ class HistoryActivity : AppCompatActivity() {
            .doOnError {
                Log.d("dkfndk",it.message.toString())
            }.subscribe {
-              adapter = MyAdapter(this,list.toList())
-              initRecyclerView()
-          }
+              adapter = MyAdapter(this,list.toList(),myViewmodel)
+               initRecyclerView()
+          }*/
 
    }
 
@@ -90,10 +113,10 @@ class HistoryActivity : AppCompatActivity() {
         adapter?.setCustomClickListenr(object:MyAdapter.CustomClickListener {
             override fun customOnClick(item: EntityClass, position: Int) {
 
-                myViewmodel.delete(item)
-                list.remove(item)
-                  adapter?.notifyItemRemoved(position)
-                adapter?.notifyItemRangeChanged(position,list.size)
+              /*  myViewmodel.delete(item)
+                list.removeAt(position)
+                adapter?.notifyItemRemoved(position)*/
+               // adapter?.notifyItemRangeChanged(position,list.size)
 
 
            /*     CoroutineScope(Dispatchers.IO).launch {
@@ -145,11 +168,15 @@ class HistoryActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        disposable?.dispose()
+        if(disposable!=null) {
+             disposable?.dispose()
+        }
     }
     override fun onDestroy() {
         super.onDestroy()
-        disposable?.dispose()
+
     }
+
+
 
 }
