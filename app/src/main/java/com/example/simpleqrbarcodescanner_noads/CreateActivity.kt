@@ -1,5 +1,7 @@
 package com.example.simpleqrbarcodescanner_noads
 
+import android.app.ActivityOptions
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidmads.library.qrgenearator.QRGContents
@@ -9,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.simpleqrbarcodescanner_noads.CreateRecyclerView.CreateAdapter
 import com.example.simpleqrbarcodescanner_noads.CreateRecyclerView.Create_Item
 import com.example.simpleqrbarcodescanner_noads.Util.Custom_Formats_duplicate
+import com.example.simpleqrbarcodescanner_noads.Util.Intent_KEYS
 import com.example.simpleqrbarcodescanner_noads.databinding.ActivityCreateBinding
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
@@ -27,6 +30,8 @@ class CreateActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityCreateBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
+
+        supportActionBar?.hide()
 
         CoroutineScope(Dispatchers.IO).launch {
             val arrayList = ArrayList<Create_Item>()
@@ -63,6 +68,18 @@ class CreateActivity : AppCompatActivity() {
                 binding.createRecyclerView2DCodes.layoutManager = LinearLayoutManager(this@CreateActivity)
                 binding.createRecyclerView2DCodes.adapter = adapter2
             }
+        }
+
+        binding.createQRCODEButton.setOnClickListener {
+          /*  val intent = Intent(context, MainActivity2::class.java)
+            intent.putExtra(Intent_KEYS.QRCODE, )
+            intent.putExtra(Intent_KEYS.FORMAT, item.format)
+            intent.putExtra(Intent_KEYS.VALUETYPE_QRGENERATOR,item.typeValue)
+
+            context.startActivity(intent)*/
+            val intent = Intent(this,CreateActivityWithTextField::class.java)
+            intent.putExtra(Intent_KEYS.VALUETYPE,"Text")
+            startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
         }
 
 

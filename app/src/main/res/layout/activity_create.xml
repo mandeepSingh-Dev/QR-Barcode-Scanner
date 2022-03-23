@@ -18,37 +18,41 @@
         <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/appbarlayout2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#1A3E42"
-                app:layout_constraintTop_toTopOf="parent"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toTopOf="@id/createQRCODEButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/createrecyclerview"
-                android:orientation="horizontal">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
                 <androidx.cardview.widget.CardView
                     android:id="@+id/backCardView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ripple"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_margin="20dp"
+                    android:background="@drawable/ripple"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="30dp"
-                    >
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
                     <ImageView
                         android:id="@+id/backbutton2"
                         android:layout_width="33dp"
                         android:layout_height="33dp"
-                        android:src="@drawable/ic_baseline_arrow_back_ios_new_24"
-                        android:padding="10dp"
                         android:layout_gravity="center"
                         android:background="@drawable/ripple"
-                        />
+                        android:padding="10dp"
+                        android:src="@drawable/ic_baseline_arrow_back_ios_new_24" />
                 </androidx.cardview.widget.CardView>
 
                 <com.google.android.material.textview.MaterialTextView
@@ -56,36 +60,38 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Create"
-                    android:textSize="35sp"
-                    android:textColor="@color/white"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Headline1"
-                    app:layout_constraintTop_toTopOf="@id/backCardView2"
-                    app:layout_constraintLeft_toRightOf="@id/backCardView2"
+                    android:textColor="@color/white"
+                    android:textSize="35sp"
                     app:layout_constraintBottom_toBottomOf="@id/backCardView2"
-                    app:layout_constraintRight_toLeftOf="@id/SupportButton2"/>
+                    app:layout_constraintLeft_toRightOf="@id/backCardView2"
+                    app:layout_constraintRight_toLeftOf="@id/SupportButton2"
+                    app:layout_constraintTop_toTopOf="@id/backCardView2" />
 
                 <ImageView
                     android:id="@+id/deleteButton2"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginRight="30dp"
-                    android:visibility="gone"
                     android:src="@drawable/ic_round_delete_outline_24"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <ImageView
                     android:id="@+id/SupportButton2"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginRight="30dp"
                     android:alpha="0"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-    <androidx.recyclerview.widget.RecyclerView
+
+            <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/createrecyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -94,8 +100,31 @@
         app:layout_constraintTop_toBottomOf="@id/appbarlayout2"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/create2DTextView"
         />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/createQRCODEButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="10dp"
+                android:text="Create QR code from text"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:drawableTop="@drawable/ic_qrcode"
+                app:strokeColor="#AD1457"
+                app:strokeWidth="1dp"
+                app:cornerRadius="10dp"
+                android:padding="30dp"
+                android:textSize="28sp"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline1"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                app:layout_constraintTop_toBottomOf="@id/appbarlayout2"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/create2DTextView"
+                />
 
 
     <TextView
@@ -107,20 +136,20 @@
         android:textColor="@color/black"
         android:textSize="20sp"
         android:layout_marginLeft="12dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        app:layout_constraintTop_toBottomOf="@id/createrecyclerview"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintTop_toBottomOf="@id/createQRCODEButton"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toTopOf="@id/createRecyclerView2DCodes"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/createRecyclerView2DCodes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="25dp"
         app:layout_constraintTop_toBottomOf="@id/create2DTextView"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

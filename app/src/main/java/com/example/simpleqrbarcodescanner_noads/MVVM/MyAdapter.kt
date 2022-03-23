@@ -97,8 +97,8 @@ class MyAdapter(val context:Context,val myviewmodel:MyViewModel):RecyclerView.Ad
                      myviewmodel.delete(itemm)
                     withContext(Dispatchers.Main) {
                         arrayListtty?.removeAt(holder.adapterPosition)
-                       // notifyItemRemoved(holder.adapterPosition)
-                       // notifyDataSetChanged()
+//                        notifyItemRemoved(holder.adapterPosition)
+//                        notifyDataSetChanged()
                        // notifyItemRangeChanged(holder.adapterPosition,arrayListtty.size)
                        // notifyItemRangeChanged(holder.adapterPosition, arrayListtty?.size!!); // notifyDataSetChanged()
                        // Toast.makeText(context, "DELETE", Toast.LENGTH_SHORT).show()
@@ -567,6 +567,6 @@ holder.itemView.setOnClickListener {
     fun setDate(listy:ArrayList<EntityClass>)
       {
           arrayListtty = listy
-          notifyDataSetChanged()
+         notifyDataSetChanged()
     }
 }

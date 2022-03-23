@@ -144,7 +144,7 @@ binding?.imageView?.setImageBitmap(bitmap)*/
                  R.id.create->{
                     startActivity(Intent(this,CreateActivity::class.java)/*,ActivityOptions.makeSceneTransitionAnimation(this).toBundle()*/)
                 }
-                R.id.history2 -> startActivity(Intent(this,HistoryActivity::class.java),ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
+                R.id.history2 -> startActivity(Intent(this,HistoryActivity::class.java))
                 else->{
                     Toast.makeText(this,"error",Toast.LENGTH_SHORT).show()
                 }

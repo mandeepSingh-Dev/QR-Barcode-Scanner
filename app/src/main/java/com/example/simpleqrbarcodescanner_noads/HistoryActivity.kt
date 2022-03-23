@@ -6,6 +6,7 @@ import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -48,6 +49,7 @@ class HistoryActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
+
         if(savedInstanceState!=null)
         {
             stateee = savedInstanceState.getParcelable("STATE")
@@ -62,13 +64,10 @@ class HistoryActivity : AppCompatActivity() {
         }
         adapter = MyAdapter(this@HistoryActivity,myViewmodel)
         initRecyclerView()
-        getData()
+       // getData()
     }
 
     private fun getData(){
-       Log.d("kdkfndknf","fdfkjd")
-
-
 
      myViewmodel.listobservable
             .subscribeOn(Schedulers.io())
@@ -174,6 +173,12 @@ class HistoryActivity : AppCompatActivity() {
     }
     override fun onDestroy() {
         super.onDestroy()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getData()
 
     }
 

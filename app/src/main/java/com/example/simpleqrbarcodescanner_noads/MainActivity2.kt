@@ -74,17 +74,14 @@ class MainActivity2 : AppCompatActivity()
         binding = ActivityMain2Binding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
 
-        //createEvent()
-
          rawQrCOde = intent.getStringExtra(Intent_KEYS.QRCODE)
-      //  Toast.makeText(this,rawQrCOde,Toast.LENGTH_SHORT).show()
         val format = intent.getIntExtra(Intent_KEYS.FORMAT,0)
         val valueType = intent.getIntExtra(Intent_KEYS.VALUETYPE,0)
         val bundle = intent.getBundleExtra(Intent_KEYS.BUNDLE)
         val typeValue_QRGEN = intent.getStringExtra(Intent_KEYS.VALUETYPE_QRGENERATOR)
         fromHistoryPage = intent.getBooleanExtra(Intent_KEYS.FROM_HISTORY,false)
 
-        Log.d("dgfknfgd","format$format $typeValue_QRGEN ")
+        Log.d("dgfknfgd","format$format $typeValue_QRGEN  $valueType")
         arrayList = ArrayList()
 
 
@@ -92,10 +89,7 @@ class MainActivity2 : AppCompatActivity()
         // but for only metoined below types
         //and for other types we store from another 2nd when block
 
-       try {
-            val bitmap = qrGenerate(rawQrCOde, format,typeValue_QRGEN!!)
-            binding.codeImage.setImageBitmap(bitmap)
-        }catch (e:Exception){}
+
 
         //when block to set type of barcode in top textview  acc. to valueType
         // and to store data also in room
@@ -113,6 +107,8 @@ class MainActivity2 : AppCompatActivity()
 
                 "Product"}
             Barcode.TYPE_TEXT->  {
+                Log.d("uidfh","ELSE_TEXTpehle WALA")
+
                 binding.searchButton.text = "Copy"
                 binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null,null)
                 binding.copybutton.visibility = View.GONE
@@ -323,6 +319,11 @@ class MainActivity2 : AppCompatActivity()
         binding.typeTextView.text = textType
         }catch (e:Exception){}
 
+      //  try {
+            val bitmap = qrGenerate(rawQrCOde, format,typeValue_QRGEN!!)
+            binding.codeImage.setImageBitmap(bitmap)
+      //  }catch (e:Exception){}
+
         try{
         binding.searchButton.setOnClickListener {
             val buttonText = binding.searchButton.text
@@ -348,83 +349,182 @@ class MainActivity2 : AppCompatActivity()
         }catch (e:Exception){}
     }//end of onCreate()
 
-    fun qrGenerate(qrcode:String?,format:Int?,TypeValstr:String): Bitmap {
+    @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
+    fun qrGenerate(qrcode:String?, format:Int?, TypeValstr:String): Bitmap {
         val imageWidth =  binding.codeImage.layoutParams?.width
         val bitmap =  when(format){
             Custom_Formats_duplicate.CODABAR -> {
-                Log.d("dfnndb", format.toString())
+                binding.searchButton.text = "Copy"
+                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null,null)
+                binding.copybutton.visibility = View.GONE
+                binding.addContactsButton.visibility = View.GONE
+                binding.result.text = rawQrCOde
+                binding.typeTextView.text = "CODABAR"
+                minsert( Barcode.TYPE_TEXT,format!!,arrayList)
+
                 binding.codeImage.layoutParams.height = 280
                 BarcodeEncoder().encodeBitmap(qrcode, BarcodeFormat.CODABAR, imageWidth!!, 220)
 
             }
             Custom_Formats_duplicate.CODE_128 -> {
-                Log.d("dfnndb", format.toString())
+                binding.searchButton.text = "Copy"
+                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null,null)
+                binding.copybutton.visibility = View.GONE
+                binding.addContactsButton.visibility = View.GONE
+                binding.result.text = rawQrCOde
+                binding.typeTextView.text = "CODE_128"
+                minsert( Barcode.TYPE_TEXT,format!!,arrayList)
+
                 binding.codeImage.layoutParams.height = 280
                 BarcodeEncoder().encodeBitmap(qrcode, BarcodeFormat.CODE_128, imageWidth!!, 220)
             }
             Custom_Formats_duplicate.CODE_39 -> {
-                Log.d("dfnndb", format.toString())
+                binding.searchButton.text = "Copy"
+                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null,null)
+                binding.copybutton.visibility = View.GONE
+                binding.addContactsButton.visibility = View.GONE
+                binding.result.text = rawQrCOde
+                binding.typeTextView.text = "CODE_39"
+                minsert( Barcode.TYPE_TEXT,format!!,arrayList)
+
                 binding.codeImage.layoutParams.height = 280
                 BarcodeEncoder().encodeBitmap(qrcode, BarcodeFormat.CODE_39,imageWidth!!, 220)
             }
             Custom_Formats_duplicate.CODE_93 -> {
-                Log.d("dfnndb", format.toString())
+                binding.searchButton.text = "Copy"
+                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null,null)
+                binding.copybutton.visibility = View.GONE
+                binding.addContactsButton.visibility = View.GONE
+                binding.result.text = rawQrCOde
+                binding.typeTextView.text = "CODE_93"
+                minsert( Barcode.TYPE_TEXT,format!!,arrayList)
+
                 binding.codeImage.layoutParams.height = 280
                 BarcodeEncoder().encodeBitmap(qrcode, BarcodeFormat.CODE_93,imageWidth!!, 220)
             }
             Custom_Formats_duplicate.DATA_MATRIX -> {
-                Log.d("dfnndb", format.toString())
+                binding.searchButton.text = "Copy"
+                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null,null)
+                binding.copybutton.visibility = View.GONE
+                binding.addContactsButton.visibility = View.GONE
+                binding.result.text = rawQrCOde
+                binding.typeTextView.text = "DATA_MATRIX"
+                minsert( Barcode.TYPE_TEXT,format!!,arrayList)
+
                 binding.codeImage.layoutParams.height = 280
                 BarcodeEncoder().encodeBitmap(qrcode, BarcodeFormat.DATA_MATRIX,imageWidth!!, 220)
             }
             Custom_Formats_duplicate.EAN_13 ->  {
-                Log.d("dfnndb", format.toString())
+                binding.searchButton.text = "Copy"
+                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null,null)
+                binding.copybutton.visibility = View.GONE
+                binding.addContactsButton.visibility = View.GONE
+                binding.result.text = rawQrCOde
+                binding.typeTextView.text = "EAN_13"
+                minsert( Barcode.TYPE_TEXT,format!!,arrayList)
+
                 binding.codeImage.layoutParams.height = 280
                 BarcodeEncoder().encodeBitmap(qrcode, BarcodeFormat.EAN_13,imageWidth!!, 220)
             }
             Custom_Formats_duplicate.EAN_8 ->  {
-                Log.d("dfnndb", format.toString())
+                binding.searchButton.text = "Copy"
+                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null,null)
+                binding.copybutton.visibility = View.GONE
+                binding.addContactsButton.visibility = View.GONE
+                binding.result.text = rawQrCOde
+                binding.typeTextView.text = "EAN_8"
+                minsert( Barcode.TYPE_TEXT,format!!,arrayList)
+
                 binding.codeImage.layoutParams.height = 280
                 BarcodeEncoder().encodeBitmap(qrcode, BarcodeFormat.EAN_8,imageWidth!!, 220)
             } Custom_Formats_duplicate.ITF -> {
-                Log.d("dfnndb", format.toString())
+                binding.searchButton.text = "Copy"
+                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null,null)
+                binding.copybutton.visibility = View.GONE
+                binding.addContactsButton.visibility = View.GONE
+                binding.result.text = rawQrCOde
+                binding.typeTextView.text = "ITF"
+                minsert( Barcode.TYPE_TEXT,format!!,arrayList)
+
                 binding.codeImage.layoutParams.height = 280
                 BarcodeEncoder().encodeBitmap(qrcode, BarcodeFormat.ITF,imageWidth!!, 220)
             }
             Custom_Formats_duplicate.QR_CODE ->  {
-                Log.d("dfnndb", format.toString())
+                Log.d("uidfh","QR_CODE")
+                binding.searchButton.text = "Copy"
+                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null,null)
+                binding.copybutton.visibility = View.GONE
+                binding.addContactsButton.visibility = View.GONE
+                binding.result.text = rawQrCOde
+                binding.typeTextView.text = "QR_CODE"
+                minsert( Barcode.TYPE_TEXT,format!!,arrayList)
+
                 binding.codeImage.layoutParams.height = 470
                 BarcodeEncoder().encodeBitmap(qrcode, BarcodeFormat.QR_CODE,imageWidth!!,430)
 
             }
             Custom_Formats_duplicate.UPC_A -> {
-                Log.d("dfnndb", format.toString())
+                binding.searchButton.text = "Copy"
+                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null,null)
+                binding.copybutton.visibility = View.GONE
+                binding.addContactsButton.visibility = View.GONE
+                binding.result.text = rawQrCOde
+                binding.typeTextView.text = "UPC_A"
+                minsert( Barcode.TYPE_TEXT,format!!,arrayList)
+
                 binding.codeImage.layoutParams.height = 280
                 BarcodeEncoder().encodeBitmap(qrcode, BarcodeFormat.UPC_A,imageWidth!!, 220)
             }
             Custom_Formats_duplicate.UPC_E ->  {
-                Log.d("dfnndb", format.toString())
+                binding.searchButton.text = "Copy"
+                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null,null)
+                binding.copybutton.visibility = View.GONE
+                binding.addContactsButton.visibility = View.GONE
+                binding.result.text = rawQrCOde
+                binding.typeTextView.text = "UPC_E"
+                minsert( Barcode.TYPE_TEXT,format!!,arrayList)
+
                 binding.codeImage.layoutParams.height = 280
                 BarcodeEncoder().encodeBitmap(qrcode, BarcodeFormat.UPC_E,imageWidth!!, 220)
             }
             Custom_Formats_duplicate.PDF_417 ->  {
-                Log.d("dfnndb", format.toString())
+                binding.searchButton.text = "Copy"
+                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null,null)
+                binding.copybutton.visibility = View.GONE
+                binding.addContactsButton.visibility = View.GONE
+                binding.result.text = rawQrCOde
+                binding.typeTextView.text = "PDF_417"
+                minsert( Barcode.TYPE_TEXT,format!!,arrayList)
+
                 binding.codeImage.layoutParams.height = 280
                 BarcodeEncoder().encodeBitmap(qrcode, BarcodeFormat.PDF_417,imageWidth!!, 220)
             }
             Custom_Formats_duplicate.AZTEC ->  {
-                Log.d("dfnndb", format.toString())
+                binding.searchButton.text = "Copy"
+                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null,null)
+                binding.copybutton.visibility = View.GONE
+                binding.addContactsButton.visibility = View.GONE
+                binding.result.text = rawQrCOde
+                binding.typeTextView.text = "AZTEC"
+                minsert( Barcode.TYPE_TEXT,format!!,arrayList)
+
                 binding.codeImage.layoutParams.height = 280
                 BarcodeEncoder().encodeBitmap(qrcode, BarcodeFormat.AZTEC,imageWidth!!, 220)
             }
             else ->  {
-                Log.d("dfnndb", format.toString()+"else block")
-               /* binding.codeImage.layoutParams.height = 280
-                BitmapFactory.decodeResource(resources, R.drawable.ic_baseline_image_24)
-                */
               val bitmapp =   when(TypeValstr) {
-                    "Text"->{  val encoder =  QRGEncoder("9654980621",null,QRGContents.Type.TEXT,470)
-                        Log.d("dfnndb", TypeValstr.toString()+"else block")
+                    "Text"->{
+                        Log.d("uidfh","ELSE_TEXTWALA")
+
+                        binding.searchButton.text = "Copy"
+                        binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null,null)
+                        binding.copybutton.visibility = View.GONE
+                        binding.addContactsButton.visibility = View.GONE
+                        binding.result.text = rawQrCOde
+                        binding.typeTextView.text = "Text"
+                        minsert( Barcode.TYPE_TEXT,format!!,arrayList)
+
+                        val encoder =  QRGEncoder(qrcode,null,QRGContents.Type.TEXT,470)
                         encoder.encodeAsBitmap()}
                     "Phone Number"->{
                         Log.d("dfnndb", TypeValstr.toString()+"else block")
