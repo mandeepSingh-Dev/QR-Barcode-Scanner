@@ -9,6 +9,7 @@ import com.example.simpleqrbarcodescanner_noads.Util.Intent_KEYS
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
+import java.lang.Exception
 
 class ScannerBarcode(private val listener: QRCodeFoundListener)
 {
@@ -187,20 +188,37 @@ class ScannerBarcode(private val listener: QRCodeFoundListener)
                 calArrayList.let { bundle.putStringArrayList(Intent_KEYS.CAL_ARRAYLIST, calArrayList) }
             }
             Barcode.TYPE_CONTACT_INFO ->{
+
                 try {
                     calArrayList.add(barcode?.contactInfo?.phones?.get(0)?.number.toString())
-                    calArrayList.add(barcode?.contactInfo?.addresses?.get(0)?.addressLines?.get(0).toString())
-                    calArrayList.add(barcode?.contactInfo?.emails?.get(0)?.address.toString())
-                    var dfhdj4 = ""
-                    barcode?.contactInfo?.organization?.forEach { dfhdj4 += it.toString() }
-                    calArrayList.add(dfhdj4)
-                    calArrayList.add(barcode?.contactInfo?.name?.formattedName.toString())
-                    calArrayList.add(barcode?.contactInfo?.title.toString())
-                    calArrayList.add(barcode?.contactInfo?.urls?.get(0).toString())
-                    calArrayList.add(barcode?.contactInfo?.phones?.get(0)?.type.toString())
+                }catch (e:Exception){calArrayList.add("")}
+               try{
+                calArrayList.add(barcode?.contactInfo?.addresses?.get(0)?.addressLines?.get(0).toString())
+               }catch (e:Exception){calArrayList.add("")}
+                try{
+                   calArrayList.add( barcode?.contactInfo?.emails?.get(0)?.address.toString())
+                }catch (e:Exception){calArrayList.add("")}
 
-                    calArrayList.let { bundle.putStringArrayList(Intent_KEYS.CONTACTS_ARRAYLIST, it) }
-                }catch (e:Exception){}
+                var organization = ""
+                barcode?.contactInfo?.organization?.forEach { organization += it.toString() }
+                calArrayList.add(organization)
+                   // calArrayList.add(dfhdj4)
+                       try{
+                calArrayList.add(barcode?.contactInfo?.name?.formattedName.toString())
+                       }catch (e:Exception){calArrayList.add("")}
+                           try{
+                calArrayList.add(   barcode?.contactInfo?.title.toString())
+                           }catch (e:Exception){calArrayList.add("")}
+                               try{
+                calArrayList.add(  barcode?.contactInfo?.urls?.get(0).toString())
+                               }catch (e:Exception){calArrayList.add("")}
+                                   try{
+                calArrayList.add(   barcode?.contactInfo?.phones?.get(0)?.type.toString())
+                                   }catch (e:Exception){calArrayList.add("")}
+
+                calArrayList.let { bundle.putStringArrayList(Intent_KEYS.CONTACTS_ARRAYLIST, it) }
+                Log.d("fidhfudfd",calArrayList.size.toString()+"ihu")
+
 
             }
             //doesnot suppported

@@ -1,6 +1,5 @@
 package com.example.simpleqrbarcodescanner_noads.CreateRecyclerView
 
-import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -10,13 +9,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.simpleqrbarcodescanner_noads.CreateActivityWithTextField
-import com.example.simpleqrbarcodescanner_noads.MVVM.MyAdapter
-import com.example.simpleqrbarcodescanner_noads.MainActivity2
 import com.example.simpleqrbarcodescanner_noads.R
 import com.example.simpleqrbarcodescanner_noads.Util.Intent_KEYS
-import com.google.mlkit.vision.barcode.common.Barcode
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.qrcode.QRCodeWriter
 
 class CreateAdapter(val context: Context, val arrayList:ArrayList<Create_Item>): RecyclerView.Adapter<CreateAdapter.MyViewHolder>() {
 
@@ -38,9 +32,9 @@ class CreateAdapter(val context: Context, val arrayList:ArrayList<Create_Item>):
 
         val item = arrayList.get(position)
         holder.iconLogo?.setImageResource(item.iconId)
-        holder.typeValue?.text = item.typeValue
+        holder.typeValue?.text = item.typeName
 
-        holder.itemView?.setOnClickListener {
+        holder.itemView.setOnClickListener {
            /* val intent = Intent(context, MainActivity2::class.java)
             intent.putExtra(Intent_KEYS.QRCODE, "9650226920")
             intent.putExtra(Intent_KEYS.FORMAT, item.format)

@@ -24,6 +24,8 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import android.content.Intent
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.provider.CalendarContract
 import android.provider.ContactsContract
 import androidmads.library.qrgenearator.QRGContents
@@ -44,7 +46,7 @@ import kotlin.collections.ArrayList
 @AndroidEntryPoint
 class MainActivity2 : AppCompatActivity()
 {
-     lateinit var binding:ActivityMain2Binding
+    lateinit var binding:ActivityMain2Binding
     private var rawQrCOde:String?=null
     private var fromHistoryPage:Boolean?=null
 
@@ -74,14 +76,14 @@ class MainActivity2 : AppCompatActivity()
         binding = ActivityMain2Binding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
 
-         rawQrCOde = intent.getStringExtra(Intent_KEYS.QRCODE)
+        rawQrCOde = intent.getStringExtra(Intent_KEYS.QRCODE)
         val format = intent.getIntExtra(Intent_KEYS.FORMAT,0)
         val valueType = intent.getIntExtra(Intent_KEYS.VALUETYPE,0)
         val bundle = intent.getBundleExtra(Intent_KEYS.BUNDLE)
-        val typeValue_QRGEN = intent.getStringExtra(Intent_KEYS.VALUETYPE_QRGENERATOR)
+        //var typeValue_QRGEN = intent.getStringExtra(Intent_KEYS.VALUETYPE_QRGENERATOR)
         fromHistoryPage = intent.getBooleanExtra(Intent_KEYS.FROM_HISTORY,false)
 
-        Log.d("dgfknfgd","format$format $typeValue_QRGEN  $valueType")
+        Log.d("dgfknfgd","format$format   $valueType")
         arrayList = ArrayList()
 
 
@@ -93,264 +95,257 @@ class MainActivity2 : AppCompatActivity()
 
         //when block to set type of barcode in top textview  acc. to valueType
         // and to store data also in room
-        try{
-        val textType =  when(valueType){
-            Barcode.TYPE_PRODUCT-> {
-                binding.searchButton.text = "Search"
-                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_search_24,null),null,null,null)
-                binding.copybutton.text = "Copy"
-                binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
-                binding.addContactsButton.visibility = View.GONE
+       /* try{
+            val textType =  when(valueType){
+                Barcode.TYPE_PRODUCT-> {
+                    binding.searchButton.text = "Search"
+                    binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_search_24,null),null,null,null)
+                    binding.copybutton.text = "Copy"
+                    binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
+                    binding.addContactsButton.visibility = View.GONE
 //                binding.copyMainButton.visibility = View.GONE
-               minsert( Barcode.TYPE_PRODUCT,format,arrayList)
-                binding.result.text = rawQrCOde
+                    minsert( Barcode.TYPE_PRODUCT,format,arrayList)
+                    binding.result.text = rawQrCOde
 
-                "Product"}
-            Barcode.TYPE_TEXT->  {
-                Log.d("uidfh","ELSE_TEXTpehle WALA")
+                    "Product"}
+                Barcode.TYPE_TEXT->  {
+                    Log.d("uidfh","ELSE_TEXTpehle WALA")
 
-                binding.searchButton.text = "Copy"
-                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null,null)
-                binding.copybutton.visibility = View.GONE
-                binding.addContactsButton.visibility = View.GONE
-                binding.result.text = rawQrCOde
-                minsert( Barcode.TYPE_TEXT,format,arrayList)
+                    binding.searchButton.text = "Copy"
+                    binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null,null)
+                    binding.copybutton.visibility = View.GONE
+                    binding.addContactsButton.visibility = View.GONE
+                    binding.result.text = rawQrCOde
+                    minsert( Barcode.TYPE_TEXT,format,arrayList)
 
-                "Text"}
-            Barcode.TYPE_CONTACT_INFO->  {
-                binding.searchButton.text = "Add to contacts"
-                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_outline_person_add_alt_1_24,null),null,null,null)
-                binding.copybutton.text = "Call"
-                binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_twotone_call_24,null),null,null)
-                //    binding.copyMainButton.visibility = View.GONE
-              /**------------------*/
-               val list =  bundle?.getStringArrayList(Intent_KEYS.CONTACTS_ARRAYLIST)/*?.let {
-                    *//*contactArlst.addAll(it)*//*
-                    arrayList.addAll(it)}*/
-                Log.d("fjhife",list?.size.toString())
-                //Toast.makeText(this,arrayList[0],Toast.LENGTH_SHORT).show()
-                /* CoroutineScope(Dispatchers.IO).launch {
-                     MyRoomDatabase.getInstance(this@MainActivity2).getDao()
-                         .insert(EntityClass(contactArlst,System.currentTimeMillis(),Barcode.TYPE_CONTACT_INFO.toString(),rawQrCOde.toString()))
-                 }*/
-                binding.result.text = rawQrCOde
-                minsert( Barcode.TYPE_CONTACT_INFO,format,arrayList)
-                /**------------------*/
+                    "Text"}
+                Barcode.TYPE_CONTACT_INFO->  {
+                    binding.searchButton.text = "Add to contacts"
+                    binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_outline_person_add_alt_1_24,null),null,null,null)
+                    binding.copybutton.text = "Call"
+                    binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_twotone_call_24,null),null,null)
+                    //    binding.copyMainButton.visibility = View.GONE
+                    *//**------------------*//*
+                    contactArlst =  bundle?.getStringArrayList(Intent_KEYS.CONTACTS_ARRAYLIST)  as ArrayList<String>
+                    val name = contactArlst[4]
+                    val phone = contactArlst[0]
+                    val email = contactArlst[2]
+                    val organisation = contactArlst[3]
+                    val title = contactArlst[5]
+                    val address = contactArlst[1]
+                    val url = contactArlst[6]
+                    binding.result.text = "Name: $name \n Phone: $phone \n Email: $email \n Organisation: $organisation \n Title: $title \n Adress: $address \n Url: $url"
+                    minsert( Barcode.TYPE_CONTACT_INFO,format,contactArlst)
+                    *//**------------------*//*
 
-                "Contact Information"}
-            Barcode.TYPE_ISBN->  {
-                binding.searchButton.text = "Search"
-                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_search_24,null),null,null,null)
-                binding.copybutton.text = "Copy"
-                binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
-                binding.addContactsButton.visibility = View.GONE
-                //    binding.copyMainButton.visibility = View.GONE
-                binding.result.text = rawQrCOde
-                minsert( Barcode.TYPE_ISBN,format,arrayList)
+                    "Contact Information"}
+                Barcode.TYPE_ISBN->  {
+                    binding.searchButton.text = "Search"
+                    binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_search_24,null),null,null,null)
+                    binding.copybutton.text = "Copy"
+                    binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
+                    binding.addContactsButton.visibility = View.GONE
+                    //    binding.copyMainButton.visibility = View.GONE
+                    binding.result.text = rawQrCOde
+                    minsert( Barcode.TYPE_ISBN,format,arrayList)
 
-                "ID Book"}
-            Barcode.TYPE_PHONE->  {
-                binding.searchButton.text = "Call"
-                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_twotone_call_24,null),null,null,null)
-                binding.copybutton.text = "Copy"
-                binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
-                binding.addContactsButton.text = "Add contact"
+                    "ID Book"}
+                Barcode.TYPE_PHONE->  {
+                    binding.searchButton.text = "Call"
+                    binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_twotone_call_24,null),null,null,null)
+                    binding.copybutton.text = "Copy"
+                    binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
+                    binding.addContactsButton.text = "Add contact"
 //  binding.copyMainButton.visibility = View.GONE
-                binding.result.text = rawQrCOde
-                minsert( Barcode.TYPE_PHONE,format,arrayList)
-                "Phone"}
-            Barcode.TYPE_URL->  {
-                binding.searchButton.text = "Search"
-                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_search_24,null),null,null,null)
-                binding.copybutton.text = "Copy"
-                binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
-                binding.addContactsButton.visibility = View.GONE
-                //  binding.copyMainButton.visibility = View.GONE
-                binding.result.text = rawQrCOde
+                    binding.result.text = rawQrCOde
+                    minsert( Barcode.TYPE_PHONE,format,arrayList)
+                    "Phone"}
+                Barcode.TYPE_URL->  {
+                    binding.searchButton.text = "Search"
+                    binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_search_24,null),null,null,null)
+                    binding.copybutton.text = "Copy"
+                    binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
+                    binding.addContactsButton.visibility = View.GONE
+                    //  binding.copyMainButton.visibility = View.GONE
+                    binding.result.text = rawQrCOde
 
-                bundle?.getStringArrayList(Intent_KEYS.URL_LIST)?.let { arrayList.addAll(it) }
-                minsert( Barcode.TYPE_URL,format,arrayList)
-                "Url"}
-            Barcode.TYPE_GEO-> {
-                binding.searchButton.text = "Copy"
-                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null,null)
-                binding.copybutton.visibility = View.GONE
-                binding.addContactsButton.visibility = View.GONE
-                binding.result.text = rawQrCOde
-                minsert( Barcode.TYPE_GEO,format,arrayList)
+                    bundle?.getStringArrayList(Intent_KEYS.URL_LIST)?.let { arrayList.addAll(it) }
+                    minsert( Barcode.TYPE_URL,format,arrayList)
+                    "Url"}
+                Barcode.TYPE_GEO-> {
+                    binding.searchButton.text = "Copy"
+                    binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null,null)
+                    binding.copybutton.visibility = View.GONE
+                    binding.addContactsButton.visibility = View.GONE
+                    binding.result.text = rawQrCOde
+                    minsert( Barcode.TYPE_GEO,format,arrayList)
 
-                "Location"}
-            Barcode.TYPE_CALENDAR_EVENT->  {
-                binding.searchButton.text = "Add event"
-                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_calendar_month_24,null),null,null,null)
-                binding.copybutton.text = "Copy"
-                binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
-                binding.addContactsButton.visibility = View.GONE
-                //  binding.copyMainButton.visibility = View.GONE
-                /**--------------------*/
-               val list = bundle?.getStringArrayList(Intent_KEYS.CAL_ARRAYLIST)
-                list?.let{arrayList.addAll(it)}
-
-
-                if(arrayList[6].toInt()<10){ arrayList[6] = "0${arrayList[6]}" }
-                if(arrayList[7].toInt()<10){  arrayList[7] = "0${arrayList[7]}" }
-                if(arrayList[8].toInt()<10){  arrayList[8] = "0${arrayList[8]}" }
-
-                if(arrayList[12].toInt()<10){ arrayList[12] = "0${arrayList[12]}" }
-                if(arrayList[13].toInt()<10){ arrayList[13] = "0${arrayList[13]}" }
-                if(arrayList[14].toInt()<10){ arrayList[14] = "0${arrayList[14]}"}
-
-                binding.result.text = "Summary: ${arrayList[0]}\nDescription: ${arrayList[1]}\nLocation: ${arrayList[2]}\nStart Time: ${arrayList[3]}-${arrayList[4]}-${arrayList[5]}   ${arrayList[6]}:${arrayList[7]}:${arrayList[8]}\nEnd Time: ${arrayList[9]}-${arrayList[10]}-${arrayList[11]}   ${arrayList[12]}:${arrayList[13]}:${arrayList[14]}"
-/*
-                    CoroutineScope(Dispatchers.IO).launch {
-                        MyRoomDatabase.getInstance(this@MainActivity2).getDao()
-                            .insert(EntityClass(calArlst,System.currentTimeMillis(),Barcode.TYPE_CALENDAR_EVENT.toString(),rawQrCOde.toString()))
-                    }
-
-*/              list?.let{minsert( Barcode.TYPE_CALENDAR_EVENT,format,it)}
-                /**--------------------*/
-                "Event"}
-            Barcode.TYPE_UNKNOWN ->{
-                binding.searchButton.text = "Search"
-                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_email_24,null),null,null,null)
-                binding.copybutton.text = "Copy"
-                binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
-                binding.addContactsButton.visibility = View.GONE
-                //  binding.copyMainButton.visibility = View.GONE
-                binding.result.text = rawQrCOde
-                //minsert( Barcode.TYPE_UNKNOWN,format,arrayList)
-
-                "Unknown"}
-            Barcode.TYPE_EMAIL -> {
-                binding.searchButton.text = "Send email"
-                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_email_24,null),null,null,null)
-                binding.copybutton.text = "Copy"
-                binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
-                binding.addContactsButton.visibility = View.GONE
-                //   binding.copyMainButton.visibility = View.GONE
-                /**--------------------------*/
-                bundle?.getStringArrayList(Intent_KEYS.EMAIL_LIST)?.let { arrayList.addAll(it) }
-                emailAddress =  arrayList[0]
-                emailSubject =  arrayList[1]
-                emailBody =  arrayList[2]
+                    "Location"}
+                Barcode.TYPE_CALENDAR_EVENT->  {
+                    binding.searchButton.text = "Add event"
+                    binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_calendar_month_24,null),null,null,null)
+                    binding.copybutton.text = "Copy"
+                    binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
+                    binding.addContactsButton.visibility = View.GONE
+                    //  binding.copyMainButton.visibility = View.GONE
+                    *//**--------------------*//*
+                    calArlst = bundle?.getStringArrayList(Intent_KEYS.CAL_ARRAYLIST) as ArrayList<String>
+                    calArlst?.let{arrayList.addAll(it)}
 
 
-/*
+                    if(arrayList[6].toInt()<10){ arrayList[6] = "0${arrayList[6]}" }
+                    if(arrayList[7].toInt()<10){  arrayList[7] = "0${arrayList[7]}" }
+                    if(arrayList[8].toInt()<10){  arrayList[8] = "0${arrayList[8]}" }
+
+                    if(arrayList[12].toInt()<10){ arrayList[12] = "0${arrayList[12]}" }
+                    if(arrayList[13].toInt()<10){ arrayList[13] = "0${arrayList[13]}" }
+                    if(arrayList[14].toInt()<10){ arrayList[14] = "0${arrayList[14]}"}
+
+                    binding.result.text = "Summary: ${arrayList[0]}\nDescription: ${arrayList[1]}\nLocation: ${arrayList[2]}\nStart Time: ${arrayList[3]}-${arrayList[4]}-${arrayList[5]}   ${arrayList[6]}:${arrayList[7]}:${arrayList[8]}\nEnd Time: ${arrayList[9]}-${arrayList[10]}-${arrayList[11]}   ${arrayList[12]}:${arrayList[13]}:${arrayList[14]}"
+                    calArlst?.let{minsert( Barcode.TYPE_CALENDAR_EVENT,format,it)}
+                    *//**--------------------*//*
+                    "Event"}
+                Barcode.TYPE_UNKNOWN ->{
+                    binding.searchButton.text = "Search"
+                    binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_email_24,null),null,null,null)
+                    binding.copybutton.text = "Copy"
+                    binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
+                    binding.addContactsButton.visibility = View.GONE
+                    //  binding.copyMainButton.visibility = View.GONE
+                    binding.result.text = rawQrCOde
+                    //minsert( Barcode.TYPE_UNKNOWN,format,arrayList)
+
+                    "Unknown"}
+                Barcode.TYPE_EMAIL -> {
+                    binding.searchButton.text = "Send email"
+                    binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_email_24,null),null,null,null)
+                    binding.copybutton.text = "Copy"
+                    binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
+                    binding.addContactsButton.visibility = View.GONE
+                    //   binding.copyMainButton.visibility = View.GONE
+                    *//**--------------------------*//*
+                    bundle?.getStringArrayList(Intent_KEYS.EMAIL_LIST)?.let { arrayList.addAll(it) }
+                    emailAddress =  arrayList[0]
+                    emailSubject =  arrayList[1]
+                    emailBody =  arrayList[2]
+
+
+*//*
                     CoroutineScope(Dispatchers.IO).launch {
                         MyRoomDatabase.getInstance(this@MainActivity2).getDao()
                             .insert(EntityClass(arrayList,System.currentTimeMillis(),Barcode.TYPE_EMAIL.toString(),rawQrCOde.toString()))
                     }
-*/
-                binding.result.text = "Mail to :$emailAddress\nSubject : $emailSubject\nBody: $emailBody"
-                minsert(Barcode.TYPE_EMAIL,format,arrayList)
+*//*
+                    binding.result.text = "Mail to :$emailAddress\nSubject : $emailSubject\nBody: $emailBody"
+                    minsert(Barcode.TYPE_EMAIL,format,arrayList)
 
-                /**----------------*/
-                "Email"}
-            Barcode.TYPE_SMS->{
-                binding.searchButton.text = "Create message"
-                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_message_24,null),null,null,null)
-                binding.copybutton.text = "Copy"
-                binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
-                binding.addContactsButton.visibility = View.GONE
-                //   binding.copyMainButton.visibility = View.GONE
-         /**--------------------------*/
-                bundle?.getStringArrayList(Intent_KEYS.SMS_LIST)?.let { arrayList.addAll(it) }
-                phone = arrayList[0]
-                message = arrayList[1]
+                    *//**----------------*//*
+                    "Email"}
+                Barcode.TYPE_SMS->{
+                    binding.searchButton.text = "Create message"
+                    binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_message_24,null),null,null,null)
+                    binding.copybutton.text = "Copy"
+                    binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
+                    binding.addContactsButton.visibility = View.GONE
+                    //   binding.copyMainButton.visibility = View.GONE
+                    *//**--------------------------*//*
+                    bundle?.getStringArrayList(Intent_KEYS.SMS_LIST)?.let { arrayList.addAll(it) }
+                    phone = arrayList[0]
+                    message = arrayList[1]
 
 
-/*
+*//*
                     CoroutineScope(Dispatchers.IO).launch {
                         MyRoomDatabase.getInstance(this@MainActivity2).getDao()
                             .insert(EntityClass(arrayList,System.currentTimeMillis(),Barcode.TYPE_SMS.toString(),rawQrCOde.toString()))
                     }
-*/
-                binding.result.text = "SMS to: $phone\nMessage: $message"
-                minsert(Barcode.TYPE_SMS,format,arrayList)
-                /**-----------------------*/
-                "SMS"}
-            Barcode.TYPE_WIFI->{
-                binding.searchButton.text = "Connect"
-                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_sharp_wifi_24,null),null,null,null)
-                binding.copybutton.text = "Copy"
-                binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
-                binding.addContactsButton.visibility = View.GONE
-                //  binding.copyMainButton.visibility = View.GONE
-                /**---------------------------*/
-                bundle?.getStringArrayList(Intent_KEYS.WIFI_LIST)?.let { arrayList.addAll(it) }
-                val wifiName = arrayList[0]
-                val password = arrayList[1]
-                val encryptionValue = arrayList[2].toInt()
-                val encryption = if(encryptionValue==2){"WPA/WPA2"}
-                else if(encryptionValue==3){"WEP"}
-                else{"None"}
+*//*
+                    binding.result.text = "SMS to: $phone\nMessage: $message"
+                    minsert(Barcode.TYPE_SMS,format,arrayList)
+                    *//**-----------------------*//*
+                    "SMS"}
+                Barcode.TYPE_WIFI->{
+                    binding.searchButton.text = "Connect"
+                    binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_sharp_wifi_24,null),null,null,null)
+                    binding.copybutton.text = "Copy"
+                    binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
+                    binding.addContactsButton.visibility = View.GONE
+                    //  binding.copyMainButton.visibility = View.GONE
+                    *//**---------------------------*//*
+                    bundle?.getStringArrayList(Intent_KEYS.WIFI_LIST)?.let { arrayList.addAll(it) }
+                    val wifiName = arrayList[0]
+                    val password = arrayList[1]
+                    val encryptionValue = arrayList[2].toInt()
+                    val encryption = if(encryptionValue==2){"WPA/WPA2"}
+                    else if(encryptionValue==3){"WEP"}
+                    else{"None"}
 
 
-/*
+*//*
                     CoroutineScope(Dispatchers.IO).launch {
                         MyRoomDatabase.getInstance(this@MainActivity2).getDao()
                             .insert(EntityClass(arrayList,System.currentTimeMillis(),Barcode.TYPE_WIFI.toString(),rawQrCOde.toString()))
                     }
-*/
-                binding.result.text = "Wifi Name:$wifiName\nPassword: $password\n$encryption"
-                minsert(Barcode.TYPE_WIFI,format,arrayList)
-                /**---------------------------*/
-                "Wifi"}
-            Barcode.TYPE_DRIVER_LICENSE->{
-                binding.searchButton.visibility = View.GONE
-                binding.copybutton.text = "Copy"
-                binding.addContactsButton.visibility = View.GONE
-                               binding.result.text = rawQrCOde
-                minsert( Barcode.TYPE_DRIVER_LICENSE,format,arrayList)
-                "Driving Licence"}
-           else -> {
-               binding.searchButton.visibility= View.GONE
-               binding.copybutton.visibility = View.GONE
-               binding.shareButton.visibility = View.GONE
-               binding.addContactsButton.visibility = View.GONE
+*//*
+                    binding.result.text = "Wifi Name:$wifiName\nPassword: $password\n$encryption"
+                    minsert(Barcode.TYPE_WIFI,format,arrayList)
+                    *//**---------------------------*//*
+                    "Wi-fi"}
+                Barcode.TYPE_DRIVER_LICENSE->{
+                    binding.searchButton.visibility = View.GONE
+                    binding.copybutton.text = "Copy"
+                    binding.addContactsButton.visibility = View.GONE
+                    binding.result.text = rawQrCOde
+                    minsert( Barcode.TYPE_DRIVER_LICENSE,format,arrayList)
+                    "Driving Licence"}
+                else -> {
+                    binding.searchButton.visibility= View.GONE
+                    binding.copybutton.visibility = View.GONE
+                    binding.shareButton.visibility = View.GONE
+                    binding.addContactsButton.visibility = View.GONE
 
-               /**--------------------------------*/
-               binding.result.text = rawQrCOde
-               minsert( Barcode.TYPE_UNKNOWN,format,arrayList)
-               /**--------------------------------*/
+                    *//**--------------------------------*//*
+                    binding.result.text = rawQrCOde
+                    minsert( Barcode.TYPE_UNKNOWN,format,arrayList)
+                    *//**--------------------------------*//*
 
-               "Unknown"}
-        }
-        binding.typeTextView.text = textType
+                    "Unknown"}
+            }
+            binding.typeTextView.text = textType
+        }catch (e:Exception){}*/
+
+        try {
+            val bitmap = qrGenerate(rawQrCOde, format,valueType,bundle)
+            binding.codeImage.setImageBitmap(bitmap)
         }catch (e:Exception){}
 
-      //  try {
-            val bitmap = qrGenerate(rawQrCOde, format,typeValue_QRGEN!!)
-            binding.codeImage.setImageBitmap(bitmap)
-      //  }catch (e:Exception){}
-
         try{
-        binding.searchButton.setOnClickListener {
-            val buttonText = binding.searchButton.text
-            when(buttonText) {
-                "Search" ->  rawQrCOde?.let { onSearch(it, valueType) }
-                "Copy" ->  rawQrCOde?.let { copyText(it) }
-                "Add to contacts"-> addToContacts(contactArlst)
-                "Call"-> if(ContextCompat.checkSelfPermission(applicationContext,Manifest.permission.CALL_PHONE)!=PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE),mPERMISSION_CODE)
-                }else{rawQrCOde?.let { call(it) } }
-                "Add event"->createEvent(calArlst)
-                "Send email"->sendEmail(emailAddress,emailSubject,emailBody)
-                "Create message"->createMessage(phone,message)
-                "Connect"-> connectToWifi()
+            binding.searchButton.setOnClickListener {
+                val buttonText = binding.searchButton.text
+                when(buttonText) {
+                    "Search" ->  rawQrCOde?.let { onSearch(it, valueType) }
+                    "Copy" ->  rawQrCOde?.let { copyText(it) }
+                    "Add to contacts"-> addToContacts(contactArlst)
+                    "Call"-> if(ContextCompat.checkSelfPermission(applicationContext,Manifest.permission.CALL_PHONE)!=PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE),mPERMISSION_CODE)
+                    }else{rawQrCOde?.let { call(it) } }
+                    "Add event"->createEvent(calArlst)
+                    "Send email"->sendEmail(emailAddress,emailSubject,emailBody)
+                    "Create message"->createMessage(phone,message)
+                    "Connect"-> connectToWifi()
+                }
             }
-        }
-        binding.copybutton.setOnClickListener {
-            rawQrCOde?.let { copyText(it) }
-        }
-        binding.shareButton.setOnClickListener {
-            rawQrCOde?.let { shareText(it) }
-        }
+            binding.copybutton.setOnClickListener {
+                rawQrCOde?.let { copyText(it) }
+            }
+            binding.shareButton.setOnClickListener {
+                rawQrCOde?.let { shareText(it) }
+            }
         }catch (e:Exception){}
     }//end of onCreate()
 
     @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
-    fun qrGenerate(qrcode:String?, format:Int?, TypeValstr:String): Bitmap {
+    fun qrGenerate(qrcode:String?, format:Int, TypeValue:Int?,bundle:Bundle?): Bitmap {
         val imageWidth =  binding.codeImage.layoutParams?.width
         val bitmap =  when(format){
             Custom_Formats_duplicate.CODABAR -> {
@@ -360,7 +355,7 @@ class MainActivity2 : AppCompatActivity()
                 binding.addContactsButton.visibility = View.GONE
                 binding.result.text = rawQrCOde
                 binding.typeTextView.text = "CODABAR"
-                minsert( Barcode.TYPE_TEXT,format!!,arrayList)
+                minsert( -1,format!!,arrayList)
 
                 binding.codeImage.layoutParams.height = 280
                 BarcodeEncoder().encodeBitmap(qrcode, BarcodeFormat.CODABAR, imageWidth!!, 220)
@@ -373,7 +368,7 @@ class MainActivity2 : AppCompatActivity()
                 binding.addContactsButton.visibility = View.GONE
                 binding.result.text = rawQrCOde
                 binding.typeTextView.text = "CODE_128"
-                minsert( Barcode.TYPE_TEXT,format!!,arrayList)
+                minsert( -1,format!!,arrayList)
 
                 binding.codeImage.layoutParams.height = 280
                 BarcodeEncoder().encodeBitmap(qrcode, BarcodeFormat.CODE_128, imageWidth!!, 220)
@@ -385,7 +380,7 @@ class MainActivity2 : AppCompatActivity()
                 binding.addContactsButton.visibility = View.GONE
                 binding.result.text = rawQrCOde
                 binding.typeTextView.text = "CODE_39"
-                minsert( Barcode.TYPE_TEXT,format!!,arrayList)
+                minsert( -1,format!!,arrayList)
 
                 binding.codeImage.layoutParams.height = 280
                 BarcodeEncoder().encodeBitmap(qrcode, BarcodeFormat.CODE_39,imageWidth!!, 220)
@@ -397,7 +392,7 @@ class MainActivity2 : AppCompatActivity()
                 binding.addContactsButton.visibility = View.GONE
                 binding.result.text = rawQrCOde
                 binding.typeTextView.text = "CODE_93"
-                minsert( Barcode.TYPE_TEXT,format!!,arrayList)
+                minsert( -1,format!!,arrayList)
 
                 binding.codeImage.layoutParams.height = 280
                 BarcodeEncoder().encodeBitmap(qrcode, BarcodeFormat.CODE_93,imageWidth!!, 220)
@@ -409,7 +404,7 @@ class MainActivity2 : AppCompatActivity()
                 binding.addContactsButton.visibility = View.GONE
                 binding.result.text = rawQrCOde
                 binding.typeTextView.text = "DATA_MATRIX"
-                minsert( Barcode.TYPE_TEXT,format!!,arrayList)
+                minsert( -1,format!!,arrayList)
 
                 binding.codeImage.layoutParams.height = 280
                 BarcodeEncoder().encodeBitmap(qrcode, BarcodeFormat.DATA_MATRIX,imageWidth!!, 220)
@@ -421,7 +416,7 @@ class MainActivity2 : AppCompatActivity()
                 binding.addContactsButton.visibility = View.GONE
                 binding.result.text = rawQrCOde
                 binding.typeTextView.text = "EAN_13"
-                minsert( Barcode.TYPE_TEXT,format!!,arrayList)
+                minsert( -1,format!!,arrayList)
 
                 binding.codeImage.layoutParams.height = 280
                 BarcodeEncoder().encodeBitmap(qrcode, BarcodeFormat.EAN_13,imageWidth!!, 220)
@@ -433,35 +428,22 @@ class MainActivity2 : AppCompatActivity()
                 binding.addContactsButton.visibility = View.GONE
                 binding.result.text = rawQrCOde
                 binding.typeTextView.text = "EAN_8"
-                minsert( Barcode.TYPE_TEXT,format!!,arrayList)
+                minsert( -1,format!!,arrayList)
 
                 binding.codeImage.layoutParams.height = 280
                 BarcodeEncoder().encodeBitmap(qrcode, BarcodeFormat.EAN_8,imageWidth!!, 220)
-            } Custom_Formats_duplicate.ITF -> {
+            }
+            Custom_Formats_duplicate.ITF -> {
                 binding.searchButton.text = "Copy"
                 binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null,null)
                 binding.copybutton.visibility = View.GONE
                 binding.addContactsButton.visibility = View.GONE
                 binding.result.text = rawQrCOde
                 binding.typeTextView.text = "ITF"
-                minsert( Barcode.TYPE_TEXT,format!!,arrayList)
+                minsert( -1,format!!,arrayList)
 
                 binding.codeImage.layoutParams.height = 280
                 BarcodeEncoder().encodeBitmap(qrcode, BarcodeFormat.ITF,imageWidth!!, 220)
-            }
-            Custom_Formats_duplicate.QR_CODE ->  {
-                Log.d("uidfh","QR_CODE")
-                binding.searchButton.text = "Copy"
-                binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null,null)
-                binding.copybutton.visibility = View.GONE
-                binding.addContactsButton.visibility = View.GONE
-                binding.result.text = rawQrCOde
-                binding.typeTextView.text = "QR_CODE"
-                minsert( Barcode.TYPE_TEXT,format!!,arrayList)
-
-                binding.codeImage.layoutParams.height = 470
-                BarcodeEncoder().encodeBitmap(qrcode, BarcodeFormat.QR_CODE,imageWidth!!,430)
-
             }
             Custom_Formats_duplicate.UPC_A -> {
                 binding.searchButton.text = "Copy"
@@ -470,7 +452,7 @@ class MainActivity2 : AppCompatActivity()
                 binding.addContactsButton.visibility = View.GONE
                 binding.result.text = rawQrCOde
                 binding.typeTextView.text = "UPC_A"
-                minsert( Barcode.TYPE_TEXT,format!!,arrayList)
+                minsert( -1,format!!,arrayList)
 
                 binding.codeImage.layoutParams.height = 280
                 BarcodeEncoder().encodeBitmap(qrcode, BarcodeFormat.UPC_A,imageWidth!!, 220)
@@ -482,7 +464,7 @@ class MainActivity2 : AppCompatActivity()
                 binding.addContactsButton.visibility = View.GONE
                 binding.result.text = rawQrCOde
                 binding.typeTextView.text = "UPC_E"
-                minsert( Barcode.TYPE_TEXT,format!!,arrayList)
+                minsert( -1,format!!,arrayList)
 
                 binding.codeImage.layoutParams.height = 280
                 BarcodeEncoder().encodeBitmap(qrcode, BarcodeFormat.UPC_E,imageWidth!!, 220)
@@ -494,7 +476,7 @@ class MainActivity2 : AppCompatActivity()
                 binding.addContactsButton.visibility = View.GONE
                 binding.result.text = rawQrCOde
                 binding.typeTextView.text = "PDF_417"
-                minsert( Barcode.TYPE_TEXT,format!!,arrayList)
+                minsert( -1,format!!,arrayList)
 
                 binding.codeImage.layoutParams.height = 280
                 BarcodeEncoder().encodeBitmap(qrcode, BarcodeFormat.PDF_417,imageWidth!!, 220)
@@ -506,14 +488,32 @@ class MainActivity2 : AppCompatActivity()
                 binding.addContactsButton.visibility = View.GONE
                 binding.result.text = rawQrCOde
                 binding.typeTextView.text = "AZTEC"
-                minsert( Barcode.TYPE_TEXT,format!!,arrayList)
+                minsert( -1,format!!,arrayList)
 
                 binding.codeImage.layoutParams.height = 280
                 BarcodeEncoder().encodeBitmap(qrcode, BarcodeFormat.AZTEC,imageWidth!!, 220)
             }
             else ->  {
-              val bitmapp =   when(TypeValstr) {
-                    "Text"->{
+
+                Log.d("dfdifdhgfbd","ssgdfgsjdf")
+                val bitmapp =   when(TypeValue) {
+                    Barcode.TYPE_PRODUCT-> {
+                        binding.searchButton.text = "Search"
+                        binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_search_24,null),null,null,null)
+                        binding.copybutton.text = "Copy"
+                        binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
+                        binding.addContactsButton.visibility = View.GONE
+                        binding.typeTextView.text = "Product"
+
+//                binding.copyMainButton.visibility = View.GONE
+                        minsert( Barcode.TYPE_PRODUCT,format,arrayList)
+                        binding.result.text = rawQrCOde
+
+                       // val encoder =  QRGEncoder(qrcode,null,QRGContents.Type.TEXT,470)
+                       // encoder.encodeAsBitmap()
+                        BarcodeEncoder().encodeBitmap(qrcode,BarcodeFormat.QR_CODE,imageWidth!!,470)
+                    }
+                    Barcode.TYPE_TEXT->{
                         Log.d("uidfh","ELSE_TEXTWALA")
 
                         binding.searchButton.text = "Copy"
@@ -524,38 +524,255 @@ class MainActivity2 : AppCompatActivity()
                         binding.typeTextView.text = "Text"
                         minsert( Barcode.TYPE_TEXT,format!!,arrayList)
 
-                        val encoder =  QRGEncoder(qrcode,null,QRGContents.Type.TEXT,470)
-                        encoder.encodeAsBitmap()}
-                    "Phone Number"->{
-                        Log.d("dfnndb", TypeValstr.toString()+"else block")
-                        val encoder =  QRGEncoder("9654980621",null,QRGContents.Type.PHONE,470)
-                        encoder.encodeAsBitmap()
+                      //  val encoder =  QRGEncoder(qrcode,null,QRGContents.Type.TEXT,470)
+                       // encoder.encodeAsBitmap()
+                        BarcodeEncoder().encodeBitmap(qrcode,BarcodeFormat.QR_CODE,imageWidth!!,470)
                     }
-                    "URL"->{ val encoder =  QRGEncoder("9654980621",null,QRGContents.URL_KEY,470)
-                        Log.d("dfnndb", TypeValstr.toString()+"else block")
-                        encoder.encodeAsBitmap()}
-                    "Contact information"->{ val encoder =  QRGEncoder("9654980621",null,QRGContents.Type.CONTACT,170)
-                        Log.d("dfnndb", TypeValstr.toString()+"else block")
-                       try {
-                           binding.codeImage.setImageBitmap(encoder.encodeAsBitmap())
-                       }catch (e:Exception){}
-                        encoder.encodeAsBitmap()
+                    Barcode.TYPE_CONTACT_INFO->{
+                        Log.d("difghduhgd",qrcode.toString())
+                        binding.searchButton.text = "Add to contacts"
+                        binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_outline_person_add_alt_1_24,null),null,null,null)
+                        binding.copybutton.text = "Call"
+                        binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_twotone_call_24,null),null,null)
+                        binding.typeTextView.text = "Contact Information"
+                        //    binding.copyMainButton.visibility = View.GONE
+                        /**------------------*/
+                        contactArlst =  bundle?.getStringArrayList(Intent_KEYS.CONTACTS_ARRAYLIST)  as ArrayList<String>
+                        val name = contactArlst[4]
+                        val phone = contactArlst[0]
+                        val email = contactArlst[2]
+                        val organisation = contactArlst[3]
+                        val title = contactArlst[5]
+                        val address = contactArlst[1]
+                        val url = contactArlst[6]
+                        binding.result.text = "Name: $name \n Phone: $phone \n Email: $email \n Organisation: $organisation \n Title: $title \n Adress: $address \n Url: $url"
+                        minsert( Barcode.TYPE_CONTACT_INFO,format,contactArlst)
+
+                       // val encoder =  QRGEncoder(qrcode,null,QRGContents.Type.TEXT,470)
+                       // encoder.encodeAsBitmap()
+                        BarcodeEncoder().encodeBitmap(qrcode,BarcodeFormat.QR_CODE,imageWidth!!,470)
                     }
-                    "Wi-fi information"->{ val encoder =  QRGEncoder("9654980621",null,QRGContents.Type.TEXT,470)
-                        Log.d("dfnndb", TypeValstr.toString()+"else block")
-                        encoder.encodeAsBitmap()}
-                    "Email"->{ val encoder =  QRGEncoder("9654980621",null,QRGContents.Type.EMAIL,470)
-                        Log.d("dfnndb", TypeValstr.toString()+"else block")
-                        encoder.encodeAsBitmap()}
-                    "SMS"->{ val encoder =  QRGEncoder("9654980621",null,QRGContents.Type.SMS,470)
-                        Log.d("dfnndb", TypeValstr.toString()+"else block")
-                        encoder.encodeAsBitmap()}
+                    Barcode.TYPE_ISBN->  {
+                        binding.searchButton.text = "Search"
+                        binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_search_24,null),null,null,null)
+                        binding.copybutton.text = "Copy"
+                        binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
+                        binding.addContactsButton.visibility = View.GONE
+                        binding.typeTextView.text = "ID Book"
+                        //    binding.copyMainButton.visibility = View.GONE
+                        binding.result.text = rawQrCOde
+                        minsert( Barcode.TYPE_ISBN,format,arrayList)
+                      //  val encoder =  QRGEncoder(qrcode,null,QRGContents.Type.TEXT,470)
+                       // encoder.encodeAsBitmap()
+                        BarcodeEncoder().encodeBitmap(qrcode,BarcodeFormat.QR_CODE,imageWidth!!,470)
+                    }
+                    Barcode.TYPE_PHONE-> {
+                        binding.searchButton.text = "Call"
+                        binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_twotone_call_24,null),null,null,null)
+                        binding.copybutton.text = "Copy"
+                        binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
+                        binding.addContactsButton.text = "Add contact"
+//  binding.copyMainButton.visibility = View.GONE
+                        binding.result.text = rawQrCOde
+                        binding.typeTextView.text = "Phone"
+                        minsert( Barcode.TYPE_PHONE,format!!,arrayList)
+
+                       // val encoder =  QRGEncoder(qrcode,null,QRGContents.Type.PHONE,470)
+                       // encoder.encodeAsBitmap()
+                        BarcodeEncoder().encodeBitmap(qrcode,BarcodeFormat.QR_CODE,imageWidth!!,470)
+                    }
+                    Barcode.TYPE_URL->{
+                        binding.searchButton.text = "Search"
+                        binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_search_24,null),null,null,null)
+                        binding.copybutton.text = "Copy"
+                        binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
+                        binding.addContactsButton.visibility = View.GONE
+                        //  binding.copyMainButton.visibility = View.GONE
+                        binding.result.text = rawQrCOde
+                        binding.typeTextView.text = "Url"
+
+                        bundle?.getStringArrayList(Intent_KEYS.URL_LIST)?.let { arrayList.addAll(it) }
+                        minsert( Barcode.TYPE_URL,format,arrayList)
+
+                       // val encoder =  QRGEncoder(qrcode,null,QRGContents.Type.TEXT,470)
+                       // encoder.encodeAsBitmap()
+                        BarcodeEncoder().encodeBitmap(qrcode,BarcodeFormat.QR_CODE,imageWidth!!,470)
+                    }
+                    Barcode.TYPE_GEO-> {
+                        binding.searchButton.text = "Copy"
+                        binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null,null)
+                        binding.copybutton.visibility = View.GONE
+                        binding.addContactsButton.visibility = View.GONE
+                        binding.typeTextView.text = "Location"
+                        binding.result.text = rawQrCOde
+                        minsert( Barcode.TYPE_GEO,format,arrayList)
+
+                       // val encoder =  QRGEncoder(qrcode,null,QRGContents.Type.LOCATION,470)
+                       // encoder.encodeAsBitmap()
+                        BarcodeEncoder().encodeBitmap(qrcode,BarcodeFormat.QR_CODE,imageWidth!!,470)
+                    }
+                    Barcode.TYPE_CALENDAR_EVENT->{
+                        binding.searchButton.text = "Add event"
+                        binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_calendar_month_24,null),null,null,null)
+                        binding.copybutton.text = "Copy"
+                        binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
+                        binding.addContactsButton.visibility = View.GONE
+                        binding.typeTextView.text = "Event"
+                        //  binding.copyMainButton.visibility = View.GONE
+                        /**--------------------*/
+                        calArlst = bundle?.getStringArrayList(Intent_KEYS.CAL_ARRAYLIST) as ArrayList<String>
+                        calArlst?.let{arrayList.addAll(it)}
+
+
+                        if(arrayList[6].toInt()<10){ arrayList[6] = "0${arrayList[6]}" }
+                        if(arrayList[7].toInt()<10){  arrayList[7] = "0${arrayList[7]}" }
+                        if(arrayList[8].toInt()<10){  arrayList[8] = "0${arrayList[8]}" }
+
+                        if(arrayList[12].toInt()<10){ arrayList[12] = "0${arrayList[12]}" }
+                        if(arrayList[13].toInt()<10){ arrayList[13] = "0${arrayList[13]}" }
+                        if(arrayList[14].toInt()<10){ arrayList[14] = "0${arrayList[14]}"}
+
+                        binding.result.text = "Summary: ${arrayList[0]}\nDescription: ${arrayList[1]}\nLocation: ${arrayList[2]}\nStart Time: ${arrayList[3]}-${arrayList[4]}-${arrayList[5]}   ${arrayList[6]}:${arrayList[7]}:${arrayList[8]}\nEnd Time: ${arrayList[9]}-${arrayList[10]}-${arrayList[11]}   ${arrayList[12]}:${arrayList[13]}:${arrayList[14]}"
+                        calArlst?.let{minsert( Barcode.TYPE_CALENDAR_EVENT,format,it)}
+                        /**--------------------*/
+                       // val encoder =  QRGEncoder(qrcode,null,null,470)
+                       // BarcodeEncoder().encodeBitmap(qrcode,BarcodeFormat.QR_CODE,imageWidth!!,470)
+                        //encoder.encodeAsBitmap()
+                        BarcodeEncoder().encodeBitmap(qrcode,BarcodeFormat.QR_CODE,imageWidth!!,470)
+                    }
+                    Barcode.TYPE_UNKNOWN ->{
+                        binding.searchButton.text = "Search"
+                        binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_email_24,null),null,null,null)
+                        binding.copybutton.text = "Copy"
+                        binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
+                        binding.addContactsButton.visibility = View.GONE
+                        binding.typeTextView.text = "Unknown"
+                        //  binding.copyMainButton.visibility = View.GONE
+                        binding.result.text = rawQrCOde
+                        //minsert( Barcode.TYPE_UNKNOWN,format,arrayList)
+                       // val encoder =  QRGEncoder(qrcode,null,QRGContents.Type.TEXT,470)
+                       // encoder.encodeAsBitmap()
+                        BarcodeEncoder().encodeBitmap(qrcode,BarcodeFormat.QR_CODE,imageWidth!!,470)
+                    }
+                    Barcode.TYPE_EMAIL->{
+                        binding.searchButton.text = "Send email"
+                        binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_email_24,null),null,null,null)
+                        binding.copybutton.text = "Copy"
+                        binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
+                        binding.addContactsButton.visibility = View.GONE
+                        binding.typeTextView.text = "Email"
+                        //   binding.copyMainButton.visibility = View.GONE
+                        /**--------------------------*/
+                        bundle?.getStringArrayList(Intent_KEYS.EMAIL_LIST)?.let { arrayList.addAll(it) }
+                        emailAddress =  arrayList[0]
+                        emailSubject =  arrayList[1]
+                        emailBody =  arrayList[2]
+
+
+/*
+                    CoroutineScope(Dispatchers.IO).launch {
+                        MyRoomDatabase.getInstance(this@MainActivity2).getDao()
+                            .insert(EntityClass(arrayList,System.currentTimeMillis(),Barcode.TYPE_EMAIL.toString(),rawQrCOde.toString()))
+                    }
+*/
+                        binding.result.text = "Mail to :$emailAddress\nSubject : $emailSubject\nBody: $emailBody"
+                        minsert(Barcode.TYPE_EMAIL,format,arrayList)
+
+                      //  val encoder =  QRGEncoder(qrcode,null,QRGContents.Type.EMAIL,470)
+                       // encoder.encodeAsBitmap()
+                        BarcodeEncoder().encodeBitmap(qrcode,BarcodeFormat.QR_CODE,imageWidth!!,470)
+                    }
+                    Barcode.TYPE_SMS->{
+                        binding.searchButton.text = "Create message"
+                        binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_message_24,null),null,null,null)
+                        binding.copybutton.text = "Copy"
+                        binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
+                        binding.addContactsButton.visibility = View.GONE
+                        binding.typeTextView.text = "SMS"
+                        //   binding.copyMainButton.visibility = View.GONE
+                        /**--------------------------*/
+                        bundle?.getStringArrayList(Intent_KEYS.SMS_LIST)?.let { arrayList.addAll(it) }
+                        phone = arrayList[0]
+                        message = arrayList[1]
+
+
+/*
+                    CoroutineScope(Dispatchers.IO).launch {
+                        MyRoomDatabase.getInstance(this@MainActivity2).getDao()
+                            .insert(EntityClass(arrayList,System.currentTimeMillis(),Barcode.TYPE_SMS.toString(),rawQrCOde.toString()))
+                    }
+*/
+                        binding.result.text = "SMS to: $phone\nMessage: $message"
+                        minsert(Barcode.TYPE_SMS,format,arrayList)
+
+                       // val encoder =  QRGEncoder(qrcode,null,QRGContents.Type.SMS,470)
+                       // encoder.encodeAsBitmap()
+                        BarcodeEncoder().encodeBitmap(qrcode,BarcodeFormat.QR_CODE,imageWidth!!,470)
+                    }
+                    Barcode.TYPE_WIFI->{
+                        binding.searchButton.text = "Connect"
+                        binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_sharp_wifi_24,null),null,null,null)
+                        binding.copybutton.text = "Copy"
+                        binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
+                        binding.addContactsButton.visibility = View.GONE
+                        binding.typeTextView.text = "Wi-fi"
+                        //  binding.copyMainButton.visibility = View.GONE
+                        /**---------------------------*/
+                        bundle?.getStringArrayList(Intent_KEYS.WIFI_LIST)?.let { arrayList.addAll(it) }
+                        val wifiName = arrayList[0]
+                        val password = arrayList[1]
+                        val encryptionValue = arrayList[2].toInt()
+                        val encryption = if(encryptionValue==2){"WPA/WPA2"}
+                        else if(encryptionValue==3){"WEP"}
+                        else{"None"}
+
+
+/*
+                    CoroutineScope(Dispatchers.IO).launch {
+                        MyRoomDatabase.getInstance(this@MainActivity2).getDao()
+                            .insert(EntityClass(arrayList,System.currentTimeMillis(),Barcode.TYPE_WIFI.toString(),rawQrCOde.toString()))
+                    }
+*/
+                        binding.result.text = "Wifi Name:$wifiName\nPassword: $password\n$encryption"
+                        minsert(Barcode.TYPE_WIFI,format,arrayList)
+
+                       // val encoder =  QRGEncoder(qrcode,null,QRGContents.Type.TEXT,470)
+                      //  Log.d("dfnndb", TypeValue.toString()+"else block")
+                       // encoder.encodeAsBitmap()
+                        BarcodeEncoder().encodeBitmap(qrcode,BarcodeFormat.QR_CODE,imageWidth!!,470)
+                    }
+                    Barcode.TYPE_DRIVER_LICENSE->{
+                        binding.searchButton.visibility = View.GONE
+                        binding.copybutton.text = "Copy"
+                        binding.addContactsButton.visibility = View.GONE
+                        binding.typeTextView.text = "Driving Licence"
+                        binding.result.text = rawQrCOde
+                        minsert( Barcode.TYPE_DRIVER_LICENSE,format,arrayList)
+
+                       // val encoder =  QRGEncoder(qrcode,null,QRGContents.Type.TEXT,470)
+                       // encoder.encodeAsBitmap()
+                        BarcodeEncoder().encodeBitmap(qrcode,BarcodeFormat.QR_CODE,imageWidth!!,470)
+                    }
                     else->{
-                        val encoder =  QRGEncoder("9654980621",null,QRGContents.Type.TEXT,470)
-                        Log.d("dfnndb", TypeValstr.toString()+"else block")
-                        encoder.encodeAsBitmap()}
+                        binding.searchButton.visibility= View.GONE
+                        binding.copybutton.visibility = View.GONE
+                        binding.shareButton.visibility = View.GONE
+                        binding.addContactsButton.visibility = View.GONE
+                        binding.typeTextView.text = "Unknown"
+
+                        /**--------------------------------*/
+                        binding.result.text = rawQrCOde
+                        minsert( Barcode.TYPE_UNKNOWN,format,arrayList)
+
+                       // val encoder =  QRGEncoder(qrcode,null,QRGContents.Type.TEXT,470)
+                      //  encoder.encodeAsBitmap()
+                        BarcodeEncoder().encodeBitmap(qrcode,BarcodeFormat.QR_CODE,imageWidth!!,470)
+                    }
                 }
                 bitmapp
+                /* binding.codeImage.layoutParams.height = 470
+                 BarcodeEncoder().encodeBitmap(qrcode, BarcodeFormat.QR_CODE,imageWidth!!,430)
+ */
             }
 
         }
@@ -563,27 +780,27 @@ class MainActivity2 : AppCompatActivity()
         return bitmap
     }
 
-   private fun onSearch(text:String,valueType: Int){
-       val intent = Intent(Intent.ACTION_VIEW)
-       val ISBN_baseurl = "https://www.google.com/search?q="
-         when(valueType){
-           Barcode.TYPE_URL -> {
-               binding.searchButton.text = "Search"
-               intent.data = Uri.parse(text)
-               startActivity(intent)
-           }
-           Barcode.TYPE_ISBN,Barcode.TYPE_PRODUCT ->{
-               binding.searchButton.text = "Search"
-               intent.data = Uri.parse(ISBN_baseurl+text)
-               startActivity(intent)
-           }
-             Barcode.TYPE_TEXT-> copyText(text)
+    private fun onSearch(text:String,valueType: Int){
+        val intent = Intent(Intent.ACTION_VIEW)
+        val ISBN_baseurl = "https://www.google.com/search?q="
+        when(valueType){
+            Barcode.TYPE_URL -> {
+                binding.searchButton.text = "Search"
+                intent.data = Uri.parse(text)
+                startActivity(intent)
+            }
+            Barcode.TYPE_ISBN,Barcode.TYPE_PRODUCT ->{
+                binding.searchButton.text = "Search"
+                intent.data = Uri.parse(ISBN_baseurl+text)
+                startActivity(intent)
+            }
+            Barcode.TYPE_TEXT-> copyText(text)
 
 
-       }
+        }
 
 
-   }
+    }
 
     private fun copyText(text: String){
         val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -602,7 +819,7 @@ class MainActivity2 : AppCompatActivity()
     private fun call(phnNumber:String){
         val intent = Intent(Intent.ACTION_CALL)
         intent.data = Uri.parse(/*"tel:$*/phnNumber)
-       val dialogBuidler = MaterialAlertDialogBuilder(applicationContext, com.google.android.material.R.style.MaterialAlertDialog_MaterialComponents)
+        val dialogBuidler = MaterialAlertDialogBuilder(applicationContext, com.google.android.material.R.style.MaterialAlertDialog_MaterialComponents)
             .setIcon(resources.getDrawable(R.drawable.ic_twotone_call_24,null))
             .setMessage("Calling to: $rawQrCOde")
             .setTitle("Dial")
@@ -615,7 +832,7 @@ class MainActivity2 : AppCompatActivity()
             .setNegativeButton("cancel",DialogInterface.OnClickListener { dialog, which ->
 
             })
-         dialogue = dialogBuidler.show()
+        dialogue = dialogBuidler.show()
 
 
     }
@@ -654,6 +871,10 @@ class MainActivity2 : AppCompatActivity()
         intent.type = ContactsContract.RawContacts.CONTENT_TYPE
         intent.putExtra(ContactsContract.Intents.Insert.NAME,list[4])
         intent.putExtra(ContactsContract.Intents.Insert.PHONE,list[0])
+        intent.putExtra(ContactsContract.Intents.Insert.EMAIL,list[2])
+        intent.putExtra(ContactsContract.Intents.Insert.JOB_TITLE,list[5])
+        intent.putExtra(ContactsContract.CommonDataKinds.Organization.DISPLAY_NAME,list[3])
+
         startActivity(intent)
 
     }
@@ -663,10 +884,10 @@ class MainActivity2 : AppCompatActivity()
         if(!fromHistoryPage!!) {
             myiewmodel.insert(EntityClass(list, System.currentTimeMillis(), typeValue.toString(), rawQrCOde.toString(), format))
         }
-       /* CoroutineScope(Dispatchers.IO).launch {
-            MyRoomDatabase.getInstance(this@MainActivity2).getDao()
-                .insert(EntityClass(list,System.currentTimeMillis(),typeValue.toString(),rawQrCOde.toString(),format))
-        }*/
+        /* CoroutineScope(Dispatchers.IO).launch {
+             MyRoomDatabase.getInstance(this@MainActivity2).getDao()
+                 .insert(EntityClass(list,System.currentTimeMillis(),typeValue.toString(),rawQrCOde.toString(),format))
+         }*/
     }
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -675,7 +896,7 @@ class MainActivity2 : AppCompatActivity()
             mPERMISSION_CODE ->{
                 if(permissions.isNotEmpty() && permissions[0].equals(Manifest.permission.CALL_PHONE))
                 {
-                     rawQrCOde?.let { call(it) }
+                    rawQrCOde?.let { call(it) }
                 }
             }
         }

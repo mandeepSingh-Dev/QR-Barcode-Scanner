@@ -1,3 +1,3 @@
 package com.example.simpleqrbarcodescanner_noads.CreateRecyclerView
 
-data class Create_Item(val iconId:Int,val typeValue:String,val format:Int)
+data class Create_Item(val iconId:Int, val typeName:String, val format:Int,val typeValue:Int)

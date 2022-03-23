@@ -22,9 +22,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.simpleqrbarcodescanner_noads.HistoryActivity
 import com.example.simpleqrbarcodescanner_noads.MainActivity2
 import com.example.simpleqrbarcodescanner_noads.R
+import com.example.simpleqrbarcodescanner_noads.Util.Custom_Formats_duplicate
 import com.example.simpleqrbarcodescanner_noads.Util.Intent_KEYS
 import com.example.simpleqrbarcodescanner_noads.room.EntityClass
 import com.google.mlkit.vision.barcode.common.Barcode
+import com.google.zxing.BarcodeFormat
+import com.journeyapps.barcodescanner.BarcodeEncoder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -70,7 +73,7 @@ class MyAdapter(val context:Context,val myviewmodel:MyViewModel):RecyclerView.Ad
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
          val entityItem = arrayListtty?.get(position)
 
-        setDataintoVIEW(entityItem?.type_value?.toInt()!!,entityItem, holder)
+        setDataintoVIEW(entityItem.type_value.toInt(),entityItem.format,entityItem, holder)
 
         holder.itemView.setOnClickListener {
             Log.d("soljdsdfs",entityItem.type_value)
@@ -321,97 +324,175 @@ holder.itemView.setOnClickListener {
          }
     }
      @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
-     fun setDataintoVIEW(typeValue:Int,item:EntityClass, holder: MyViewHolder){
+     fun setDataintoVIEW(typeValue:Int,format:Int,item:EntityClass, holder: MyViewHolder){
 
          Log.d("dfhdf",item.type_value)
 
-            when(typeValue)
-           {
-                   Barcode.TYPE_PRODUCT -> {
-                       holder.typeTextView?.text = "Product"
-                       holder.nameInfoText?.text = item.rawValue
-                       holder.currentDateTEXT?.text = convertoDate(item.currentTime)
-                       holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_baseline_production_quantity_limits_24,null))
-                   }
-                   Barcode.TYPE_TEXT-> {
-                       holder.typeTextView?.text = "Text"
-                       holder.nameInfoText?.text = item.rawValue
-                       holder.currentDateTEXT?.text = convertoDate(item.currentTime)
-                       holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_baseline_text_snippet_24,null))
-                   }
-                   Barcode.TYPE_CONTACT_INFO-> {
-                       holder.typeTextView?.text = "Contact Information"
-                       holder.nameInfoText?.text = item.rawValue
-                       holder.currentDateTEXT?.text = convertoDate(item.currentTime)
-                       holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_outline_person_add_alt_1_24,null))
-                   }
-                   Barcode.TYPE_ISBN-> {
-                       holder.typeTextView?.text = "ID Book"
-                       holder.nameInfoText?.text = item.rawValue
-                       holder.currentDateTEXT?.text = convertoDate(item.currentTime)
-                       holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_baseline_menu_book_24,null))
-                   }
-                   Barcode.TYPE_PHONE-> {
-                       holder.typeTextView?.text = "Phone"
-                       holder.nameInfoText?.text = item.rawValue
-                       holder.currentDateTEXT?.text = convertoDate(item.currentTime)
-                       holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_twotone_call_24,null))
-                   }
-                   Barcode.TYPE_URL-> {
-                       holder.typeTextView?.text = "Url"
-                       holder.nameInfoText?.text = item?.calenderList[0]
-                       holder.currentDateTEXT?.text = convertoDate(item.currentTime)
-                       holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_baseline_web_24,null))
-                   }
-                   Barcode.TYPE_GEO-> {
-                       holder.typeTextView?.text = "Location"
-                       holder.nameInfoText?.text = item.rawValue
-                       holder.currentDateTEXT?.text = convertoDate(item.currentTime)
-                       holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_baseline_location_on_24,null))
-                   }
-                   Barcode.TYPE_CALENDAR_EVENT-> {
-                       holder.typeTextView?.text = "Event"
-                       holder.nameInfoText?.text = item.calenderList[0]
-                       holder.currentDateTEXT?.text = convertoDate(item.currentTime)
-                       holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_baseline_calendar_month_24,null))
-                   }
-                   Barcode.TYPE_UNKNOWN-> {
-                       holder.typeTextView?.text = "Unknown"
-                       holder.nameInfoText?.text = item.rawValue
-                       holder.currentDateTEXT?.text = convertoDate(item.currentTime)
-                       holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_baseline_question_mark_24,null))
-                   }
-                   Barcode.TYPE_EMAIL-> {
-                       holder.typeTextView?.text = "Email"
-                       holder.nameInfoText?.text = item.calenderList[0]
-                       holder.currentDateTEXT?.text = convertoDate(item.currentTime)
-                       holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_baseline_email_24,null))
-                   }
-                   Barcode.TYPE_SMS-> {
-                       holder.typeTextView?.text = "SMS"
-                       holder.nameInfoText?.text = item.calenderList[0]
-                       holder.currentDateTEXT?.text = convertoDate(item.currentTime)
-                       holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_baseline_message_24,null))
-                   }
-                   Barcode.TYPE_WIFI-> {
-                       holder.typeTextView?.text = "Wifi"
-                       holder.nameInfoText?.text = item.calenderList[0]
-                       holder.currentDateTEXT?.text = convertoDate(item.currentTime)
-                       holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_sharp_wifi_24,null))
-                   }
-                   Barcode.TYPE_DRIVER_LICENSE-> {
-                       holder.typeTextView?.text = "Driving Licence"
-                       holder.nameInfoText?.text = item.rawValue
-                       holder.currentDateTEXT?.text = convertoDate(item.currentTime)
-                       holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_baseline_document_scanner_24,null))
-                   }
-                   else ->{
-                       holder.typeTextView?.text = "Driving Licence"
-                       holder.nameInfoText?.text = item.rawValue
-                       holder.currentDateTEXT?.text = convertoDate(item.currentTime)
-                       holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_baseline_question_mark_24,null))
-                   }
+         when(format)
+         {
+             Custom_Formats_duplicate.CODABAR -> {
+                 holder.typeTextView?.text = "CODABAR"
+                 holder.nameInfoText?.text = item.rawValue
+                 holder.currentDateTEXT?.text = convertoDate(item.currentTime)
+                 holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_barcode, null))
+             }
+             Custom_Formats_duplicate.CODE_128 ->{
+                 holder.typeTextView?.text = "CODE_128"
+                 holder.nameInfoText?.text = item.rawValue
+                 holder.currentDateTEXT?.text = convertoDate(item.currentTime)
+                 holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_barcode, null))
+             }
+             Custom_Formats_duplicate.CODE_39 ->{
+                 holder.typeTextView?.text = "CODE_39"
+                 holder.nameInfoText?.text = item.rawValue
+                 holder.currentDateTEXT?.text = convertoDate(item.currentTime)
+                 holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_barcode, null))
+             }
+             Custom_Formats_duplicate.CODE_93 ->{
+                 holder.typeTextView?.text = "CODE_93"
+                 holder.nameInfoText?.text = item.rawValue
+                 holder.currentDateTEXT?.text = convertoDate(item.currentTime)
+                 holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_barcode, null))
+             }
+             Custom_Formats_duplicate.DATA_MATRIX ->{
+                 holder.typeTextView?.text = "DATA_MATRIX"
+                 holder.nameInfoText?.text = item.rawValue
+                 holder.currentDateTEXT?.text = convertoDate(item.currentTime)
+                 holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_barcode, null))
+             }
+             Custom_Formats_duplicate.EAN_13 ->{
+                 holder.typeTextView?.text = "EAN_13"
+                 holder.nameInfoText?.text = item.rawValue
+                 holder.currentDateTEXT?.text = convertoDate(item.currentTime)
+                 holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_barcode, null))
+             }
+             Custom_Formats_duplicate.EAN_8 ->{
+                 holder.typeTextView?.text = "EAN_8"
+                 holder.nameInfoText?.text = item.rawValue
+                 holder.currentDateTEXT?.text = convertoDate(item.currentTime)
+                 holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_barcode, null))
+             }
+             Custom_Formats_duplicate.ITF ->{
+                 holder.typeTextView?.text = "ITF"
+                 holder.nameInfoText?.text = item.rawValue
+                 holder.currentDateTEXT?.text = convertoDate(item.currentTime)
+                 holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_barcode, null))
+             }
+             Custom_Formats_duplicate.UPC_A ->{
+                 holder.typeTextView?.text = "UPC_A"
+                 holder.nameInfoText?.text = item.rawValue
+                 holder.currentDateTEXT?.text = convertoDate(item.currentTime)
+                 holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_barcode, null))
+             }
+             Custom_Formats_duplicate.UPC_E ->{
+                 holder.typeTextView?.text = "UPC_E"
+                 holder.nameInfoText?.text = item.rawValue
+                 holder.currentDateTEXT?.text = convertoDate(item.currentTime)
+                 holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_barcode, null))
+             }
+             Custom_Formats_duplicate.PDF_417 ->{
+                 holder.typeTextView?.text = "PDF_417"
+                 holder.nameInfoText?.text = item.rawValue
+                 holder.currentDateTEXT?.text = convertoDate(item.currentTime)
+                 holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_barcode, null))
+             }
+             Custom_Formats_duplicate.AZTEC ->{
+                 holder.typeTextView?.text = "AZTEC"
+                 holder.nameInfoText?.text = item.rawValue
+                 holder.currentDateTEXT?.text = convertoDate(item.currentTime)
+                 holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_barcode, null))
+             }
+             else ->{
+                 when(typeValue)
+                 {
+                     Barcode.TYPE_PRODUCT -> {
+                         holder.typeTextView?.text = "Product"
+                         holder.nameInfoText?.text = item.rawValue
+                         holder.currentDateTEXT?.text = convertoDate(item.currentTime)
+                         holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_baseline_production_quantity_limits_24,null))
+                     }
+                     Barcode.TYPE_TEXT-> {
+                         holder.typeTextView?.text = "Text"
+                         holder.nameInfoText?.text = item.rawValue
+                         holder.currentDateTEXT?.text = convertoDate(item.currentTime)
+                         holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_baseline_text_snippet_24,null))
+                     }
+                     Barcode.TYPE_CONTACT_INFO-> {
+                         holder.typeTextView?.text = "Contact Information"
+                         holder.nameInfoText?.text = item.rawValue
+                         holder.currentDateTEXT?.text = convertoDate(item.currentTime)
+                         holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_outline_person_add_alt_1_24,null))
+                     }
+                     Barcode.TYPE_ISBN-> {
+                         holder.typeTextView?.text = "ID Book"
+                         holder.nameInfoText?.text = item.rawValue
+                         holder.currentDateTEXT?.text = convertoDate(item.currentTime)
+                         holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_baseline_menu_book_24,null))
+                     }
+                     Barcode.TYPE_PHONE-> {
+                         holder.typeTextView?.text = "Phone"
+                         holder.nameInfoText?.text = item.rawValue
+                         holder.currentDateTEXT?.text = convertoDate(item.currentTime)
+                         holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_twotone_call_24,null))
+                     }
+                     Barcode.TYPE_URL-> {
+                         holder.typeTextView?.text = "Url"
+                         holder.nameInfoText?.text = item?.calenderList[0]
+                         holder.currentDateTEXT?.text = convertoDate(item.currentTime)
+                         holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_baseline_web_24,null))
+                     }
+                     Barcode.TYPE_GEO-> {
+                         holder.typeTextView?.text = "Location"
+                         holder.nameInfoText?.text = item.rawValue
+                         holder.currentDateTEXT?.text = convertoDate(item.currentTime)
+                         holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_baseline_location_on_24,null))
+                     }
+                     Barcode.TYPE_CALENDAR_EVENT-> {
+                         holder.typeTextView?.text = "Event"
+                         holder.nameInfoText?.text = item.calenderList[0]
+                         holder.currentDateTEXT?.text = convertoDate(item.currentTime)
+                         holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_baseline_calendar_month_24,null))
+                     }
+                     Barcode.TYPE_UNKNOWN-> {
+                         holder.typeTextView?.text = "Unknown"
+                         holder.nameInfoText?.text = item.rawValue
+                         holder.currentDateTEXT?.text = convertoDate(item.currentTime)
+                         holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_baseline_question_mark_24,null))
+                     }
+                     Barcode.TYPE_EMAIL-> {
+                         holder.typeTextView?.text = "Email"
+                         holder.nameInfoText?.text = item.calenderList[0]
+                         holder.currentDateTEXT?.text = convertoDate(item.currentTime)
+                         holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_baseline_email_24,null))
+                     }
+                     Barcode.TYPE_SMS-> {
+                         holder.typeTextView?.text = "SMS"
+                         holder.nameInfoText?.text = item.calenderList[0]
+                         holder.currentDateTEXT?.text = convertoDate(item.currentTime)
+                         holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_baseline_message_24,null))
+                     }
+                     Barcode.TYPE_WIFI-> {
+                         holder.typeTextView?.text = "Wifi"
+                         holder.nameInfoText?.text = item.calenderList[0]
+                         holder.currentDateTEXT?.text = convertoDate(item.currentTime)
+                         holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_sharp_wifi_24,null))
+                     }
+                     Barcode.TYPE_DRIVER_LICENSE-> {
+                         holder.typeTextView?.text = "Driving Licence"
+                         holder.nameInfoText?.text = item.rawValue
+                         holder.currentDateTEXT?.text = convertoDate(item.currentTime)
+                         holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_baseline_document_scanner_24,null))
+                     }
+                     else ->{
+                         holder.typeTextView?.text = "Unknown"
+                         holder.nameInfoText?.text = item.rawValue
+                         holder.currentDateTEXT?.text = convertoDate(item.currentTime)
+                         holder.logo?.setImageDrawable(context.resources.getDrawable(R.drawable.ic_baseline_question_mark_24,null))
+                     }
+                 }
+             }
          }
+
      }
 
     @SuppressLint("SimpleDateFormat")
