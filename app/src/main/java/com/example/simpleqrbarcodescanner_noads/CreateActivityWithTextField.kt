@@ -21,50 +21,75 @@ class CreateActivityWithTextField : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        binding.textFieldLayout.hint = "Enter text, E.g: I Love You  "+getEmojiByUnicode(unicodeEmoji)
+
           val typevalue = intent.getIntExtra(Intent_KEYS.VALUETYPE,0)
           val format = intent.getIntExtra(Intent_KEYS.FORMAT,0)
 
 
         when(format){
             Custom_Formats_duplicate.CODABAR -> {
+                binding.textFieldLayout.hint = "Enter codetext: e.g. 0123456789"
                 binding.typeValuecreateAct2.text =  "CODABAR"
                 binding.instruction1TextView.text = "* Character set: numeric digits (0-9) and special characters $/-:+. \n* Codetext capacity: no restriction"
             }
-            Custom_Formats_duplicate.CODE_128 ->{ binding.typeValuecreateAct2.text =  "CODE_128"
+            Custom_Formats_duplicate.CODE_128 ->{
+                binding.textFieldLayout.hint = "Enter codetext: e.g. 0123456789"
+                binding.typeValuecreateAct2.text =  "CODE_128"
                 binding.instruction1TextView.text = "* Character set: all 128 characters of ASCII \n* Codetext capacity: no specific restrictions"
             }
-            Custom_Formats_duplicate.CODE_39 ->{ binding.typeValuecreateAct2.text =  "CODE_39"
+            Custom_Formats_duplicate.CODE_39 ->{
+                binding.textFieldLayout.hint ="Enter codetext: e.g. 0123456789"
+                binding.typeValuecreateAct2.text =  "CODE_39"
                 binding.instruction1TextView.text = "* Character set: numeric digits (0-9) and uppercase letters (A-Z) and a number of special characters (-, ., $, /, +, %, and space) \n* Codetext capacity: no specific restrictions"
             }
-            Custom_Formats_duplicate.CODE_93 ->{ binding.typeValuecreateAct2.text =  "CODE_93"
+            Custom_Formats_duplicate.CODE_93 ->{
+                binding.textFieldLayout.hint ="Enter codetext: e.g. 0123456789"
+                binding.typeValuecreateAct2.text =  "CODE_93"
                 binding.instruction1TextView.text = "* Character set: numeric digits (0-9) and uppercase letters (A-Z) and a number of special characters (-, ., $, /, +, %, and space) \n* Codetext capacity: no specific restrictions"
             }
-            Custom_Formats_duplicate.DATA_MATRIX ->{ binding.typeValuecreateAct2.text =  "DATA_MATRIX"
+            Custom_Formats_duplicate.DATA_MATRIX ->{
+                binding.textFieldLayout.hint ="Enter codetext: e.g. 0123456789"
+                binding.typeValuecreateAct2.text =  "DATA_MATRIX"
                 binding.instruction1TextView.text = "* Character set: supports all 256 ASCII characters, all ISO characters, and all Extended Binary Coded Decimal Interchange Code (EBCDIC) characters. \n* Codetext capacity: up to 3116 numeric digits, or 2335 alpha numeric characters, or 1556 binary characters"
             }
-            Custom_Formats_duplicate.EAN_13 ->{ binding.typeValuecreateAct2.text =  "EAN_13"
+            Custom_Formats_duplicate.EAN_13 ->{
+                binding.textFieldLayout.hint ="Enter codetext: e.g. 590123412345"
+                binding.typeValuecreateAct2.text =  "EAN_13"
                 binding.instruction1TextView.text ="* Character set: only numeric digits (0-9). \n* Codetext capacity: exactly 12 digits + 1 check digit"
             }
-            Custom_Formats_duplicate.EAN_8 ->{ binding.typeValuecreateAct2.text =  "EAN_8"
+            Custom_Formats_duplicate.EAN_8 ->{
+                binding.textFieldLayout.hint ="Enter codetext: e.g. 9638507"
+                binding.typeValuecreateAct2.text =  "EAN_8"
                 binding.instruction1TextView.text = "* Character set: only numeric digits (0-9). \n* Codetext capacity: exactly 7 digits + 1 check digit"
             }
-            Custom_Formats_duplicate.ITF ->{ binding.typeValuecreateAct2.text =  "ITF"
+            Custom_Formats_duplicate.ITF ->{
+                binding.textFieldLayout.hint ="Enter codetext: e.g. 123456"
+                binding.typeValuecreateAct2.text =  "ITF"
                 binding.instruction1TextView.text = "* Character set: only numeric digits (0-9).\n* Codetext capacity: 5 digits + 1 check digit"
             }
-            Custom_Formats_duplicate.UPC_A ->{ binding.typeValuecreateAct2.text =  "UPC_A"
-                binding.instruction1TextView.text = "* Character set: only numeric digits (0-9). \n* Codetext capacity: 5 digits + 1 check digit"
+            Custom_Formats_duplicate.UPC_A ->{
+                binding.textFieldLayout.hint ="Enter codetext: e.g. 0123456"
+                binding.typeValuecreateAct2.text =  "UPC_A"
+                binding.instruction1TextView.text = "* Character set: only numeric digits (0-9).\n* Codetext capacity: exactly 11 digits + 1 check digit"
             }
-            Custom_Formats_duplicate.UPC_E ->{ binding.typeValuecreateAct2.text =  "UPC_E"
+            Custom_Formats_duplicate.UPC_E ->{
+                binding.textFieldLayout.hint ="Enter codetext: e.g. 0123456"
+                binding.typeValuecreateAct2.text =  "UPC_E"
                 binding.instruction1TextView.text = "* Character set: Supports only numeric digits (0-9). \n* Codetext capacity: exactly 7 digits + 1 check digit"
             }
-            Custom_Formats_duplicate.PDF_417 ->{ binding.typeValuecreateAct2.text =  "PDF_417"
+            Custom_Formats_duplicate.PDF_417 ->{
+                binding.textFieldLayout.hint = "Enter codetext: e.g. 0123456789"
+                binding.typeValuecreateAct2.text =  "PDF_417"
                 binding.instruction1TextView.text = "* Character set: all 256 ASCII characters \n* Codetext capacity: up to 800 characters"
             }
-            Custom_Formats_duplicate.AZTEC ->{ binding.typeValuecreateAct2.text =  "AZTEC"
+            Custom_Formats_duplicate.AZTEC ->{
+                binding.textFieldLayout.hint =" Enter codetext: e.g. 0123456789"
+                binding.typeValuecreateAct2.text =  "AZTEC"
                 binding.instruction1TextView.text = "* Character set: all 256 ASCII characters \n* Codetext capacity: up to 3,832 numeric digits, or 3,067 alphabetic characters, or 1,914 bytes of data"
             }
-            else->{binding.typeValuecreateAct2.text = "Text"
+            else->{
+                binding.textFieldLayout.hint = "Enter text, E.g: I Love You  "+getEmojiByUnicode(unicodeEmoji)
+                binding.typeValuecreateAct2.text = "Text"
                 binding.instruction1TextView.text =  "* Character set: all 256 ASCII characters + Kanji \n* Codetext capacity: up to 7089 numeric characters, 4296 alphanumeric characters, 2953 bytes (binary data) or 1817 Kanji characters."
             }
         }
