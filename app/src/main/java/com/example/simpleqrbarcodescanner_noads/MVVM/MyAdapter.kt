@@ -33,7 +33,7 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
 
     var customClickListener: CustomClickListener? = null
     var isSelectable = false
-    var isSelected = true
+    var isSelected = false
     var pos = 0
 
     // var arrayList = ArrayList<Int>()
@@ -82,17 +82,35 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
         holder.bind(entityItem)
         // holder.getItem(entityItem)
 
-    /*    holder.itemView.setOnClickListener {
-            Log.d("soljdsdfs", entityItem.type_value)
-            val intent = Intent(context, MainActivity2::class.java)
-            intent.putExtra(Intent_KEYS.QRCODE, entityItem.rawValue)
-            intent.putExtra(Intent_KEYS.FORMAT, entityItem.format)
-            intent.putExtra(Intent_KEYS.VALUETYPE, entityItem.type_value.toInt())
-            intent.putExtra(Intent_KEYS.FROM_HISTORY, true)
-            intent.putExtra(Intent_KEYS.BUNDLE, setBundle(entityItem))
-            Log.d("fihfedf", entityItem.type_value)
-            context.startActivity(intent)
-        }*/
+        holder.itemView.setOnClickListener {
+           if(selectedList.size==0) {
+               Log.d("soljdsdfs", entityItem.type_value)
+               val intent = Intent(context, MainActivity2::class.java)
+               intent.putExtra(Intent_KEYS.QRCODE, entityItem.rawValue)
+               intent.putExtra(Intent_KEYS.FORMAT, entityItem.format)
+               intent.putExtra(Intent_KEYS.VALUETYPE, entityItem.type_value.toInt())
+               intent.putExtra(Intent_KEYS.FROM_HISTORY, true)
+               intent.putExtra(Intent_KEYS.BUNDLE, setBundle(entityItem))
+               Log.d("fihfedf", entityItem.type_value)
+               context.startActivity(intent)
+           }
+            else{
+               if (!entityItem.isSelected) {
+                  // holder.cardView?.setCardBackgroundColor(Color.GREEN)
+                   holder?.cardView?.setCardBackgroundColor(Color.parseColor("#DD8D27"))
+                   entityItem.isSelected = true
+                   isSelected = true
+                   selectedList.add(entityItem)
+               } else {
+                  // holder.cardView?.setCardBackgroundColor(Color.RED)
+                   holder?.cardView?.setCardBackgroundColor(Color.WHITE)
+                   entityItem.isSelected = false
+                   isSelected = false
+                   selectedList.remove(entityItem)
+               }
+
+           }
+        }
 
         var popmenu = PopupMenu(context, holder.popupMenu)
         popmenu.inflate(R.menu.select_menu)
@@ -338,21 +356,27 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
         fun bind(entityItem: EntityClass) {
             setDataintoVIEW(entityItem.type_value.toInt(), entityItem.format, entityItem, this)
 
-            if (!entityItem.isSelected) cardView?.setCardBackgroundColor(Color.RED)
-            else cardView?.setCardBackgroundColor(Color.GREEN)
+            if (!entityItem.isSelected) //cardView?.setCardBackgroundColor(Color.RED)
+                                          cardView?.setCardBackgroundColor(Color.WHITE)
+            else //cardView?.setCardBackgroundColor(Color.GREEN)
+                cardView?.setCardBackgroundColor(Color.parseColor("#DD8D27"))
+
 
             /**-----------------------------------------------*/
                 cardView?.setOnLongClickListener {
                     if (!entityItem.isSelected) {
-                        cardView?.setCardBackgroundColor(Color.GREEN)
+                        //cardView?.setCardBackgroundColor(Color.GREEN)
+                        cardView?.setCardBackgroundColor(Color.parseColor("#DD8D27"))
                         entityItem.isSelected = true
+                        isSelected = true
                         selectedList.add(entityItem)
                     } else {
-                        cardView?.setCardBackgroundColor(Color.RED)
+                        //cardView?.setCardBackgroundColor(Color.RED)
+                        cardView?.setCardBackgroundColor(Color.WHITE)
                         entityItem.isSelected = false
+                        isSelected = false
                         selectedList.remove(entityItem)
                     }
-
                     Toast.makeText(context, selectedList.size.toString() + "    dfhgd", Toast.LENGTH_SHORT).show()
                     return@setOnLongClickListener true
                 }
@@ -362,7 +386,7 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
 
                 if(selectedList.size<arrayListtty.size)
                 {
-                    //selectedList.clear()
+                    selectedList.clear()
                      arrayListtty.forEach {
                          it.isSelected =  false
                      }
@@ -374,7 +398,7 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
                 else{
                     Log.d("fkhdfjd","else block")
                     arrayListtty.forEach {
-                        it.isSelected = true
+                         it.isSelected = true
                     }
                     arrayListtty.forEach {
                         clickItem(this,it)
@@ -702,9 +726,9 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
         this.customClickListener = customClickListener
     }
 
-    /*fun getList(): ArrayList<EntityClass> {
-        return arrayList2
-    }*/
+    fun getList(): ArrayList<EntityClass> {
+        return selectedList
+    }
 
     //TODO(set data to send in mainActivity exactly in that pattern which is used in mainActivity for sending data to mainActity2 )
     fun setBundle(item: EntityClass): Bundle {
@@ -833,12 +857,16 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
      fun clickItem(holder: MyViewHolder,item:EntityClass)
      {
          if (!item.isSelected) {
-             holder?.cardView?.setCardBackgroundColor(Color.GREEN)
+            // holder?.cardView?.setCardBackgroundColor(Color.GREEN)
+             holder?.cardView?.setCardBackgroundColor(Color.parseColor("#DD8D27"))
              item.isSelected = true
+//             isSelected = true
              selectedList.add(item)
          } else {
-             holder?.cardView?.setCardBackgroundColor(Color.RED)
+             //holder?.cardView?.setCardBackgroundColor(Color.RED)
+             holder?.cardView?.setCardBackgroundColor(Color.WHITE)
              item.isSelected = false
+//             isSelected = false
              selectedList.remove(item)
          }
         /* if(holder.checkbox?.visibility == View.GONE)
@@ -861,6 +889,8 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
          myViewmodel2.setText(selectList.size.toString())*/
          notifyDataSetChanged()
      }
+
+
 
     fun setDate(listy: ArrayList<EntityClass>) {
         arrayListtty = listy

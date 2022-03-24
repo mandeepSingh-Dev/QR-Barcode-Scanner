@@ -159,16 +159,18 @@ class HistoryActivity : AppCompatActivity() {
     override fun onBackPressed() {
        // super.onBackPressed()
         //checking items are selected or not by checking size of arraylist of selected items
-      /*  val list = adapter?.getList()
-        list?.size?.let {
+        val list = adapter?.getList()
+              list?.size?.let {
             if (it > 0) {
-                LocalBroadcastManager.getInstance(this)
-                    .sendBroadcast(Intent(Intent_KEYS.INTENT_ADAPTER))
+                adapter?.selectedList?.clear()
+             //   adapter?.notifyDataSetChanged()
+                /* LocalBroadcastManager.getInstance(this)
+                     .sendBroadcast(Intent(Intent_KEYS.INTENT_ADAPTER))*/
             } else {
                 super.onBackPressed()
                // finish()
             }
-        }*/
+        }
     }
 
     override fun onStop() {

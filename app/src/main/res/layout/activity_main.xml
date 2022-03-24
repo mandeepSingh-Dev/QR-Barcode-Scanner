@@ -140,13 +140,15 @@
             app:menu="@menu/bottom_menu"
             app:itemRippleColor="#FF0909"
             app:elevation="5dp"
+            app:itemTextColor="@color/itemtextColor"
+            style="@style/Widget.Material3.BottomNavigationView.ActiveIndicator"
             android:background="@color/backgroundColor"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginBottom="9dp"
             app:itemActiveIndicatorStyle="@color/teal_200"
             android:elevation="10dp"
-            app:itemIconTint="@color/white"
+            app:itemIconTint="#0077FF"
             />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

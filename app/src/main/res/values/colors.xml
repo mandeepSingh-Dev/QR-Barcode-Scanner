@@ -10,5 +10,6 @@
     <color name="Red">#FF0000</color>
 
     <color name="backgroundColor">@color/white</color>
+    <color name="itemtextColor">@color/black</color>
 
 </resources>
