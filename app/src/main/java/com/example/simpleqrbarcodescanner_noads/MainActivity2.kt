@@ -26,12 +26,16 @@ import com.journeyapps.barcodescanner.BarcodeEncoder
 import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.os.Environment
 import android.provider.CalendarContract
 import android.provider.ContactsContract
+import android.provider.MediaStore
 import androidmads.library.qrgenearator.QRGContents
 import androidmads.library.qrgenearator.QRGEncoder
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.core.graphics.BitmapCompat
+import androidx.core.view.setPadding
 import com.example.simpleqrbarcodescanner_noads.MVVM.MyViewModel
 import com.example.simpleqrbarcodescanner_noads.MVVM.MyViewmodel2
 import com.example.simpleqrbarcodescanner_noads.room.EntityClass
@@ -41,6 +45,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.File
 import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
@@ -317,7 +322,13 @@ class MainActivity2 : AppCompatActivity()
         try {
             val bitmap = qrGenerate(rawQrCOde, format,valueType,bundle)
             binding.codeImage.setImageBitmap(bitmap)
-        }catch (e:Exception){}
+            binding.saveButton.visibility = View.VISIBLE
+            binding.saveButton.setOnClickListener {
+                saveCodeImage(bitmap)
+            }
+        }catch (e:Exception){
+             binding.saveButton.visibility = View.GONE
+        }
 
         try{
             binding.searchButton.setOnClickListener {
@@ -336,10 +347,18 @@ class MainActivity2 : AppCompatActivity()
                 }
             }
             binding.copybutton.setOnClickListener {
-                rawQrCOde?.let { copyText(it) }
+             val buttontext = binding.copybutton.text.toString()
+
+                when(buttontext) {
+                    "Copy" ->  rawQrCOde?.let { copyText(it) }
+                   // "Call" ->   rawQrCOde?.let { call(it)}
+                }
             }
             binding.shareButton.setOnClickListener {
                 rawQrCOde?.let { shareText(it) }
+            }
+            binding.addContactsButton?.setOnClickListener {
+                addToContacts(contactArlst)
             }
         }catch (e:Exception){}
     }//end of onCreate()
@@ -532,9 +551,10 @@ class MainActivity2 : AppCompatActivity()
                         Log.d("difghduhgd",qrcode.toString())
                         binding.searchButton.text = "Add to contacts"
                         binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_outline_person_add_alt_1_24,null),null,null,null)
-                        binding.copybutton.text = "Call"
-                        binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_twotone_call_24,null),null,null)
+                        binding.copybutton.text = "Copy"
+                        binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
                         binding.typeTextView.text = "Contact Information"
+                        binding.addContactsButton.visibility = View.GONE
                         //    binding.copyMainButton.visibility = View.GONE
                         /**------------------*/
                         contactArlst =  bundle?.getStringArrayList(Intent_KEYS.CONTACTS_ARRAYLIST)  as ArrayList<String>
@@ -545,7 +565,7 @@ class MainActivity2 : AppCompatActivity()
                         val title = contactArlst[5]
                         val address = contactArlst[1]
                         val url = contactArlst[6]
-                        binding.result.text = "Name: $name \n Phone: $phone \n Email: $email \n Organisation: $organisation \n Title: $title \n Adress: $address \n Url: $url"
+                        binding.result.text = "Name: $name \nPhone: $phone \nEmail: $email \nOrganisation: $organisation \nTitle: $title \nAdress: $address \nUrl: $url"
                         minsert( Barcode.TYPE_CONTACT_INFO,format,contactArlst)
 
                        // val encoder =  QRGEncoder(qrcode,null,QRGContents.Type.TEXT,470)
@@ -877,6 +897,26 @@ class MainActivity2 : AppCompatActivity()
 
         startActivity(intent)
 
+    }
+    private fun saveCodeImage(bitmap :Bitmap){
+        val contentUri = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
+        val imageName = System.currentTimeMillis().toString()
+
+        Log.d("kfkhdjhf",imageName)
+        val contentValues = ContentValues()
+        contentValues.put(MediaStore.Images.ImageColumns.DISPLAY_NAME,imageName)
+        contentValues.put(MediaStore.Images.ImageColumns.MIME_TYPE,"image/png")
+        contentValues.put(MediaStore.Images.ImageColumns.RELATIVE_PATH,Environment.DIRECTORY_PICTURES+"/MyQRAPP")
+        val insertedUri = contentResolver?.insert(contentUri,contentValues)
+
+       val outstream =  insertedUri?.let {  contentResolver?.openOutputStream(it)}
+
+       val con=  bitmap.compress(Bitmap.CompressFormat.PNG,100,outstream)
+        if(con){
+            Snackbar.make(binding.saveButton,"Image saved.\nPath: ${Environment.DIRECTORY_PICTURES}/MyQRAPP/$imageName",4000).show()
+            Log.d("kfkhdjhf",imageName)
+
+        }
     }
 
     fun minsert(typeValue:Int,format:Int,list:ArrayList<String>){

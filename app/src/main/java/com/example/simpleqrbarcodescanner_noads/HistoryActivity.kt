@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
@@ -43,6 +44,8 @@ class HistoryActivity : AppCompatActivity() {
     private var stateee:Parcelable?=null
     var disposable:Disposable?=null
 
+    //lateinit  var selectOnClickListener:SelectOnClickListenerr
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHistoryBinding.inflate(LayoutInflater.from(this))
@@ -62,10 +65,13 @@ class HistoryActivity : AppCompatActivity() {
         binding.backbutton.setOnClickListener {
             finish()
         }
-        adapter = MyAdapter(this@HistoryActivity,myViewmodel)
+        adapter = MyAdapter(this@HistoryActivity,myViewmodel,binding.selectAllButton)
         initRecyclerView()
        // getData()
-    }
+        binding.selectAllButton.setOnClickListener {
+            //selectOnClickListener.selectOnClick(true)
+        }
+    }//end of onCreate
 
     private fun getData(){
 
@@ -153,7 +159,7 @@ class HistoryActivity : AppCompatActivity() {
     override fun onBackPressed() {
        // super.onBackPressed()
         //checking items are selected or not by checking size of arraylist of selected items
-        val list = adapter?.getList()
+      /*  val list = adapter?.getList()
         list?.size?.let {
             if (it > 0) {
                 LocalBroadcastManager.getInstance(this)
@@ -162,7 +168,7 @@ class HistoryActivity : AppCompatActivity() {
                 super.onBackPressed()
                // finish()
             }
-        }
+        }*/
     }
 
     override fun onStop() {
@@ -181,7 +187,11 @@ class HistoryActivity : AppCompatActivity() {
         getData()
 
     }
-
-
-
+    interface SelectOnClickListenerr {
+        fun selectOnClick(con:Boolean)
+    }
+   @JvmName("setSelectOnClickListener1")
+    fun setSelectOnClickListener(selectOnClickListenerr: SelectOnClickListenerr){
+      //  this.selectOnClickListener = selectOnClickListenerr
+    }
 }

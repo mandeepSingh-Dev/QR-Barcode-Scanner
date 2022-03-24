@@ -108,11 +108,13 @@ class CreateActivityWithTextField : AppCompatActivity() {
 
                 startActivity(intent)
             }
-
         }
+
     } //end of onCreate()
 
     fun getEmojiByUnicode(unicode: Int): String? {
         return String(Character.toChars(unicode))
     }
+
+
 }

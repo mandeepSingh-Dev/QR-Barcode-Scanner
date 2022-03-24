@@ -83,6 +83,9 @@ class CreateActivity : AppCompatActivity() {
             startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
         }
 
+        binding.backbutton2.setOnClickListener {
+            onBackPressed()
+        }
 
     }//end of onCreate
 

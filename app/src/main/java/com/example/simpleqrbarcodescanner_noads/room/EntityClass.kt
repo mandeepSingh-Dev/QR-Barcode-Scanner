@@ -25,6 +25,8 @@ class EntityClass(
     var format:Int,
 
 
+
+
     //TODO create one more entity for imageDrawable for typeValues
 
     )
@@ -33,5 +35,6 @@ class EntityClass(
     @ColumnInfo(name = "ID")
     var id:Int=0
 
-
+    @ColumnInfo(name = "isSelected")
+    var isSelected: Boolean = false
 }
