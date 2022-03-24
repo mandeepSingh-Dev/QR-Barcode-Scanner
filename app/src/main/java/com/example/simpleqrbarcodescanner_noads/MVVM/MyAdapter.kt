@@ -359,8 +359,13 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
 
             selectButton.setOnClickListener {
                 Log.d("dkfhdfd","sfjsd")
+
                 if(selectedList.size<arrayListtty.size)
                 {
+                    //selectedList.clear()
+                     arrayListtty.forEach {
+                         it.isSelected =  false
+                     }
                     Log.d("fkhdfjd","if block")
                     arrayListtty.forEach {
                         clickItem(this,it)
@@ -369,7 +374,7 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
                 else{
                     Log.d("fkhdfjd","else block")
                     arrayListtty.forEach {
-                     //   it.isSelected = true
+                        it.isSelected = true
                     }
                     arrayListtty.forEach {
                         clickItem(this,it)
