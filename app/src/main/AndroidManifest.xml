@@ -27,6 +27,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SimpleQRBarcodeScannerNoAds">
         <activity
+            android:name=".SettingsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_settings" />
+        <activity
             android:name=".CreateActivityWithTextField"
             android:exported="false" />
         <activity
@@ -35,7 +39,7 @@
         <activity
             android:name=".HistoryActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".CodeSave_Activity"
             android:exported="false" />

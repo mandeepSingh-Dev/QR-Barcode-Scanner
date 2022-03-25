@@ -12,4 +12,6 @@
     <color name="backgroundColor">#DDC7C7</color>
     <color name="itemtextColor">@color/white</color>
 
+    <color name="light_darkmode">@color/black</color>
+
 </resources>

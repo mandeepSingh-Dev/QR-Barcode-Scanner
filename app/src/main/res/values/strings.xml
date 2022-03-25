@@ -1,3 +1,38 @@
 <resources>
     <string name="app_name">Simple QR &amp; Barcode Scanner - No Ads</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+   <!-- Settings strings-->
+    <string name="DarkTitle">Dark mode</string>
+    <string name="AutomaticallyOpenTitle">Automatically open links</string>
+    <string name="AutomaticallyCopyTitle">Automatically copy the results</string>
+    <string name="BeepTitle">Beep sound</string>
+    <string name="VibrateTitle">vibrate</string>
+    <string name="PrivacyTitle">Privacy policy</string>
+    <string name="OpenSourceTitle">Open source licence</string>
+
+    <string name="DarkKey">Dark mode</string>
+    <string name="AutomaticallyOpenKey">Automatically open links</string>
+    <string name="AutomaticallyCopyKey">Automatically copy the results</string>
+    <string name="BeepKey">Beep sound</string>
+    <string name="VibrateKey">vibrate</string>
+    <string name="PrivacyKey">Privacy policy</string>
+    <string name="OpenSourceKey">Open source licence</string>
+
+
 </resources>

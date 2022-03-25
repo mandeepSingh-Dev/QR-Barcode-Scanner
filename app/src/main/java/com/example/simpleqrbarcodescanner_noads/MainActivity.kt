@@ -4,10 +4,15 @@ import android.Manifest
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.app.ActivityOptions
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.media.AudioAttributes
+import android.media.MediaPlayer
 import android.os.*
+import android.provider.MediaStore
 import android.util.Log
 import android.util.Size
 import android.view.LayoutInflater
@@ -45,7 +50,16 @@ class MainActivity : AppCompatActivity(){
     lateinit var camera:Camera
     var isFlashGlow = false
 
-    var vibrator:Vibrator?=null
+    val vibrator:Vibrator by lazy {
+         getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+    }
+    val mediaplayer:MediaPlayer by lazy {
+        MediaPlayer.create(this@MainActivity,R.raw.beepsound)
+    }
+    val sharedPreferences:SharedPreferences by lazy {
+        getSharedPreferences(Intent_KEYS.SETTINGS_SHAREDPREFERNCE,Context.MODE_PRIVATE)
+    }
+    
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +67,6 @@ class MainActivity : AppCompatActivity(){
         setContentView(binding?.root)
 
         supportActionBar?.hide()
-
         binding?.scanImage?.setOnClickListener {
             Toast.makeText(this,"fgdf",Toast.LENGTH_SHORT).show()
             launcher.launch("image/*")
@@ -141,13 +154,13 @@ binding?.imageView?.setImageBitmap(bitmap)*/
 
         binding?.bottomView?.setOnItemSelectedListener {
             when(it.itemId){
-                 R.id.create->{
-                    startActivity(Intent(this,CreateActivity::class.java)/*,ActivityOptions.makeSceneTransitionAnimation(this).toBundle()*/)
-                }
+                R.id.create-> startActivity(Intent(this,CreateActivity::class.java)/*,ActivityOptions.makeSceneTransitionAnimation(this).toBundle()*/)
                 R.id.history2 -> startActivity(Intent(this,HistoryActivity::class.java))
+                R.id.setting -> startActivity(Intent(this,SettingsActivity::class.java))
                 else->{
                     Toast.makeText(this,"error",Toast.LENGTH_SHORT).show()
                 }
+
             }
             return@setOnItemSelectedListener true
         }
@@ -221,6 +234,11 @@ binding?.imageView?.setImageBitmap(bitmap)*/
                 }
                 override fun onqrCodeNotFound() {}
                 override fun onQRFormat(qrCode: String?, format: Int?, valueType: Int?, bundle:Bundle?) {
+                    if(sharedPreferences?.getString(Intent_KEYS.ISBEEP,"false").equals("true"))
+                    { mediaplayer.start() }
+                    if(sharedPreferences?.getString(Intent_KEYS.ISVIBRATE,"false").equals("true"))
+                    { vibrate()}
+
                     val intent = Intent(applicationContext, MainActivity2::class.java)
                     intent.putExtra(Intent_KEYS.QRCODE, qrCode)
                     intent.putExtra(Intent_KEYS.FORMAT, format)
@@ -235,6 +253,7 @@ binding?.imageView?.setImageBitmap(bitmap)*/
                     //then qrcode scans mulitple code and open activity multiple times
                     //thats why i need to use clearAnalysis and unBindAll for only scan one barcode at
                     // a time--->
+
                     imageAnalysis?.clearAnalyzer()
                     cameraProvider.unbindAll()
                     //then we need to start the Camera again when we come back to camera activity.
@@ -264,6 +283,17 @@ binding?.imageView?.setImageBitmap(bitmap)*/
       //  camera.cameraControl.enableTorch(true)
 
     }
+    fun vibrate()
+    {
+        // Vibrate for 500 milliseconds
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+            //deprecated in API 26
+            vibrator.vibrate(500)
+        }
+
+    }
     override fun onResume() {
         super.onResume()
         Log.d("dfsdfsdfs","onResume")
@@ -277,45 +307,63 @@ binding?.imageView?.setImageBitmap(bitmap)*/
     override fun onDestroy() {
         super.onDestroy()
         cameraProvider?.unbindAll()
+
+        if(mediaplayer!=null) mediaplayer.release()
+
     }
 
     private var launcher = registerForActivityResult(ActivityResultContracts.GetContent(),ActivityResultCallback{
 
-        val inputStream= contentResolver?.openInputStream(it)
-        val bitmap = BitmapFactory.decodeStream(inputStream)
+        if(it!=null) {
+            val inputStream = contentResolver?.openInputStream(it)
+            val bitmap = BitmapFactory.decodeStream(inputStream)
 
-      var scanner =   ScannerBarcode(object: QRCodeFoundListener {
-            override fun onQRCodeFound(qrCode: String?) {
-                Log.d("djfnd", qrCode + "d")
-                // binding?.button?.text = qrCode
-                this@MainActivity.qrCode = qrCode
-            }
-            override fun onqrCodeNotFound() {}
-            override fun onQRFormat(qrCode: String?, format: Int?, valueType: Int?, bundle:Bundle?) {
-                val intent = Intent(applicationContext, MainActivity2::class.java)
-                intent.putExtra(Intent_KEYS.QRCODE, qrCode)
-                intent.putExtra(Intent_KEYS.FORMAT, format)
-                intent.putExtra(Intent_KEYS.VALUETYPE, valueType)
-                intent.putExtra(Intent_KEYS.BUNDLE,bundle)
-                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this@MainActivity).toBundle())
+            var scanner = ScannerBarcode(object : QRCodeFoundListener {
+                override fun onQRCodeFound(qrCode: String?) {
+                    Log.d("djfnd", qrCode + "d")
+                    // binding?.button?.text = qrCode
 
-                // var effectbivrate=VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK)
-                // Vibrator().vibrate(effectbivrate)
-                //here we r doing clearAnalyzer and unBindAll because camera ImageAnalyzer taking
-                //images continuosuly and if we dont use  clearAnalyzer and Unbind
-                //then qrcode scans mulitple code and open activity multiple times
-                //thats why i need to use clearAnalysis and unBindAll for only scan one barcode at
-                // a time--->
-               // imageAnalysis?.clearAnalyzer()
-               // cameraProvider.unbindAll()
-                //then we need to start the Camera again when we come back to camera activity.
-                //requestCamera()
+                    this@MainActivity.qrCode = qrCode
+                }
 
-                //  qrGenerate(qrCode,format)
-            }
-            override fun onBarcode(barcode: Barcode) {}
-        })
-        scanner.scanBarcode2(bitmap)
+                override fun onqrCodeNotFound() {}
+                override fun onQRFormat(
+                    qrCode: String?,
+                    format: Int?,
+                    valueType: Int?,
+                    bundle: Bundle?
+                ) {
+                    val intent = Intent(applicationContext, MainActivity2::class.java)
+                    intent.putExtra(Intent_KEYS.QRCODE, qrCode)
+                    intent.putExtra(Intent_KEYS.FORMAT, format)
+                    intent.putExtra(Intent_KEYS.VALUETYPE, valueType)
+                    intent.putExtra(Intent_KEYS.BUNDLE, bundle)
+                    startActivity(
+                        intent,
+                        ActivityOptions.makeSceneTransitionAnimation(this@MainActivity).toBundle()
+                    )
+
+                    // var effectbivrate=VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK)
+                    // Vibrator().vibrate(effectbivrate)
+                    //here we r doing clearAnalyzer and unBindAll because camera ImageAnalyzer taking
+                    //images continuosuly and if we dont use  clearAnalyzer and Unbind
+                    //then qrcode scans mulitple code and open activity multiple times
+                    //thats why i need to use clearAnalysis and unBindAll for only scan one barcode at
+                    // a time--->
+                    // imageAnalysis?.clearAnalyzer()
+                    // cameraProvider.unbindAll()
+                    //then we need to start the Camera again when we come back to camera activity.
+                    //requestCamera()
+
+                    //  qrGenerate(qrCode,format)
+                    MediaPlayer.create(this@MainActivity, R.raw.beepsound).start()
+
+                }
+
+                override fun onBarcode(barcode: Barcode) {}
+            })
+            scanner.scanBarcode2(bitmap)
+        }
     })
 
 }

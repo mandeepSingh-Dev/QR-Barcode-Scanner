@@ -448,6 +448,7 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
             skd.getData()
             selectedList.clear()
             notifyDataSetChanged()
+
         }
 
     }

@@ -190,7 +190,8 @@ class HistoryActivity : AppCompatActivity() {
     }
     override fun onDestroy() {
         super.onDestroy()
-
+        disposable?.dispose()
+        onBackButtonCustomListener == null
     }
 
     override fun onResume() {
@@ -210,4 +211,5 @@ class HistoryActivity : AppCompatActivity() {
     {
         this.onBackButtonCustomListener = onBackButtonCustomListener
     }
+
 }

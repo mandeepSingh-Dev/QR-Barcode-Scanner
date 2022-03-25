@@ -29,6 +29,13 @@ object Intent_KEYS {
     const val EMAIL_LIST = "email_list"
     const val SMS_LIST = "sms_list"
 
+  const val SETTINGS_SHAREDPREFERNCE = "SETTINGS_SHAREDPREFERNCE"
+  const val ISAUTOMATICLAYOPEN = "Is_Automatically_Open"
+  const val ISAUTOMATICLAYCOPY = "Is_Automatically_Close"
+  const val ISBEEP = "Is_Beep"
+  const val ISVIBRATE = "Is_Vibrate"
+
+
   //for localbroadcast between Historyactivity and adapter
     const  val INTENT_ADAPTER = "IntentAdapter"
 

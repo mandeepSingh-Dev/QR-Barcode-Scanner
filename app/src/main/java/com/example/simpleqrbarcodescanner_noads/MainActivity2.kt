@@ -72,6 +72,8 @@ class MainActivity2 : AppCompatActivity()
 
     val myiewmodel:MyViewModel by viewModels()
 
+    lateinit var sharedPreferences: SharedPreferences
+
 
 
 
@@ -90,6 +92,20 @@ class MainActivity2 : AppCompatActivity()
 
         Log.d("dgfknfgd","format$format   $valueType")
         arrayList = ArrayList()
+
+        //getting sharerdprefenrce for setting activity
+        sharedPreferences=  getSharedPreferences(Intent_KEYS.SETTINGS_SHAREDPREFERNCE,Context.MODE_PRIVATE)
+        //for automatically open the link
+        if(sharedPreferences.getString(Intent_KEYS.ISAUTOMATICLAYOPEN,"false").equals("true"))
+        {
+            automaticallyOpenLink(rawQrCOde!!,valueType)
+        }
+        //for automatically copy text
+        if(sharedPreferences.getString(Intent_KEYS.ISAUTOMATICLAYCOPY,"false").equals("true"))
+        {
+            copyText(rawQrCOde!!)
+        }
+
 
 
         //when block for setting data acc. to Valuetype and to store in room also
@@ -916,6 +932,25 @@ class MainActivity2 : AppCompatActivity()
             Snackbar.make(binding.saveButton,"Image saved.\nPath: ${Environment.DIRECTORY_PICTURES}/MyQRAPP/$imageName",4000).show()
             Log.d("kfkhdjhf",imageName)
 
+        }
+    }
+    fun automaticallyOpenLink(text:String,valueType:Int){
+        if(text!=null)
+        {
+                val intent = Intent(Intent.ACTION_VIEW)
+                val ISBN_baseurl = "https://www.google.com/search?q="
+                when(valueType){
+                    Barcode.TYPE_URL -> {
+                        binding.searchButton.text = "Search"
+                        intent.data = Uri.parse(text)
+                        startActivity(intent)
+                    }
+                    Barcode.TYPE_ISBN,Barcode.TYPE_PRODUCT ->{
+                        binding.searchButton.text = "Search"
+                        intent.data = Uri.parse(ISBN_baseurl+text)
+                        startActivity(intent)
+                    }
+            }
         }
     }
 

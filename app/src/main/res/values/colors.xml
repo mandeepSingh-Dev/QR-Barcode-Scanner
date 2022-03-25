@@ -12,4 +12,6 @@
     <color name="backgroundColor">@color/white</color>
     <color name="itemtextColor">@color/black</color>
 
+    <color name="light_darkmode">@color/white</color>
+
 </resources>

@@ -1,6 +1,7 @@
 package com.example.simpleqrbarcodescanner_noads
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.*
 import android.os.Bundle
 import androidx.camera.core.ImageAnalysis

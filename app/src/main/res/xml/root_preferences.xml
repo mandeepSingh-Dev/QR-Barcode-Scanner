@@ -1,0 +1,54 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory app:title="General"
+        >
+
+
+        <SwitchPreference
+            app:key="@string/DarkKey"
+            app:title="@string/DarkTitle"
+            app:icon="@drawable/ic_baseline_dark_mode_24"
+
+           />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Scanner">
+
+        <SwitchPreference
+            app:key="@string/AutomaticallyOpenKey"
+            app:title="@string/AutomaticallyOpenTitle"
+            app:icon="@drawable/ic_baseline_open_in_browser_24"
+            app:useSimpleSummaryProvider="true" />
+
+        <SwitchPreference
+            app:key="@string/AutomaticallyCopyKey"
+            app:icon="@drawable/ic_baseline_content_copy_24"
+            app:title="@string/AutomaticallyCopyTitle" />
+
+        <SwitchPreference
+            app:key="@string/BeepKey"
+            app:title="@string/BeepTitle"
+            app:icon="@drawable/ic_baseline_surround_sound_24"/>
+        <SwitchPreference
+            app:key="@string/VibrateKey"
+            app:title="@string/VibrateTitle"
+            app:icon="@drawable/ic_baseline_vibration_24"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Information">
+
+        <Preference
+            app:key="@string/PrivacyKey"
+            app:title="@string/PrivacyTitle"
+            app:icon="@drawable/ic_baseline_policy_24"
+            />
+        <Preference
+            app:key="@string/OpenSourceKey"
+            app:title="@string/OpenSourceTitle"
+            app:icon="@drawable/ic_baseline_source_24"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

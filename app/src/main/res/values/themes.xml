@@ -12,14 +12,11 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name="android:windowBackground">@color/teal_200</item>
+        <item name="android:windowBackground">@color/light_darkmode</item>
     </style>
+
     <style name="mybutontheme"
         parent="Widget.Material3.Button.OutlinedButton">
         <item name="background">@drawable/ripple</item>
     </style>
-    <style name="mytheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowEnterAnimation"></item>
-    </style>
-
 </resources>
