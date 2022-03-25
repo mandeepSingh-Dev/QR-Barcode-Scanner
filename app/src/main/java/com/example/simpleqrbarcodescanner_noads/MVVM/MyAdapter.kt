@@ -6,19 +6,19 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.ImageView
-import android.widget.PopupMenu
-import android.widget.TextView
-import android.widget.Toast
+import android.view.animation.AnimationUtils
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.lifecycle.LifecycleOwner
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.simpleqrbarcodescanner_noads.HistoryActivity
 import com.example.simpleqrbarcodescanner_noads.MainActivity2
 import com.example.simpleqrbarcodescanner_noads.R
 import com.example.simpleqrbarcodescanner_noads.Util.Custom_Formats_duplicate
 import com.example.simpleqrbarcodescanner_noads.Util.Intent_KEYS
+import com.example.simpleqrbarcodescanner_noads.Util.OnBackButtonCustomListener
 import com.example.simpleqrbarcodescanner_noads.room.EntityClass
 import com.google.mlkit.vision.barcode.common.Barcode
 import kotlinx.coroutines.CoroutineScope
@@ -27,9 +27,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
-class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectButton: ImageView) :
-    RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectButton: ImageView,val deleteButton:ImageView,val ev:LinearLayout) :
+    RecyclerView.Adapter<MyAdapter.MyViewHolder>()  {
 
     var customClickListener: CustomClickListener? = null
     var isSelectable = false
@@ -50,13 +51,18 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
 
     /**-------------------*/
     var selectedList = ArrayList<EntityClass>()
-
+    var cardViewList = ArrayList<CardView>()
+   lateinit var holderr:MyViewHolder
 
     lateinit var selectOnClickListener: SelectOnClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.item_history, parent, false)
 
+
+        Toast.makeText(context,"YOYOYOYO",Toast.LENGTH_SHORT).show()
+//        val activity = context as HistoryActivity
+//        activity.selectOnBackButtonClickListener(this)
         /**--------GEEKS FOR GEEKS APPROACH---------*/
         // myViewmodel2 = ViewModelProviders.of(activity as HistoryActivity).get(MyViewmodel2::class.java)
         /**--------GEEKS FOR GEEKS APPROACH---------*/
@@ -71,7 +77,8 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
                     }
                 }
             })*/
-        return MyViewHolder(view)
+        holderr = MyViewHolder(view)
+        return holderr
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
@@ -101,16 +108,24 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
                    entityItem.isSelected = true
                    isSelected = true
                    selectedList.add(entityItem)
+                   cardViewList.add(holder.cardView!!)
                } else {
                   // holder.cardView?.setCardBackgroundColor(Color.RED)
                    holder?.cardView?.setCardBackgroundColor(Color.WHITE)
                    entityItem.isSelected = false
                    isSelected = false
                    selectedList.remove(entityItem)
+                   cardViewList.remove(holder.cardView!!)
+
                }
+               showDeleteButton()
 
            }
         }
+        deleteButton.setOnClickListener {
+            deleteItems()
+        }
+
 
         var popmenu = PopupMenu(context, holder.popupMenu)
         popmenu.inflate(R.menu.select_menu)
@@ -335,7 +350,7 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
         return arrayListtty.size
     }
 
-    inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) ,OnBackButtonCustomListener {
         var typeTextView: TextView? = null
         var nameInfoText: TextView? = null
         var currentDateTEXT: TextView? = null
@@ -351,6 +366,9 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
             logo = itemView.findViewById(R.id.logo)
             cardView = itemView.findViewById(R.id.parentcardView)
             popupMenu = itemView.findViewById(R.id.popupMenu)
+
+            val activity = context as HistoryActivity
+            activity.selectOnBackButtonClickListener(this)
         }
 
         fun bind(entityItem: EntityClass) {
@@ -370,13 +388,17 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
                         entityItem.isSelected = true
                         isSelected = true
                         selectedList.add(entityItem)
+                        cardViewList.add(cardView!!)
+
                     } else {
                         //cardView?.setCardBackgroundColor(Color.RED)
                         cardView?.setCardBackgroundColor(Color.WHITE)
                         entityItem.isSelected = false
                         isSelected = false
                         selectedList.remove(entityItem)
-                    }
+                        cardViewList.remove(cardView!!)}
+                    showDeleteButton()
+
                     Toast.makeText(context, selectedList.size.toString() + "    dfhgd", Toast.LENGTH_SHORT).show()
                     return@setOnLongClickListener true
                 }
@@ -406,10 +428,26 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
 
                    // notifyDataSetChanged()
                 }
+                showDeleteButton()
+
+
+
                 Log.d("difgdhfb","${selectedList.size.toString()}____${arrayListtty.size.toString()}")
             }
 
 
+        }
+
+        override fun onBackClick(isBackClick: Boolean) {
+            deleteButton.animation = AnimationUtils.loadAnimation(context,R.anim.disappear_anim)
+            deleteButton.visibility = View.GONE
+
+            Log.d("difdufhd",cardViewList.size.toString())
+            //cardView?.setCardBackgroundColor(Color.WHITE)
+            val skd= context as HistoryActivity
+            skd.getData()
+            selectedList.clear()
+            notifyDataSetChanged()
         }
 
     }
@@ -854,21 +892,21 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
     }
 
     /**GEEKS FOR GEEKS APPROACH METHOD*/
-     fun clickItem(holder: MyViewHolder,item:EntityClass)
-     {
+     fun clickItem(holder: MyViewHolder,item:EntityClass) {
          if (!item.isSelected) {
             // holder?.cardView?.setCardBackgroundColor(Color.GREEN)
              holder?.cardView?.setCardBackgroundColor(Color.parseColor("#DD8D27"))
              item.isSelected = true
 //             isSelected = true
              selectedList.add(item)
+             cardViewList.add(holder.cardView!!)
          } else {
              //holder?.cardView?.setCardBackgroundColor(Color.RED)
              holder?.cardView?.setCardBackgroundColor(Color.WHITE)
              item.isSelected = false
 //             isSelected = false
              selectedList.remove(item)
-         }
+             cardViewList.remove(holder.cardView!!)}
         /* if(holder.checkbox?.visibility == View.GONE)
          {
              holder.checkbox?.visibility = View.VISIBLE
@@ -890,11 +928,40 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
          notifyDataSetChanged()
      }
 
+    fun showDeleteButton() {
+        if(selectedList.size > 0 )
+        {
+            deleteButton.animation = AnimationUtils.loadAnimation(context,R.anim.appear_anim)
+            deleteButton.visibility = View.VISIBLE
+        }
+        else{
+            deleteButton.animation = AnimationUtils.loadAnimation(context,R.anim.disappear_anim)
+            deleteButton.visibility = View.GONE
+        }
+    }
 
+    fun deleteItems()
+    {
+        if(selectedList.size > 0)
+        {
+            selectedList.forEach {
+                arrayListtty.remove(it)
+                myviewmodel.delete(it)
+            }
+            selectedList.clear()
+            notifyDataSetChanged()
+            deleteButton.animation = AnimationUtils.loadAnimation(context,R.anim.disappear_anim)
+            deleteButton.visibility = View.GONE
+        }
+
+        Toast.makeText(context,selectedList.size.toString(),Toast.LENGTH_SHORT).show()
+    }
 
     fun setDate(listy: ArrayList<EntityClass>) {
         arrayListtty = listy
         notifyDataSetChanged()
     }
+
+
 
 }

@@ -24,9 +24,11 @@ class MyViewModel @Inject constructor(val mainRepositry: MainRepositry): ViewMod
          }
     }
 
-    suspend fun delete(entityClass: EntityClass)
+     fun delete(entityClass: EntityClass)
     {
+        viewModelScope.launch {
             mainRepositry.delete(entityClass)
+        }
     }
 
     suspend fun getItembyId(id:Int):EntityClass

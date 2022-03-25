@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/historyRecyclerView"
+
         android:orientation="horizontal">
         <androidx.cardview.widget.CardView
             android:id="@+id/backCardView"
@@ -94,5 +94,48 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appbarlayout" />
+
+    <LinearLayout
+        android:id="@+id/emptylayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appbarlayout"
+        android:orientation="vertical"
+        >
+        <ImageView
+            android:id="@+id/emptyImage"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_round_error_outline_24"
+            ></ImageView>
+        <TextView
+            android:id="@+id/emptytextview1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No history"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/backgroundColor"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline1"
+            android:textSize="20sp"/>
+        <TextView
+            android:id="@+id/emptytextview2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Your scans will be listed here."
+            android:textColor="@color/backgroundColor"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline1"
+            android:textSize="15sp"/>
+
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

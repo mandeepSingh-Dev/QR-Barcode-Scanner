@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.simpleqrbarcodescanner_noads.MVVM.MyAdapter
 import com.example.simpleqrbarcodescanner_noads.MVVM.MyViewModel
 import com.example.simpleqrbarcodescanner_noads.Util.Intent_KEYS
+import com.example.simpleqrbarcodescanner_noads.Util.OnBackButtonCustomListener
 import com.example.simpleqrbarcodescanner_noads.databinding.ActivityHistoryBinding
 import com.example.simpleqrbarcodescanner_noads.room.EntityClass
 import com.example.simpleqrbarcodescanner_noads.room.MainRepositry
@@ -44,6 +45,8 @@ class HistoryActivity : AppCompatActivity() {
     private var stateee:Parcelable?=null
     var disposable:Disposable?=null
 
+    lateinit var onBackButtonCustomListener:OnBackButtonCustomListener
+
     //lateinit  var selectOnClickListener:SelectOnClickListenerr
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,15 +60,14 @@ class HistoryActivity : AppCompatActivity() {
         {
             stateee = savedInstanceState.getParcelable("STATE")
         }
-        val anim =AnimationUtils.loadAnimation(this,R.anim.appear_anim)
-        binding?.deleteButton?.animation = anim
+
 
          list = mutableListOf()
 
         binding.backbutton.setOnClickListener {
             finish()
         }
-        adapter = MyAdapter(this@HistoryActivity,myViewmodel,binding.selectAllButton)
+        adapter = MyAdapter(this@HistoryActivity,myViewmodel,binding.selectAllButton,binding.deleteButton,binding.emptylayout)
         initRecyclerView()
        // getData()
         binding.selectAllButton.setOnClickListener {
@@ -73,7 +75,7 @@ class HistoryActivity : AppCompatActivity() {
         }
     }//end of onCreate
 
-    private fun getData(){
+    fun getData(){
 
      myViewmodel.listobservable
             .subscribeOn(Schedulers.io())
@@ -84,7 +86,16 @@ class HistoryActivity : AppCompatActivity() {
                 }
                 override fun onNext(it: ArrayList<EntityClass>) {
                   Toast.makeText(this@HistoryActivity,"onnextCalled",Toast.LENGTH_SHORT).show()
-                    adapter?.setDate(it)
+                    if(!it.isEmpty()) {
+                        binding.historyRecyclerView.visibility = View.VISIBLE
+                        binding.emptylayout.visibility = View.GONE
+                        adapter?.setDate(it)
+                    }
+                    else{
+                        binding.historyRecyclerView.visibility = View.GONE
+                        binding.emptylayout.visibility = View.VISIBLE
+
+                    }
                 }
                 override fun onError(e: Throwable) {}
                 override fun onComplete() {}
@@ -162,10 +173,8 @@ class HistoryActivity : AppCompatActivity() {
         val list = adapter?.getList()
               list?.size?.let {
             if (it > 0) {
-                adapter?.selectedList?.clear()
-             //   adapter?.notifyDataSetChanged()
-                /* LocalBroadcastManager.getInstance(this)
-                     .sendBroadcast(Intent(Intent_KEYS.INTENT_ADAPTER))*/
+              //  adapter?.selectedList?.clear()
+            onBackButtonCustomListener.onBackClick(true)
             } else {
                 super.onBackPressed()
                // finish()
@@ -195,5 +204,10 @@ class HistoryActivity : AppCompatActivity() {
    @JvmName("setSelectOnClickListener1")
     fun setSelectOnClickListener(selectOnClickListenerr: SelectOnClickListenerr){
       //  this.selectOnClickListener = selectOnClickListenerr
+    }
+
+    fun selectOnBackButtonClickListener(onBackButtonCustomListener: OnBackButtonCustomListener)
+    {
+        this.onBackButtonCustomListener = onBackButtonCustomListener
     }
 }
