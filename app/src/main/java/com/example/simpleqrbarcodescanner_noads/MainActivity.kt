@@ -327,12 +327,12 @@ binding?.imageView?.setImageBitmap(bitmap)*/
                 }
 
                 override fun onqrCodeNotFound() {}
-                override fun onQRFormat(
-                    qrCode: String?,
-                    format: Int?,
-                    valueType: Int?,
-                    bundle: Bundle?
-                ) {
+                override fun onQRFormat(qrCode: String?, format: Int?, valueType: Int?, bundle: Bundle?) {
+                    if(sharedPreferences?.getString(Intent_KEYS.ISBEEP,"false").equals("true"))
+                    { mediaplayer.start() }
+                    if(sharedPreferences?.getString(Intent_KEYS.ISVIBRATE,"false").equals("true"))
+                    { vibrate()}
+
                     val intent = Intent(applicationContext, MainActivity2::class.java)
                     intent.putExtra(Intent_KEYS.QRCODE, qrCode)
                     intent.putExtra(Intent_KEYS.FORMAT, format)
@@ -356,8 +356,6 @@ binding?.imageView?.setImageBitmap(bitmap)*/
                     //requestCamera()
 
                     //  qrGenerate(qrCode,format)
-                    MediaPlayer.create(this@MainActivity, R.raw.beepsound).start()
-
                 }
 
                 override fun onBarcode(barcode: Barcode) {}

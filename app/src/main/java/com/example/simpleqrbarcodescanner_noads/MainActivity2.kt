@@ -30,6 +30,7 @@ import android.os.Environment
 import android.provider.CalendarContract
 import android.provider.ContactsContract
 import android.provider.MediaStore
+import android.widget.Toast
 import androidmads.library.qrgenearator.QRGContents
 import androidmads.library.qrgenearator.QRGEncoder
 import androidx.activity.viewModels
@@ -98,7 +99,7 @@ class MainActivity2 : AppCompatActivity()
         //for automatically open the link
         if(sharedPreferences.getString(Intent_KEYS.ISAUTOMATICLAYOPEN,"false").equals("true"))
         {
-            automaticallyOpenLink(rawQrCOde!!,valueType)
+            automaticallyOpenLink(rawQrCOde!!,valueType,format)
         }
         //for automatically copy text
         if(sharedPreferences.getString(Intent_KEYS.ISAUTOMATICLAYCOPY,"false").equals("true"))
@@ -934,22 +935,30 @@ class MainActivity2 : AppCompatActivity()
 
         }
     }
-    fun automaticallyOpenLink(text:String,valueType:Int){
+    fun automaticallyOpenLink(text:String,valueType:Int,format:Int){
         if(text!=null)
         {
+            Toast.makeText(this,valueType.toString()+"dkfkndjf",Toast.LENGTH_SHORT).show()
                 val intent = Intent(Intent.ACTION_VIEW)
                 val ISBN_baseurl = "https://www.google.com/search?q="
-                when(valueType){
+            if(format!=Barcode.FORMAT_QR_CODE)
+            {
+                Log.d("f dfidjf","dfndf"+format.toString())
+            }else {
+                Log.d("f dfidjf","dfndf"+format.toString())
+                when (valueType) {
                     Barcode.TYPE_URL -> {
                         binding.searchButton.text = "Search"
                         intent.data = Uri.parse(text)
                         startActivity(intent)
                     }
-                    Barcode.TYPE_ISBN,Barcode.TYPE_PRODUCT ->{
+                    Barcode.TYPE_ISBN, Barcode.TYPE_PRODUCT -> {
                         binding.searchButton.text = "Search"
-                        intent.data = Uri.parse(ISBN_baseurl+text)
+                        intent.data = Uri.parse(ISBN_baseurl + text)
                         startActivity(intent)
                     }
+                    else -> {}
+                }
             }
         }
     }
