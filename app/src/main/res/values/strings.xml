@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Simple QR &amp; Barcode Scanner - No Ads</string>
+    <string name="app_name">QR Code &amp; Barcode Scanner App</string>
     <string name="title_activity_settings">SettingsActivity</string>
 
     <!-- Preference Titles -->
@@ -17,7 +17,7 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
-   <!-- Settings strings-->
+    <!-- Settings strings-->
     <string name="DarkTitle">Dark mode</string>
     <string name="AutomaticallyOpenTitle">Automatically open links</string>
     <string name="AutomaticallyCopyTitle">Automatically copy the results</string>

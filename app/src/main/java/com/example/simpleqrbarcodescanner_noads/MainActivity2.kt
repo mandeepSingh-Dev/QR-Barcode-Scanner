@@ -36,11 +36,14 @@ import androidmads.library.qrgenearator.QRGEncoder
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.graphics.BitmapCompat
+import androidx.core.view.marginBottom
 import androidx.core.view.setPadding
 import com.example.simpleqrbarcodescanner_noads.MVVM.MyViewModel
 import com.example.simpleqrbarcodescanner_noads.MVVM.MyViewmodel2
 import com.example.simpleqrbarcodescanner_noads.room.EntityClass
 import com.example.simpleqrbarcodescanner_noads.room.MyRoomDatabase
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
 import com.google.zxing.oned.EAN13Reader
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -83,6 +86,15 @@ class MainActivity2 : AppCompatActivity()
         super.onCreate(savedInstanceState)
         binding = ActivityMain2Binding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
+
+      /*  val adRequest = AdRequest.Builder().build()
+        binding.adViewMain2Actiivty?.loadAd(adRequest)
+        binding.adViewMain2Actiivty?.adListener = object:AdListener(){
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                binding.adViewMain2Actiivty?.visibility = View.VISIBLE
+            }
+        }*/
 
         rawQrCOde = intent.getStringExtra(Intent_KEYS.QRCODE)
         val format = intent.getIntExtra(Intent_KEYS.FORMAT,0)

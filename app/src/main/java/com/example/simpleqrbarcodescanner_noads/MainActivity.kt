@@ -30,6 +30,7 @@ import com.example.simpleqrbarcodescanner_noads.ScannerUtil.QRCodeFoundListener
 import com.example.simpleqrbarcodescanner_noads.ScannerUtil.ScannerBarcode
 import com.example.simpleqrbarcodescanner_noads.Util.Intent_KEYS
 import com.example.simpleqrbarcodescanner_noads.databinding.ActivityMainBinding
+import com.google.android.gms.ads.MobileAds
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.zxing.qrcode.encoder.QRCode
@@ -65,6 +66,9 @@ class MainActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
         setContentView(binding?.root)
+
+        MobileAds.initialize(this) {}
+
 
         supportActionBar?.hide()
         binding?.scanImage?.setOnClickListener {

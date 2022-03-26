@@ -4,8 +4,7 @@ import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import androidmads.library.qrgenearator.QRGContents
-import androidmads.library.qrgenearator.QRGEncoder
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.simpleqrbarcodescanner_noads.CreateRecyclerView.CreateAdapter
@@ -13,26 +12,54 @@ import com.example.simpleqrbarcodescanner_noads.CreateRecyclerView.Create_Item
 import com.example.simpleqrbarcodescanner_noads.Util.Custom_Formats_duplicate
 import com.example.simpleqrbarcodescanner_noads.Util.Intent_KEYS
 import com.example.simpleqrbarcodescanner_noads.databinding.ActivityCreateBinding
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
 import com.google.mlkit.vision.barcode.common.Barcode
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.EncodeHintType
-import com.google.zxing.qrcode.QRCodeWriter
-import com.google.zxing.qrcode.encoder.QRCode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import javax.annotation.concurrent.Immutable
+
 
 class CreateActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityCreateBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCreateBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
 
         supportActionBar?.hide()
+
+        val adRequest = AdRequest.Builder().build()
+        binding.adViewCreateActiivty?.loadAd(adRequest)
+        binding.adViewCreateActiivty?.adListener = object: AdListener() {
+            override fun onAdLoaded() {
+            // binding.adViewlinearlayout?.visibility = View.VISIBLE
+                // Code to be executed when an ad finishes loading.
+            }
+
+            override fun onAdFailedToLoad(adError : LoadAdError) {
+                // Code to be executed when an ad request fails.
+            }
+
+            override fun onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen.
+            }
+
+            override fun onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            override fun onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+            }
+        }
 
         CoroutineScope(Dispatchers.IO).launch {
           /*  val arrayList = ArrayList<Create_Item>()
@@ -70,7 +97,6 @@ class CreateActivity : AppCompatActivity() {
                 binding.createRecyclerView2DCodes.adapter = adapter2
             }
         }
-
         binding.createQRCODEButton.setOnClickListener {
           /*  val intent = Intent(context, MainActivity2::class.java)
             intent.putExtra(Intent_KEYS.QRCODE, )
@@ -86,6 +112,39 @@ class CreateActivity : AppCompatActivity() {
         binding.backbutton2.setOnClickListener {
             onBackPressed()
         }
+
+
+
+      // mAdView =  findViewById<AdView>(R.id.adVieww)
+       // mAdView.loadAd(adRequest)
+
+     /*   mAdView.adListener = object: AdListener() {
+            override fun onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+            super.onAdLoaded()
+                Toast.makeText(this@CreateActivity,"Loaded",Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onAdFailedToLoad(adError : LoadAdError) {
+                // Code to be executed when an ad request fails.
+            }
+
+            override fun onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen.
+            }
+
+            override fun onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            override fun onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+            }
+        }*/
+       // val adview=  AdView(this)
+
 
     }//end of onCreate
 

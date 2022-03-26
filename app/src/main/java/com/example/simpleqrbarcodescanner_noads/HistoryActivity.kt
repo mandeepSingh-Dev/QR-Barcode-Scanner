@@ -25,6 +25,7 @@ import com.example.simpleqrbarcodescanner_noads.Util.OnBackButtonCustomListener
 import com.example.simpleqrbarcodescanner_noads.databinding.ActivityHistoryBinding
 import com.example.simpleqrbarcodescanner_noads.room.EntityClass
 import com.example.simpleqrbarcodescanner_noads.room.MainRepositry
+import com.google.android.gms.ads.AdRequest
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.FlowableSubscriber
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -57,6 +58,8 @@ class HistoryActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
+        val adRequest = AdRequest.Builder().build()
+        binding.adViewHistoryActiivty?.loadAd(adRequest)
 
         if(savedInstanceState!=null)
         {
