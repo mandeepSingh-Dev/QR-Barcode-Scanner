@@ -1,6 +1,7 @@
 package com.example.simpleqrbarcodescanner_noads
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
@@ -12,6 +13,7 @@ import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -66,6 +68,7 @@ class HistoryActivity : AppCompatActivity() {
 
         binding.backbutton.setOnClickListener {
             finish()
+           // onBackPressed()
         }
         adapter = MyAdapter(this@HistoryActivity,myViewmodel,binding.selectAllButton,binding.deleteButton,binding.emptylayout)
         initRecyclerView()
@@ -191,7 +194,6 @@ class HistoryActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         disposable?.dispose()
-        onBackButtonCustomListener == null
     }
 
     override fun onResume() {

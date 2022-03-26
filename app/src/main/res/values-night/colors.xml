@@ -9,9 +9,20 @@
     <color name="white">#FFFFFFFF</color>
     <color name="Red">#FF0000</color>
 
-    <color name="backgroundColor">#DDC7C7</color>
+    <color name="backgroundColor">#0D47A1</color>
+    <color name="backgroundColor1">#505657</color>
+
     <color name="itemtextColor">@color/white</color>
 
     <color name="light_darkmode">@color/black</color>
+    <color name="Modecolor">@color/white</color>
+
+    <color name="gradientEnd">#042F33</color>
+    <color name="gradientCentre">#385753</color>
+    <color name="gradientStart">#FFFFFF</color>
+
+    <color name="buttoncolor1">#DD2C00</color>
+
+    <color name="itemiconcolor">#FAE0C7</color>
 
 </resources>

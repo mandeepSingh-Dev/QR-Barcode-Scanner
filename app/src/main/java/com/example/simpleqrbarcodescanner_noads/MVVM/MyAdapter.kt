@@ -10,6 +10,7 @@ import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.RecyclerView
@@ -111,7 +112,7 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
                    cardViewList.add(holder.cardView!!)
                } else {
                   // holder.cardView?.setCardBackgroundColor(Color.RED)
-                   holder?.cardView?.setCardBackgroundColor(Color.WHITE)
+                   holder?.cardView?.setCardBackgroundColor(ContextCompat.getColor(context,R.color.backgroundColor1))
                    entityItem.isSelected = false
                    isSelected = false
                    selectedList.remove(entityItem)
@@ -375,7 +376,7 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
             setDataintoVIEW(entityItem.type_value.toInt(), entityItem.format, entityItem, this)
 
             if (!entityItem.isSelected) //cardView?.setCardBackgroundColor(Color.RED)
-                                          cardView?.setCardBackgroundColor(Color.WHITE)
+                                          cardView?.setCardBackgroundColor(ContextCompat.getColor(context,R.color.backgroundColor1))
             else //cardView?.setCardBackgroundColor(Color.GREEN)
                 cardView?.setCardBackgroundColor(Color.parseColor("#DD8D27"))
 
@@ -392,7 +393,7 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
 
                     } else {
                         //cardView?.setCardBackgroundColor(Color.RED)
-                        cardView?.setCardBackgroundColor(Color.WHITE)
+                        cardView?.setCardBackgroundColor(ContextCompat.getColor(context,R.color.backgroundColor1))
                         entityItem.isSelected = false
                         isSelected = false
                         selectedList.remove(entityItem)
@@ -903,7 +904,7 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
              cardViewList.add(holder.cardView!!)
          } else {
              //holder?.cardView?.setCardBackgroundColor(Color.RED)
-             holder?.cardView?.setCardBackgroundColor(Color.WHITE)
+             holder?.cardView?.setCardBackgroundColor(ContextCompat.getColor(context,R.color.backgroundColor1))
              item.isSelected = false
 //             isSelected = false
              selectedList.remove(item)

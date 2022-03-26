@@ -125,7 +125,7 @@ class MainActivity : AppCompatActivity(){
             repeatMode = ValueAnimator.REVERSE
             repeatCount = ValueAnimator.INFINITE
          //   reverse()
-            duration = 1500
+            duration = 800
             start()
         }
        // ObjectAnimator.

@@ -17,10 +17,5 @@
         android:icon="@drawable/ic_twotone_settings_24"
         android:title="Setting"
         android:iconTint="#1CFFFF"/>
-    <item
-        android:id="@+id/settingEXTRA"
-        android:icon="@drawable/ic_baseline_lightbulb_24"
-        android:title="History"
-        android:iconTint="#FFFFFF"/>
 
 </menu>

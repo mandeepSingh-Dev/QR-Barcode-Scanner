@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
     android:id="@+id/parentcardView"
-    app:cardBackgroundColor="@color/white"
+    app:cardBackgroundColor="@color/backgroundColor1"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardElevation="10dp"
     app:cardCornerRadius="10dp"
@@ -24,7 +24,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:tint="#8C2020" />
+            app:tint="@color/itemiconcolor" />
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -33,27 +33,29 @@
             app:layout_constraintRight_toLeftOf="@id/popupMenu"
             app:layout_constraintBottom_toBottomOf="parent"
             android:orientation="vertical">
-        <TextView
-            android:id="@+id/TypeValueTEXT"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Email"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:textSize="19sp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="8dp"/>
+
+            <TextView
+                android:id="@+id/TypeValueTEXT"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="8dp"
+                android:text="Email"
+                android:textColor="@color/Modecolor"
+                android:textSize="19sp"
+                android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/nameInfoText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="email@example.com"
+                android:textColor="@color/Modecolor"
                 android:ellipsize="end"
                 android:maxLines="3"
                 android:maxHeight="200dp"
                 android:layout_marginRight="45dp"
                 android:layout_marginTop="5dp"
-                android:textColor="@color/black"
                 android:layout_marginLeft="25dp"/>
             <TextView
             android:id="@+id/currentDateTEXT"
@@ -61,7 +63,7 @@
             android:layout_height="wrap_content"
             android:text="03/17/2022 09:36"
                 android:layout_marginTop="7dp"
-                android:textColor="@color/black"
+                android:textColor="@color/Modecolor"
                 android:textStyle="italic"
                 android:textSize="12sp"
                 android:layout_marginLeft="25dp"

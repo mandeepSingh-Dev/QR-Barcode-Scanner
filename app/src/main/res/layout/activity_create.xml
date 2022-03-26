@@ -41,7 +41,8 @@
                 android:layout_gravity="center"
                 android:background="@drawable/ripple"
                 android:padding="10dp"
-                android:src="@drawable/ic_baseline_arrow_back_ios_new_24" />
+                android:src="@drawable/ic_baseline_arrow_back_ios_new_24"
+                app:tint="@color/Modecolor" />
         </androidx.cardview.widget.CardView>
 
         <com.google.android.material.textview.MaterialTextView
@@ -112,15 +113,16 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="10dp"
                 android:text="Create QR code from text"
-                android:textColor="@color/backgroundColor"
+                android:textColor="@color/Modecolor"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:drawableTop="@drawable/ic_qrcode"
-                app:strokeColor="#FFFFFF"
+                app:strokeColor="@color/Modecolor"
                 app:strokeWidth="1dp"
-                app:cornerRadius="10dp"
+                app:cornerRadius="15dp"
                 android:padding="30dp"
                 android:textSize="28sp"
+                app:elevation="20dp"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline1"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 app:layout_constraintTop_toTopOf="parent"
@@ -136,7 +138,7 @@
         android:layout_height="wrap_content"
         android:text="Barcode/2D Codes"
         android:textStyle="bold"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/Modecolor"
         android:textSize="20sp"
         android:layout_marginLeft="12dp"
         android:layout_marginTop="15dp"
