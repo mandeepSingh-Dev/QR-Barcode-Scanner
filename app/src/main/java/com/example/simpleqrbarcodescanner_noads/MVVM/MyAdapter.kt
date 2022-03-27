@@ -59,7 +59,6 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
         val view = LayoutInflater.from(context).inflate(R.layout.item_history, parent, false)
 
 
-        Toast.makeText(context,"YOYOYOYO",Toast.LENGTH_SHORT).show()
 //        val activity = context as HistoryActivity
 //        activity.selectOnBackButtonClickListener(this)
         /**--------GEEKS FOR GEEKS APPROACH---------*/
@@ -90,14 +89,12 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
 
         holder.itemView.setOnClickListener {
            if(selectedList.size==0) {
-               Log.d("soljdsdfs", entityItem.type_value)
                val intent = Intent(context, MainActivity2::class.java)
                intent.putExtra(Intent_KEYS.QRCODE, entityItem.rawValue)
                intent.putExtra(Intent_KEYS.FORMAT, entityItem.format)
                intent.putExtra(Intent_KEYS.VALUETYPE, entityItem.type_value.toInt())
                intent.putExtra(Intent_KEYS.FROM_HISTORY, true)
                intent.putExtra(Intent_KEYS.BUNDLE, setBundle(entityItem))
-               Log.d("fihfedf", entityItem.type_value)
                context.startActivity(intent)
            }
             else{
@@ -147,16 +144,13 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
                         }
                     }
                 } else {
-                    Toast.makeText(context, "SELECTEDTOAST", Toast.LENGTH_SHORT).show()
                 }
                 return@setOnMenuItemClickListener true
             }
             popmenu.show()
         }
 
-        Log.d("fp[fgdjifgvd", entityItem.isSelected.toString())
        /* selectButton.setOnClickListener {
-            Log.d("fhdfgb", "gihd")
             holder.cardView?.setBackgroundColor(Color.RED)
         }*/
 
@@ -309,13 +303,11 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
                                }
                    }
                    else{
-                       Log.d("soljdsdfs",entityItem.type_value)
                        val intent = Intent(context,MainActivity2::class.java)
                        intent.putExtra(Intent_KEYS.QRCODE, entityItem.rawValue)
                        intent.putExtra(Intent_KEYS.FORMAT, entityItem.format)
                        intent.putExtra(Intent_KEYS.VALUETYPE, entityItem.type_value.toInt())
                        intent.putExtra(Intent_KEYS.BUNDLE,setBundle(entityItem))
-                       Log.d("fihfedf",entityItem.type_value)
                        context.startActivity(intent)
                    }
                }
@@ -398,12 +390,10 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
                         cardViewList.remove(cardView!!)}
                     showDeleteButton()
 
-                    Toast.makeText(context, selectedList.size.toString() + "    dfhgd", Toast.LENGTH_SHORT).show()
                     return@setOnLongClickListener true
                 }
 
             selectButton.setOnClickListener {
-                Log.d("dkfhdfd","sfjsd")
 
                 if(selectedList.size<arrayListtty.size)
                 {
@@ -411,13 +401,11 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
                      arrayListtty.forEach {
                          it.isSelected =  false
                      }
-                    Log.d("fkhdfjd","if block")
                     arrayListtty.forEach {
                         clickItem(this,it)
                     }
                 }
                 else{
-                    Log.d("fkhdfjd","else block")
                     arrayListtty.forEach {
                          it.isSelected = true
                     }
@@ -431,7 +419,6 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
 
 
 
-                Log.d("difgdhfb","${selectedList.size.toString()}____${arrayListtty.size.toString()}")
             }
 
 
@@ -441,7 +428,6 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
             deleteButton.animation = AnimationUtils.loadAnimation(context,R.anim.disappear_anim)
             deleteButton.visibility = View.GONE
 
-            Log.d("difdufhd",cardViewList.size.toString())
             //cardView?.setCardBackgroundColor(Color.WHITE)
             val skd= context as HistoryActivity
             skd.getData()
@@ -455,7 +441,6 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
     @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
     fun setDataintoVIEW(typeValue: Int, format: Int, item: EntityClass, holder: MyViewHolder) {
 
-        Log.d("dfhdf", item.type_value)
 
         when (format) {
             Custom_Formats_duplicate.CODABAR -> {
@@ -954,7 +939,6 @@ class MyAdapter(val context: Context, val myviewmodel: MyViewModel, val selectBu
             deleteButton.visibility = View.GONE
         }
 
-        Toast.makeText(context,selectedList.size.toString(),Toast.LENGTH_SHORT).show()
     }
 
     fun setDate(listy: ArrayList<EntityClass>) {

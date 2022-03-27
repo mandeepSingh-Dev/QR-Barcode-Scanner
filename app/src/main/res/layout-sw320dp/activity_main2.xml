@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/parentViewgroup"
+    tools:context=".MainActivity2"
+    android:background="@drawable/gradient_actionbar">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/appbarlayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#1A3E42"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/backCardView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:background="@drawable/ripple"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/backbutton3"
+                android:layout_width="33dp"
+                android:layout_height="33dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ripple"
+                android:padding="10dp"
+                android:src="@drawable/ic_baseline_arrow_back_ios_new_24"
+                app:tint="@color/Modecolor" />
+        </androidx.cardview.widget.CardView>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/createTITLE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Result"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline1"
+            android:textColor="@color/white"
+            android:textSize="35sp"
+            app:layout_constraintBottom_toBottomOf="@id/backCardView3"
+            app:layout_constraintLeft_toRightOf="@id/backCardView3"
+            app:layout_constraintRight_toLeftOf="@id/SupportButton3"
+            app:layout_constraintTop_toTopOf="@id/backCardView3" />
+
+        <ImageView
+            android:id="@+id/deleteButton3"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="30dp"
+            android:src="@drawable/ic_round_delete_outline_24"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/SupportButton3"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="30dp"
+            android:alpha="0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/texttitleCardView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardElevation="20dp"
+        android:layout_marginLeft="30dp"
+        app:layout_constraintTop_toTopOf="@id/bigCardView"
+        app:layout_constraintBottom_toTopOf="@id/bigCardView"
+        app:layout_constraintLeft_toLeftOf="@id/bigCardView" >
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/typeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HEIFHYEFGEBF"
+            android:textColor="#FB4E23"
+            android:padding="7dp"
+            android:elevation="20dp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@id/bigCardView"
+            app:layout_constraintBottom_toTopOf="@id/bigCardView"
+            app:layout_constraintLeft_toLeftOf="@id/bigCardView"/>
+    </com.google.android.material.card.MaterialCardView>
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardElevation="20dp"
+        android:layout_marginRight="40dp"
+        app:layout_constraintTop_toTopOf="@id/texttitleCardView"
+        app:layout_constraintBottom_toBottomOf="@+id/texttitleCardView"
+        app:layout_constraintRight_toRightOf="@id/bigCardView" >
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/qrShowPiece"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HEIFHYEFGEBF"
+            android:textColor="#253022"
+            android:src="@drawable/ic_qrcode"
+            android:elevation="20dp"
+            app:layout_constraintTop_toTopOf="@id/bigCardView"
+            app:layout_constraintBottom_toTopOf="@id/bigCardView"
+            app:layout_constraintLeft_toLeftOf="@id/bigCardView"/>
+    </com.google.android.material.card.MaterialCardView>
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/bigCardView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/appbarlayout3"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/adViewMain2Actiivty"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="30dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="10dp"
+        >
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:paddingLeft="20dp">
+
+                <TextView
+                    android:id="@+id/result"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:lineSpacingExtra="14dp"
+                    android:layout_marginRight="20dp"
+                    android:paddingRight="20dp"
+                    android:text="https://VOID.COM"
+                    android:textIsSelectable="true"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"/>
+
+                <!--search button-->
+                <Button
+                    android:id="@+id/searchButton"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginRight="20dp"
+                    android:text="Search"
+                    android:textAllCaps="false"
+                    app:cornerRadius="6dp"
+                    android:paddingLeft="60dp"
+                    android:paddingRight="60dp"
+                    android:drawableLeft="@drawable/ic_baseline_search_24"
+                    android:drawableTint="#016DD8"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/result"
+                    app:strokeColor="#FB4E23"
+                    app:strokeWidth="0.5dp" />
+                <!--copy button-->
+
+                <!--linearlayout for url website-->
+                <LinearLayout
+                    android:id="@+id/buttonsLinerLyaout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="20dp"
+                    app:layout_constraintLeft_toLeftOf="@id/result"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/searchButton"
+                    >
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/addContactsButton"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableTop="@drawable/ic_outline_person_add_alt_1_24"
+                        android:text="Add to Contacts"
+                        android:textAllCaps="false"
+                        app:layout_constraintLeft_toLeftOf="@id/result"
+                        app:layout_constraintRight_toLeftOf="@id/shareButton"
+                        app:layout_constraintTop_toBottomOf="@id/searchButton"
+                        app:strokeColor="@android:color/transparent" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/copybutton"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:drawableTop="@drawable/ic_baseline_content_copy_24"
+                        android:text="copy"
+                        android:layout_weight="1"
+                        android:textAllCaps="false"
+                        app:layout_constraintLeft_toLeftOf="@id/result"
+                        app:layout_constraintRight_toLeftOf="@id/shareButton"
+                        app:layout_constraintTop_toBottomOf="@id/searchButton"
+                        app:strokeColor="@android:color/transparent" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/shareButton"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:drawableTop="@drawable/ic_baseline_share_24"
+                        android:text="share"
+                        android:layout_weight="1"
+                        android:textAllCaps="false"
+                        app:layout_constraintLeft_toRightOf="@id/copybutton"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/searchButton"
+                        app:strokeColor="@android:color/transparent" />
+
+                </LinearLayout>
+
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/codeImageCardview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="40dp"
+                    app:cardCornerRadius="30dp"
+                    app:cardElevation="5dp"
+                    app:cardPreventCornerOverlap="true"
+                    app:layout_constraintBottom_toTopOf="@id/saveButton"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/buttonsLinerLyaout"
+                    app:strokeColor="@color/teal_200"
+                    app:strokeWidth="1dp">
+
+                    <ImageView
+                        android:id="@+id/codeImage"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp"
+                        android:elevation="10dp"
+                        android:src="@drawable/ic_round_error_outline_24"
+                        android:background="@color/white"
+                        />
+                </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/saveButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:text="Save"
+                android:textColor="@color/white"
+                android:drawableLeft="@drawable/ic_baseline_download_24"
+                android:drawableTint="#FFC08C"
+                android:backgroundTint="#00695C"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                app:layout_constraintLeft_toLeftOf="@id/codeImageCardview"
+                app:layout_constraintRight_toRightOf="@id/codeImageCardview"
+                app:layout_constraintTop_toBottomOf="@id/codeImageCardview"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adViewMain2Actiivty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        ads:layout_constraintTop_toBottomOf="@id/bigCardView"
+        ads:layout_constraintBottom_toBottomOf="parent"
+        ads:layout_constraintLeft_toLeftOf="parent"
+        ads:layout_constraintRight_toRightOf="parent"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-3940256099942544/6300978111">
+    </com.google.android.gms.ads.AdView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

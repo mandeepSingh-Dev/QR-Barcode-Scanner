@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -77,7 +76,6 @@ class HistoryActivity : AppCompatActivity() {
                     disposable = d
                 }
                 override fun onNext(it: ArrayList<EntityClass>) {
-                  Toast.makeText(this@HistoryActivity,"onnextCalled",Toast.LENGTH_SHORT).show()
                     if(!it.isEmpty()) {
                         binding.historyRecyclerView.visibility = View.VISIBLE
                         binding.emptylayout.visibility = View.GONE

@@ -8,7 +8,6 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -22,10 +21,12 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import android.content.Intent
+import android.os.Build
 import android.os.Environment
 import android.provider.CalendarContract
 import android.provider.ContactsContract
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -45,7 +46,8 @@ class MainActivity2 : AppCompatActivity()
     private var rawQrCOde:String?=null
     private var fromHistoryPage:Boolean?=null
 
-    private val mPERMISSION_CODE = 100
+    private val mCALLPERMISSION_CODE = 100
+    private val mWRITEPERMISSION_CODE = 1
 
     private  lateinit var phone:String
     private lateinit var message:String
@@ -53,6 +55,8 @@ class MainActivity2 : AppCompatActivity()
     private lateinit var emailAddress:String
     private lateinit var emailSubject:String
     private lateinit var emailBody:String
+
+     var bitmap:Bitmap?=null
 
     lateinit var calArlst:ArrayList<String>
     lateinit var contactArlst:ArrayList<String>
@@ -97,7 +101,6 @@ class MainActivity2 : AppCompatActivity()
         //var typeValue_QRGEN = intent.getStringExtra(Intent_KEYS.VALUETYPE_QRGENERATOR)
         fromHistoryPage = intent.getBooleanExtra(Intent_KEYS.FROM_HISTORY,false)
 
-        Log.d("dgfknfgd","format$format   $valueType")
         arrayList = ArrayList()
 
         //getting sharerdprefenrce for setting activity
@@ -343,11 +346,20 @@ class MainActivity2 : AppCompatActivity()
         }catch (e:Exception){}*/
 
         try {
-            val bitmap = qrGenerate(rawQrCOde, format,valueType,bundle)
+             bitmap = qrGenerate(rawQrCOde, format,valueType,bundle)
             binding.codeImage.setImageBitmap(bitmap)
             binding.saveButton.visibility = View.VISIBLE
+
             binding.saveButton.setOnClickListener {
-                saveCodeImage(bitmap)
+                if(Build.VERSION.SDK_INT<=Build.VERSION_CODES.P) {
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                        bitmap?.let{saveCodeImage(it)}
+                    } else {
+                        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+                    }
+                }else{
+                    bitmap?.let{saveCodeImage(it)}
+                }
             }
         }catch (e:Exception){
              binding.saveButton.visibility = View.GONE
@@ -361,7 +373,7 @@ class MainActivity2 : AppCompatActivity()
                     "Copy" ->  rawQrCOde?.let { copyText(it) }
                     "Add to contacts"-> addToContacts(contactArlst)
                     "Call"-> if(ContextCompat.checkSelfPermission(applicationContext,Manifest.permission.CALL_PHONE)!=PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE),mPERMISSION_CODE)
+                        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE),mCALLPERMISSION_CODE)
                     }else{rawQrCOde?.let { call(it) } }
                     "Add event"->createEvent(calArlst)
                     "Send email"->sendEmail(emailAddress,emailSubject,emailBody)
@@ -537,7 +549,6 @@ class MainActivity2 : AppCompatActivity()
             }
             else ->  {
 
-                Log.d("dfdifdhgfbd","ssgdfgsjdf")
                 val bitmapp =   when(TypeValue) {
                     Barcode.TYPE_PRODUCT-> {
                         binding.searchButton.text = "Search"
@@ -556,7 +567,6 @@ class MainActivity2 : AppCompatActivity()
                         BarcodeEncoder().encodeBitmap(qrcode,BarcodeFormat.QR_CODE,imageWidth!!,470)
                     }
                     Barcode.TYPE_TEXT->{
-                        Log.d("uidfh","ELSE_TEXTWALA")
 
                         binding.searchButton.text = "Copy"
                         binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null,null)
@@ -571,7 +581,6 @@ class MainActivity2 : AppCompatActivity()
                         BarcodeEncoder().encodeBitmap(qrcode,BarcodeFormat.QR_CODE,imageWidth!!,470)
                     }
                     Barcode.TYPE_CONTACT_INFO->{
-                        Log.d("difghduhgd",qrcode.toString())
                         binding.searchButton.text = "Add to contacts"
                         binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_outline_person_add_alt_1_24,null),null,null,null)
                         binding.copybutton.text = "Copy"
@@ -614,7 +623,7 @@ class MainActivity2 : AppCompatActivity()
                         binding.searchButton.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_twotone_call_24,null),null,null,null)
                         binding.copybutton.text = "Copy"
                         binding.copybutton.setCompoundDrawablesWithIntrinsicBounds(null,resources.getDrawable(R.drawable.ic_baseline_content_copy_24,null),null,null)
-                        binding.addContactsButton.text = "Add contact"
+                        binding.addContactsButton.visibility = View.GONE
 //  binding.copyMainButton.visibility = View.GONE
                         binding.result.text = rawQrCOde
                         binding.typeTextView.text = "Phone"
@@ -862,7 +871,8 @@ class MainActivity2 : AppCompatActivity()
     private fun call(phnNumber:String){
         val intent = Intent(Intent.ACTION_CALL)
         intent.data = Uri.parse(/*"tel:$*/phnNumber)
-        val dialogBuidler = MaterialAlertDialogBuilder(applicationContext, com.google.android.material.R.style.MaterialAlertDialog_MaterialComponents)
+        val dialogBuidler = MaterialAlertDialogBuilder(this,
+            com.google.android.material.R.style.Theme_MaterialComponents_Dialog)
             .setIcon(resources.getDrawable(R.drawable.ic_twotone_call_24,null))
             .setMessage("Calling to: $rawQrCOde")
             .setTitle("Dial")
@@ -922,36 +932,36 @@ class MainActivity2 : AppCompatActivity()
 
     }
     private fun saveCodeImage(bitmap :Bitmap){
-        val contentUri = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
-        val imageName = System.currentTimeMillis().toString()
+       // try {
+            val contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            val imageName = System.currentTimeMillis().toString()
 
-        Log.d("kfkhdjhf",imageName)
-        val contentValues = ContentValues()
-        contentValues.put(MediaStore.Images.ImageColumns.DISPLAY_NAME,imageName)
-        contentValues.put(MediaStore.Images.ImageColumns.MIME_TYPE,"image/png")
-        contentValues.put(MediaStore.Images.ImageColumns.RELATIVE_PATH,Environment.DIRECTORY_PICTURES+"/MyQRAPP")
-        val insertedUri = contentResolver?.insert(contentUri,contentValues)
+            val contentValues = ContentValues()
+            contentValues.put(MediaStore.Images.ImageColumns.DISPLAY_NAME, imageName)
+            contentValues.put(MediaStore.Images.ImageColumns.MIME_TYPE, "image/png")
+        contentValues.put(MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME,Environment.DIRECTORY_PICTURES + "/MyQRAPP")
+          //  contentValues.put(MediaStore.Images.ImageColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/MyQRAPP")
 
-       val outstream =  insertedUri?.let {  contentResolver?.openOutputStream(it)}
+            val insertedUri = contentResolver?.insert(contentUri, contentValues)
 
-       val con=  bitmap.compress(Bitmap.CompressFormat.PNG,100,outstream)
-        if(con){
-            Snackbar.make(binding.saveButton,"Image saved.\nPath: ${Environment.DIRECTORY_PICTURES}/MyQRAPP/$imageName",4000).show()
-            Log.d("kfkhdjhf",imageName)
+            val outstream = insertedUri?.let { contentResolver?.openOutputStream(it) }
 
-        }
+            val con = bitmap.compress(Bitmap.CompressFormat.PNG, 100, outstream)
+            if (con) {
+                Snackbar.make(binding.saveButton, "Image saved.\nPath: ${Environment.DIRECTORY_PICTURES}/$imageName", 4000).show()
+            }
+
+       /* }catch (e:java.lang.Exception){
+        }*/
     }
     fun automaticallyOpenLink(text:String,valueType:Int,format:Int){
         if(text!=null)
         {
-            Toast.makeText(this,valueType.toString()+"dkfkndjf",Toast.LENGTH_SHORT).show()
                 val intent = Intent(Intent.ACTION_VIEW)
                 val ISBN_baseurl = "https://www.google.com/search?q="
             if(format!=Barcode.FORMAT_QR_CODE)
             {
-                Log.d("f dfidjf","dfndf"+format.toString())
             }else {
-                Log.d("f dfidjf","dfndf"+format.toString())
                 when (valueType) {
                     Barcode.TYPE_URL -> {
                         binding.searchButton.text = "Search"
@@ -973,12 +983,10 @@ class MainActivity2 : AppCompatActivity()
 
         InterstitialAd.load(this,"ca-app-pub-3940256099942544/1033173712", adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
-                Log.d("dfd44", adError?.message)
                 initializeAd(adRequest)
                 mInterstitialAd = null
             }
             override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                Log.d("dfdiuhf39", "Ad was loaded.")
                 mInterstitialAd = interstitialAd
                 mInterstitialAd?.show(this@MainActivity2)
             }
@@ -1001,10 +1009,16 @@ class MainActivity2 : AppCompatActivity()
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         when(requestCode){
-            mPERMISSION_CODE ->{
+            mCALLPERMISSION_CODE ->{
                 if(permissions.isNotEmpty() && permissions[0].equals(Manifest.permission.CALL_PHONE))
                 {
                     rawQrCOde?.let { call(it) }
+                }
+            }
+            mWRITEPERMISSION_CODE ->{
+                if(permissions.isNotEmpty() && permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE))
+                {
+                    bitmap?.let{saveCodeImage(it)}
                 }
             }
         }

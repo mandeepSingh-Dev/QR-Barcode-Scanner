@@ -44,7 +44,6 @@ class QRCodeImageAnalyzer(private val listener: QRCodeFoundListener) : ImageAnal
             val scanner = BarcodeScanning.getClient()
 
             scanner.process(inputImage!!).addOnSuccessListener { barcodes ->
-                Log.d("dgfnd","fg")
 
                 barcodes.firstOrNull().let { barcode ->
                             rawValue = barcode?.rawValue

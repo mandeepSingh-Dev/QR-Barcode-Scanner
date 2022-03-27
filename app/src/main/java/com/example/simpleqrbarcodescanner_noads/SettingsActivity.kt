@@ -68,12 +68,10 @@ class SettingsActivity : AppCompatActivity() {
 
                     if(newValue.toString().equals("true"))
                     {
-                        Toast.makeText(requireContext(),"Dark Theme Enabled",Toast.LENGTH_SHORT).show()
 
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                     }
                     else{
-                        Toast.makeText(requireContext(),"Dark Theme Disabled",Toast.LENGTH_SHORT).show()
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                     }
                     return true

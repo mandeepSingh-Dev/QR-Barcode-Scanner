@@ -23,7 +23,7 @@
 
         <SwitchPreference
             app:key="@string/AutomaticallyCopyKey"
-            app:icon="@drawable/ic_baseline_content_copy_24"
+            app:icon="@drawable/ic_baseline_content_copy_24_2"
             app:title="@string/AutomaticallyCopyTitle" />
 
         <SwitchPreference

@@ -69,7 +69,6 @@ class MainActivity : AppCompatActivity(){
 
         supportActionBar?.hide()
         binding?.scanImage?.setOnClickListener {
-            Toast.makeText(this,"fgdf",Toast.LENGTH_SHORT).show()
             launcher.launch("image/*")
         }
 
@@ -160,7 +159,6 @@ binding?.imageView?.setImageBitmap(bitmap)*/
                 R.id.history2 -> startActivity(Intent(this, HistoryActivity::class.java))
                 R.id.setting -> startActivity(Intent(this, SettingsActivity::class.java))
                 else->{
-                    Toast.makeText(this,"error",Toast.LENGTH_SHORT).show()
                 }
 
             }
@@ -186,7 +184,7 @@ binding?.imageView?.setImageBitmap(bitmap)*/
             if (grantResults.size == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 startCamera()
             } else {
-                Toast.makeText(this, "Camera Permission Denied", Toast.LENGTH_SHORT).show()
+               // Toast.makeText(this, "Camera Permission Denied", Toast.LENGTH_SHORT).show()
             }
         }
     }//end of onRequetPermiss...
@@ -199,9 +197,7 @@ binding?.imageView?.setImageBitmap(bitmap)*/
                 cameraProvider?.let { bindCameraPreview(it) }
 
             } catch (e: Exception) {
-              //  Toast.makeText(this, "Error starting camera " + e.message, Toast.LENGTH_SHORT).show()
             } catch (e: InterruptedException) {
-               // Toast.makeText(this, "Error starting camera " + e.message, Toast.LENGTH_SHORT).show()
             }
         }, ContextCompat.getMainExecutor(this))
 
@@ -230,7 +226,6 @@ binding?.imageView?.setImageBitmap(bitmap)*/
         imageAnalysis?.setAnalyzer(ContextCompat.getMainExecutor(this),QRCodeImageAnalyzer(object :
             QRCodeFoundListener {
                 override fun onQRCodeFound(qrCode: String?) {
-                    Log.d("djfnd", qrCode + "d")
                    // binding?.button?.text = qrCode
                     this@MainActivity.qrCode = qrCode
                 }
@@ -299,7 +294,6 @@ binding?.imageView?.setImageBitmap(bitmap)*/
     }
     override fun onResume() {
         super.onResume()
-        Log.d("dfsdfsdfs","onResume")
         requestCamera()
     }
 
@@ -313,7 +307,6 @@ binding?.imageView?.setImageBitmap(bitmap)*/
 
             var scanner = ScannerBarcode(object : QRCodeFoundListener {
                 override fun onQRCodeFound(qrCode: String?) {
-                    Log.d("djfnd", qrCode + "d")
                     // binding?.button?.text = qrCode
 
                     this@MainActivity.qrCode = qrCode
@@ -372,6 +365,5 @@ binding?.imageView?.setImageBitmap(bitmap)*/
 
     override fun onPause() {
         super.onPause()
-        Log.d("dkfjdfn","onPause called")
     }
 }

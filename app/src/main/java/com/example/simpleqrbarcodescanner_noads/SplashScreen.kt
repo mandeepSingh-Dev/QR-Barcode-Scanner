@@ -21,7 +21,7 @@ class SplashScreen : AppCompatActivity() {
         binding.splashCardview.animation = AnimationUtils.loadAnimation(this,R.anim.bounce)
 
         CoroutineScope(Dispatchers.IO).launch {
-            delay(2400)
+            delay(1100)
              withContext(Dispatchers.Main){
             startActivity(Intent(this@SplashScreen, MainActivity::class.java),ActivityOptions.makeSceneTransitionAnimation(this@SplashScreen).toBundle())
                    finish()

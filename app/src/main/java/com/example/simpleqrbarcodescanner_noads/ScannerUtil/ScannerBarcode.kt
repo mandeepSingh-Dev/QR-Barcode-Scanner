@@ -35,7 +35,6 @@ class ScannerBarcode( private val listener: QRCodeFoundListener)
                 val scanner = BarcodeScanning.getClient()
 
                 scanner.process(inputImage!!).addOnSuccessListener { barcodes ->
-                    Log.d("dgfnd", "fg")
                     barcodes.firstOrNull().let { barcode ->
                         rawValue = barcode?.rawValue
                         format = barcode?.format
@@ -59,13 +58,10 @@ class ScannerBarcode( private val listener: QRCodeFoundListener)
                     imageProxy.close()
                     // provider.unbindAll()
                 }.addOnFailureListener {
-                    Log.d("dfgdfgdfdfderg", it.cause.toString())
                     listener.onqrCodeNotFound()
                     imageProxy.close()
                 }.addOnCompleteListener {
-                    Log.d("fidhfd", "bhsdj")
                 }.addOnCanceledListener {
-                    Log.d("fidhfd", "bhsdj")
 
                 }
 
@@ -81,7 +77,6 @@ class ScannerBarcode( private val listener: QRCodeFoundListener)
             val scanner = BarcodeScanning.getClient()
 
             scanner.process(inputImage!!).addOnSuccessListener { barcodes ->
-                Log.d("dgfnd", "fg")
 
                 barcodes.firstOrNull().let { barcode ->
                     rawValue = barcode?.rawValue
@@ -106,13 +101,10 @@ class ScannerBarcode( private val listener: QRCodeFoundListener)
               //  imageProxy.close()
                 // provider.unbindAll()
             }.addOnFailureListener {
-                Log.d("dfgdfgdfdfderg", it.cause.toString())
                 listener.onqrCodeNotFound()
                // imageProxy.close()
             }.addOnCompleteListener {
-                Log.d("fidhfd", "bhsdj")
             }.addOnCanceledListener {
-                Log.d("fidhfd", "bhsdj")
 
             }
 
@@ -216,7 +208,6 @@ class ScannerBarcode( private val listener: QRCodeFoundListener)
                                    }catch (e:Exception){calArrayList.add("")}
 
                 calArrayList.let { bundle.putStringArrayList(Intent_KEYS.CONTACTS_ARRAYLIST, it) }
-                Log.d("fidhfudfd",calArrayList.size.toString()+"ihu")
 
 
             }
