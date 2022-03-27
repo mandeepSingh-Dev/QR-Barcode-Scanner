@@ -8,10 +8,8 @@ import android.util.Log
 import android.view.*
 import android.view.animation.AnimationUtils
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LifecycleOwner
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.simpleqrbarcodescanner_noads.HistoryActivity

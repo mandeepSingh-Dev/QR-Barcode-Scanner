@@ -1,0 +1,88 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/appbarlayout4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#1A3E42"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/settings"
+        >
+        <androidx.cardview.widget.CardView
+            android:id="@+id/backCardView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:background="@drawable/ripple"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/backbutton4"
+                android:layout_width="33dp"
+                android:layout_height="33dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ripple"
+                android:padding="10dp"
+                android:src="@drawable/ic_baseline_arrow_back_ios_new_24"
+                app:tint="@color/Modecolor" />
+        </androidx.cardview.widget.CardView>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/createTITLE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Settings"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline1"
+            android:textColor="@color/white"
+            android:textSize="35sp"
+            app:layout_constraintBottom_toBottomOf="@id/backCardView4"
+            app:layout_constraintLeft_toRightOf="@id/backCardView4"
+            app:layout_constraintRight_toLeftOf="@id/SupportButton4"
+            app:layout_constraintTop_toTopOf="@id/backCardView4" />
+
+        <ImageView
+            android:id="@+id/SupportButton4"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="30dp"
+            android:alpha="0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <FrameLayout
+        android:id="@+id/settings"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/gradientCentre"
+        app:layout_constraintTop_toBottomOf="@id/appbarlayout4"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/adViewSettingActiivty"/>
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adViewSettingActiivty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        ads:layout_constraintBottom_toBottomOf="parent"
+        ads:layout_constraintLeft_toLeftOf="parent"
+        ads:layout_constraintRight_toRightOf="parent"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-3940256099942544/6300978111">
+    </com.google.android.gms.ads.AdView>
+</androidx.constraintlayout.widget.ConstraintLayout>

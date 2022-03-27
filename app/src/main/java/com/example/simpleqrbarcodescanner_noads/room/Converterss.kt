@@ -3,7 +3,6 @@ package com.example.simpleqrbarcodescanner_noads.room
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.google.mlkit.vision.barcode.common.Barcode
 
 
 class Converterss

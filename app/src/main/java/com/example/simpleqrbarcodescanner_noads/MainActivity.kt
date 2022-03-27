@@ -9,10 +9,8 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
-import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.os.*
-import android.provider.MediaStore
 import android.util.Log
 import android.util.Size
 import android.view.LayoutInflater
@@ -33,7 +31,6 @@ import com.example.simpleqrbarcodescanner_noads.databinding.ActivityMainBinding
 import com.google.android.gms.ads.MobileAds
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.mlkit.vision.barcode.common.Barcode
-import com.google.zxing.qrcode.encoder.QRCode
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -158,9 +155,10 @@ binding?.imageView?.setImageBitmap(bitmap)*/
 
         binding?.bottomView?.setOnItemSelectedListener {
             when(it.itemId){
-                R.id.create-> startActivity(Intent(this,CreateActivity::class.java)/*,ActivityOptions.makeSceneTransitionAnimation(this).toBundle()*/)
-                R.id.history2 -> startActivity(Intent(this,HistoryActivity::class.java))
-                R.id.setting -> startActivity(Intent(this,SettingsActivity::class.java))
+                R.id.create-> startActivity(Intent(this,
+                    CreateActivity::class.java)/*,ActivityOptions.makeSceneTransitionAnimation(this).toBundle()*/)
+                R.id.history2 -> startActivity(Intent(this, HistoryActivity::class.java))
+                R.id.setting -> startActivity(Intent(this, SettingsActivity::class.java))
                 else->{
                     Toast.makeText(this,"error",Toast.LENGTH_SHORT).show()
                 }
@@ -269,6 +267,7 @@ binding?.imageView?.setImageBitmap(bitmap)*/
             })
         )
         camera = cameraProvider.bindToLifecycle(this,cameraSelector,imageAnalysis,preview)
+
         /**-------Configuring Flash---------------------------------*/
         if(camera.cameraInfo.hasFlashUnit()){
                binding?.flashButton?.visibility = View.VISIBLE
@@ -304,17 +303,7 @@ binding?.imageView?.setImageBitmap(bitmap)*/
         requestCamera()
     }
 
-    override fun onStop() {
-        super.onStop()
-        cameraProvider?.unbindAll()
-    }
-    override fun onDestroy() {
-        super.onDestroy()
-        cameraProvider?.unbindAll()
 
-        if(mediaplayer!=null) mediaplayer.release()
-
-    }
 
     private var launcher = registerForActivityResult(ActivityResultContracts.GetContent(),ActivityResultCallback{
 
@@ -368,4 +357,21 @@ binding?.imageView?.setImageBitmap(bitmap)*/
         }
     })
 
+    override fun onStop() {
+        super.onStop()
+        cameraProvider?.unbindAll()
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        cameraProvider?.unbindAll()
+
+
+        if(mediaplayer!=null) mediaplayer.release()
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("dkfjdfn","onPause called")
+    }
 }

@@ -12,8 +12,6 @@
     <color name="backgroundColor">#0D47A1</color>
     <color name="backgroundColor1">#505657</color>
 
-    <color name="itemtextColor">@color/white</color>
-
     <color name="light_darkmode">@color/black</color>
     <color name="Modecolor">@color/white</color>
 

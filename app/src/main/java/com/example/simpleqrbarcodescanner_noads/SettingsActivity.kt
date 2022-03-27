@@ -1,8 +1,8 @@
 package com.example.simpleqrbarcodescanner_noads
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -10,16 +10,40 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
 import com.example.simpleqrbarcodescanner_noads.Util.Intent_KEYS
+import com.example.simpleqrbarcodescanner_noads.databinding.ActivitySettingsBinding
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
 
 class SettingsActivity : AppCompatActivity() {
 
+    lateinit var binding:ActivitySettingsBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.settings_activity)
+      binding =  ActivitySettingsBinding.inflate(LayoutInflater.from(this))
+        setContentView(binding.root)
+
+        supportActionBar?.hide()
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().replace(R.id.settings, SettingsFragment()).commit()
         }
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        //supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+     val adRequest = AdRequest.Builder().build()
+        binding.adViewSettingActiivty.loadAd(adRequest)
+
+        binding.adViewSettingActiivty.adListener = object : AdListener(){
+            override fun onAdFailedToLoad(p0: LoadAdError) {
+                super.onAdFailedToLoad(p0)
+                binding.adViewSettingActiivty.loadAd(adRequest)
+            }
+
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+            }
+
+        }
     }
 
     class SettingsFragment : PreferenceFragmentCompat()
@@ -104,5 +128,6 @@ class SettingsActivity : AppCompatActivity() {
             }
 
         }
+
     }
 }

@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.content.*
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -17,45 +16,32 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.simpleqrbarcodescanner_noads.Util.Custom_Formats_duplicate
 import com.example.simpleqrbarcodescanner_noads.Util.Intent_KEYS
-import com.example.simpleqrbarcodescanner_noads.databinding.ActivityMain2Binding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import android.content.Intent
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.os.Environment
 import android.provider.CalendarContract
 import android.provider.ContactsContract
 import android.provider.MediaStore
 import android.widget.Toast
-import androidmads.library.qrgenearator.QRGContents
-import androidmads.library.qrgenearator.QRGEncoder
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.core.graphics.BitmapCompat
-import androidx.core.view.marginBottom
-import androidx.core.view.setPadding
 import com.example.simpleqrbarcodescanner_noads.MVVM.MyViewModel
-import com.example.simpleqrbarcodescanner_noads.MVVM.MyViewmodel2
+import com.example.simpleqrbarcodescanner_noads.databinding.ActivityMain2Binding
 import com.example.simpleqrbarcodescanner_noads.room.EntityClass
-import com.example.simpleqrbarcodescanner_noads.room.MyRoomDatabase
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
-import com.google.zxing.oned.EAN13Reader
+import com.google.android.gms.ads.*
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.io.File
 import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class MainActivity2 : AppCompatActivity()
 {
-    lateinit var binding:ActivityMain2Binding
+    lateinit var binding: com.example.simpleqrbarcodescanner_noads.databinding.ActivityMain2Binding
     private var rawQrCOde:String?=null
     private var fromHistoryPage:Boolean?=null
 
@@ -77,6 +63,7 @@ class MainActivity2 : AppCompatActivity()
     val myiewmodel:MyViewModel by viewModels()
 
     lateinit var sharedPreferences: SharedPreferences
+    private var mInterstitialAd: InterstitialAd? = null
 
 
 
@@ -87,14 +74,21 @@ class MainActivity2 : AppCompatActivity()
         binding = ActivityMain2Binding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
 
-      /*  val adRequest = AdRequest.Builder().build()
-        binding.adViewMain2Actiivty?.loadAd(adRequest)
-        binding.adViewMain2Actiivty?.adListener = object:AdListener(){
-            override fun onAdLoaded() {
-                super.onAdLoaded()
-                binding.adViewMain2Actiivty?.visibility = View.VISIBLE
+        supportActionBar?.hide()
+        binding.backbutton3?.setOnClickListener {
+            finish()
+            if(mInterstitialAd!=null) mInterstitialAd?.show(this)
+        }
+        val adRequestBanner = AdRequest.Builder().build()
+        binding.adViewMain2Actiivty.loadAd(adRequestBanner)
+        binding.adViewMain2Actiivty.adListener = object:AdListener(){
+            override fun onAdFailedToLoad(p0: LoadAdError) {
+                super.onAdFailedToLoad(p0)
+                binding.adViewMain2Actiivty.loadAd(adRequestBanner)
             }
-        }*/
+        }
+        var adRequestInterstitial = AdRequest.Builder().build()
+            initializeAd(adRequestInterstitial)
 
         rawQrCOde = intent.getStringExtra(Intent_KEYS.QRCODE)
         val format = intent.getIntExtra(Intent_KEYS.FORMAT,0)
@@ -975,6 +969,24 @@ class MainActivity2 : AppCompatActivity()
         }
     }
 
+    private fun initializeAd(adRequest:AdRequest){
+
+        InterstitialAd.load(this,"ca-app-pub-3940256099942544/1033173712", adRequest, object : InterstitialAdLoadCallback() {
+            override fun onAdFailedToLoad(adError: LoadAdError) {
+                Log.d("dfd44", adError?.message)
+                initializeAd(adRequest)
+                mInterstitialAd = null
+            }
+            override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                Log.d("dfdiuhf39", "Ad was loaded.")
+                mInterstitialAd = interstitialAd
+                mInterstitialAd?.show(this@MainActivity2)
+            }
+        })
+
+
+    }
+
     fun minsert(typeValue:Int,format:Int,list:ArrayList<String>){
 
         if(!fromHistoryPage!!) {
@@ -1004,6 +1016,14 @@ class MainActivity2 : AppCompatActivity()
         {
             dialogue?.cancel()
             dialogue = null
+        }
+
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        if(mInterstitialAd!=null) {
+            mInterstitialAd?.show(this)
         }
 
     }

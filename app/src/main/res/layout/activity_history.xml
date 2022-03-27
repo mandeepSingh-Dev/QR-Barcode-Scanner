@@ -92,7 +92,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/adViewHistoryActiivty"
         app:layout_constraintTop_toBottomOf="@id/appbarlayout" />
 
     <LinearLayout
@@ -142,6 +142,7 @@
         android:id="@+id/adViewHistoryActiivty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        ads:layout_constraintTop_toBottomOf="@id/historyRecyclerView"
         ads:layout_constraintBottom_toBottomOf="parent"
         ads:layout_constraintLeft_toLeftOf="parent"
         ads:layout_constraintRight_toRightOf="parent"

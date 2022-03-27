@@ -1,9 +1,6 @@
 package com.example.simpleqrbarcodescanner_noads.room
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
-import androidx.room.OnConflictStrategy.REPLACE
-import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Observable
 
 

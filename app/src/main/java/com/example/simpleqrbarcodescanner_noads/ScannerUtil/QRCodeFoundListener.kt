@@ -1,6 +1,5 @@
 package com.example.simpleqrbarcodescanner_noads.ScannerUtil
 
-import android.graphics.Bitmap
 import android.os.Bundle
 import com.google.mlkit.vision.barcode.common.Barcode
 

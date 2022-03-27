@@ -2,7 +2,6 @@ package com.example.simpleqrbarcodescanner_noads.MVVM
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
 
 class MyViewmodel2:ViewModel()
 {

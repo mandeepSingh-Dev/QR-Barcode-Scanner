@@ -1,13 +1,10 @@
 package com.example.simpleqrbarcodescanner_noads.ScannerUtil
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.graphics.Bitmap
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import androidx.camera.core.ImageProxy
-import com.example.simpleqrbarcodescanner_noads.R
 import com.example.simpleqrbarcodescanner_noads.Util.Intent_KEYS
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode

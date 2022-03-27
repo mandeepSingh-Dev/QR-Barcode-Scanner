@@ -4,7 +4,6 @@ import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.simpleqrbarcodescanner_noads.CreateRecyclerView.CreateAdapter
@@ -13,7 +12,6 @@ import com.example.simpleqrbarcodescanner_noads.Util.Custom_Formats_duplicate
 import com.example.simpleqrbarcodescanner_noads.Util.Intent_KEYS
 import com.example.simpleqrbarcodescanner_noads.databinding.ActivityCreateBinding
 import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.mlkit.vision.barcode.common.Barcode
@@ -104,7 +102,8 @@ class CreateActivity : AppCompatActivity() {
             intent.putExtra(Intent_KEYS.VALUETYPE_QRGENERATOR,item.typeValue)
 
             context.startActivity(intent)*/
-            val intent = Intent(this,CreateActivityWithTextField::class.java)
+            val intent = Intent(this,
+                CreateActivityWithTextField::class.java)
             intent.putExtra(Intent_KEYS.VALUETYPE,Barcode.TYPE_TEXT)
             startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
         }

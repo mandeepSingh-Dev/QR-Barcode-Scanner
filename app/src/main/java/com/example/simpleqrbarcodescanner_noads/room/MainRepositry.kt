@@ -1,7 +1,5 @@
 package com.example.simpleqrbarcodescanner_noads.room
 
-import androidx.lifecycle.LiveData
-import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.simpleqrbarcodescanner_noads.Util.Custom_Formats_duplicate
 import com.example.simpleqrbarcodescanner_noads.Util.Intent_KEYS
@@ -22,7 +21,7 @@ class CreateActivityWithTextField : AppCompatActivity() {
         setContentView(binding.root)
 
         val adRequest = AdRequest.Builder().build()
-        binding.adViewTextFieldActiivty?.loadAd(adRequest)
+        binding.adViewTextFieldActivity?.loadAd(adRequest)
 
           val typevalue = intent.getIntExtra(Intent_KEYS.VALUETYPE,0)
           val format = intent.getIntExtra(Intent_KEYS.FORMAT,0)

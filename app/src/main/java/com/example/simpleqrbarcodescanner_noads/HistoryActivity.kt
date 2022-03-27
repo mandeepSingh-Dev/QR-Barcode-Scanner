@@ -1,37 +1,23 @@
 package com.example.simpleqrbarcodescanner_noads
 
-import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
-import android.view.WindowManager
-import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.simpleqrbarcodescanner_noads.MVVM.MyAdapter
 import com.example.simpleqrbarcodescanner_noads.MVVM.MyViewModel
-import com.example.simpleqrbarcodescanner_noads.Util.Intent_KEYS
 import com.example.simpleqrbarcodescanner_noads.Util.OnBackButtonCustomListener
 import com.example.simpleqrbarcodescanner_noads.databinding.ActivityHistoryBinding
 import com.example.simpleqrbarcodescanner_noads.room.EntityClass
-import com.example.simpleqrbarcodescanner_noads.room.MainRepositry
 import com.google.android.gms.ads.AdRequest
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.FlowableSubscriber
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
-import org.reactivestreams.Subscription
 
 @AndroidEntryPoint
 class HistoryActivity : AppCompatActivity() {
