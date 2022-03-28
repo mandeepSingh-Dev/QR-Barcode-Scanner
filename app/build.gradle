@@ -7,6 +7,8 @@ plugins {
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
 }
+apply plugin: 'com.google.android.gms.oss-licenses-plugin'
+
 //apply plugin: 'kotlin-kapt'
 
 android {
@@ -14,7 +16,7 @@ android {
     viewBinding {enabled = true}
 
     defaultConfig {
-        applicationId "com.example.simpleqrbarcodescanner_noads"
+        applicationId "com.Scanner.simpleqrbarcodescanner_noads"
         minSdk 21
         targetSdk 31
         versionCode 1
@@ -25,7 +27,8 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -69,6 +72,7 @@ dependencies {
     implementation "androidx.camera:camera-view:${camerax_version}"
     implementation "androidx.camera:camera-extensions:${camerax_version}"
 
+    //useless i think
     implementation 'androidmads.library.qrgenearator:QRGenearator:1.0.3'
 
     implementation 'com.google.mlkit:barcode-scanning:17.0.2'
@@ -121,7 +125,8 @@ dependencies {
     implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
 
 
-    implementation 'com.google.android.gms:play-services-ads:20.6.0'
+   // implementation 'com.google.android.gms:play-services-ads:20.6.0'
+    implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
 
 

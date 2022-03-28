@@ -150,7 +150,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-    <com.google.android.gms.ads.AdView
+ <!--   <com.google.android.gms.ads.AdView
         xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/adViewTextFieldActivity"
         android:layout_width="wrap_content"
@@ -160,5 +160,5 @@
         ads:layout_constraintRight_toRightOf="parent"
         ads:adSize="BANNER"
         ads:adUnitId="ca-app-pub-3940256099942544/6300978111">
-    </com.google.android.gms.ads.AdView>
+    </com.google.android.gms.ads.AdView>-->
 </androidx.constraintlayout.widget.ConstraintLayout>
