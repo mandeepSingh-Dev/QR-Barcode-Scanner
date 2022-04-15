@@ -6,4 +6,4 @@ MVVM , Room , Dagger2 , RxJava.
 ● Features: QR Scanning , Barcode Scanning , Generating QR 
 and Barcode , History of Scanned Codes.
 
-![](download.png 100x20)
+<a href='https://play.google.com/store/apps/details?id=com.eventyay.attendee'><img alt='Get it on Google Play' src='download.png' height="80"/></a>
